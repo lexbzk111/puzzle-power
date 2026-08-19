@@ -1,57 +1,7 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Puzzle & Power</title>
-    <!-- Подключаем официальный скрипт Telegram, чтобы WebApp работал на смартфонах -->
-    <script src="https://telegram.org"></script>
-    <style>
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; background-color: #ffffff;
-            font-family: 'Georgia', serif;
-        }
-        /* Ставим твою новую светлую заставку на весь экран */
-        .background {
-            width: 100%; height: 100%;
-            background: url('welcome_light.png') no-repeat center center;
-            background-size: cover; position: relative;
-        }
-        /* Создаем невидимую кнопку поверх нарисованной серебряной плашки */
-        .login-btn {
-            position: absolute;
-            bottom: 3.5%; left: 50%; /* Идеальные координаты под плашку на твоем арте */
-            transform: translateX(-50%);
-            width: 75%; height: 60px;
-            cursor: pointer;
-            background: transparent; /* Делаем саму кнопку прозрачной */
-            border: none;
-            outline: none;
-            
-            /* Стилизуем текст внутри рамки под цвет логотипа */
-            color: #163654; 
-            font-size: 20px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.1s;
-        }
-        /* Эффект легкого сжатия при тапе пальцем на телефоне */
-        .login-btn:active {
-            transform: translateX(-50%) scale(0.96);
-        }
-    </style>
-</head>
-<body>
-
-    <div class="background">
-        <!-- Надпись пишется кодом прямо внутри серебряной рамки -->
-        <button class="login-btn" onclick="enterGame()">Начать играть</button>
-    </div>
-
     <script>
+        // Твоя постоянная ссылка ngrok, которая ведёт прямо в базу PostgreSQL на твоём ПК!
+        const SERVER_URL = 'https://ngrok-free.dev';
+
         // Инициализируем Telegram WebApp
         const tg = window.Telegram.WebApp;
         if (tg) {
@@ -65,9 +15,49 @@
                 tg.HapticFeedback.impactOccurred('medium');
             }
             
-            // Перенаправляем игрока на второй экран — создание персонажа
-            window.location.href = "select.html";
+            // 1. Вытягиваем реальный Telegram ID игрока. Если тестить на ПК в браузере — дадим дефолтный ID 777
+            let tgId = 777;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                tgId = tg.initDataUnsafe.user.id;
+            }
+
+            console.log("Отправляем запрос авторизации для TG_ID:", tgId);
+
+            // 2. Делаем реальный fetch-запрос к твоему Python-серверу через туннель ngrok
+            fetch(`${SERVER_URL}/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ tg_id: tgId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.has_character) {
+                        // ЕСЛИ ВОИН УЖЕ ЕСТЬ В БАЗЕ:
+                        console.log("Персонаж найден в БД! Пускаем в лобби города...");
+                        
+                        // Здесь мы в будущем просто откроем интерфейс города, а пока выведем алерт:
+                        alert(`Добро пожаловать обратно, ${data.user.name}! (Ур. ${data.user.level})`);
+                        
+                        // Куда перенаправлять старого игрока (например, на саму карту лобби, если сделаешь для неё отдельный файл):
+                        // window.location.href = "lobby.html"; 
+                    } else {
+                        // ЕСЛИ ЭТО НОВЫЙ ИГРОК:
+                        console.log("Воина в базе нет. Отправляем создавать персонажа...");
+                        window.location.href = "select.html";
+                    }
+                } else {
+                    alert("Ошибка авторизации на сервере игры.");
+                }
+            })
+            .catch(err => {
+                console.error("Сервер игры не отвечает:", err);
+                alert("Не удалось подключиться к серверу. Убедись, что на ПК запущены server.py и ngrok!");
+                
+                // Временный пропуск для локальных тестов верстки (если сервер выключен, всё равно пустим дальше):
+                window.location.href = "select.html";
+            });
         }
     </script>
-</body>
-</html>
