@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Puzzle & Power</title>
+    <!-- Подключаем официальный скрипт Telegram, чтобы WebApp работал на смартфонах -->
+    <script src="https://telegram.org"></script>
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; background-color: #ffffff;
+            font-family: 'Georgia', serif;
+        }
+        /* Ставим твою новую светлую заставку на весь экран */
+        .background {
+            width: 100%; height: 100%;
+            background: url('welcome_light.png') no-repeat center center;
+            background-size: cover; position: relative;
+        }
+        /* Создаем невидимую кнопку поверх нарисованной серебряной плашки */
+        .login-btn {
+            position: absolute;
+            bottom: 6.5%; left: 50%; /* Идеальные координаты под плашку на твоем арте */
+            transform: translateX(-50%);
+            width: 75%; height: 60px;
+            cursor: pointer;
+            background: transparent; /* Делаем саму кнопку прозрачной */
+            border: none;
+            outline: none;
+            
+            /* Стилизуем текст внутри рамки под цвет логотипа */
+            color: #163654; 
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.1s;
+        }
+        /* Эффект легкого сжатия при тапе пальцем на телефоне */
+        .login-btn:active {
+            transform: translateX(-50%) scale(0.96);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background">
+        <!-- Надпись пишется кодом прямо внутри серебряной рамки -->
+        <button class="login-btn" onclick="enterGame()">Начать играть</button>
+    </div>
+
+    <script>
+        // Инициализируем Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand(); // Раскрываем игру на весь экран телефона
+        }
+
+        function enterGame() {
+            // Включаем сочную вибрацию телефона через Telegram SDK при нажатии
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+            
+            // Перенаправляем игрока на второй экран — создание персонажа
+            window.location.href = "select.html";
+        }
+    </script>
+</body>
+</html>

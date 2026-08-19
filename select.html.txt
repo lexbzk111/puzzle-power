@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Создание персонажа - Puzzle & Power</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; font-family: 'Arial', sans-serif; }
+        
+        .wrapper { 
+            width: 100%; height: 100%; 
+            background: url('select_light_final.png') no-repeat center center; 
+            background-size: cover; position: relative; 
+        }
+        
+        /* Спрайт героя на подиуме СЛЕВА */
+        .hero-portrait {
+            position: absolute; 
+            bottom: 26%; left: 24%;
+            height: 50%; transition: all 0.25s ease; z-index: 2;
+        }
+        
+        /* Кнопки-стрелочки (накладываются на стрелки из картинки) */
+        .arrow {
+            position: absolute; bottom: 18%; width: 45px; height: 45px;
+            background: rgba(22, 54, 84, 0.1); border: 2px solid #163654; border-radius: 50%;
+            color: #163654; font-size: 22px; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; z-index: 10;
+            box-shadow: 0 0 10px rgba(22, 54, 84, 0.2); transition: 0.1s;
+        }
+        .arrow-left { left: 8%; }
+        .arrow-right { left: 40%; }
+        .arrow:active { background: rgba(22, 54, 84, 0.3); transform: scale(0.9); }
+
+        /* Заголовок «ХАРАКТЕРИСТИКИ» (поверх круглой золотой плашки) */
+        .title-box {
+            position: absolute; right: 12.3%; top: 22%; width: 33%; text-align: center;
+            color: #bc933d; font-weight: bold; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+        }
+
+        /* Контейнер для характеристик (РОВНО НА 5 РАМОК СПРАВА) */
+        .stats-container {
+            position: absolute; 
+            right: 12.3%; top: 29.5%; 
+            height: 48%; width: 33%;
+            display: flex; flex-direction: column; justify-content: space-between;
+            z-index: 5; pointer-events: none;
+        }
+
+        /* Строчка статов внутри одной рамки */
+        .stat-box {
+            height: 18%; width: 100%;
+            display: flex; align-items: center; justify-content: space-between;
+            box-sizing: border-box; padding: 0 15px;
+            color: #163654; font-weight: bold;
+        }
+        .stat-name { font-size: 11px; color: #4b6584; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-val { font-size: 16px; color: #bc933d; text-shadow: 0 0 4px rgba(188, 147, 61, 0.3); }
+
+        /* Поле ввода НИКНЕЙМА (поверх нижней золотой рамки) */
+        .nickname-input {
+            position: absolute; 
+            bottom: 10.3%; left: 50%; transform: translateX(-50%);
+            width: 32%; height: 35px;
+            background: transparent; border: none; outline: none;
+            color: #163654; text-align: center; font-size: 16px; font-weight: bold;
+            letter-spacing: 1px; z-index: 10;
+        }
+        .nickname-input::placeholder { color: rgba(22, 54, 84, 0.4); font-style: italic; font-size: 13px; }
+
+        /* Прозрачная рабочая кнопка «Создать» на самом низу */
+        .start-btn {
+            position: absolute; bottom: 3%; left: 50%; transform: translateX(-50%);
+            width: 40%; height: 40px; background: transparent; border: none; cursor: pointer;
+            color: #163654; font-size: 15px; font-weight: bold; text-transform: uppercase;
+            letter-spacing: 2px; z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <!-- Спрайт героя слева (пока заглушка, завтра вырежем) -->
+        <img id="heroImage" class="hero-portrait" src="mage.png" alt="Hero" onerror="this.style.display='none'">
+
+        <!-- Заголовок правой панели -->
+        <div class="title-box">СТАТЫ БК</div>
+
+        <!-- Стрелки переключения вокруг героя -->
+        <button class="arrow arrow-left" onclick="prevHero()">&langle;</button>
+        <button class="arrow arrow-right" onclick="nextHero()">&rangle;</button>
+
+        <!-- 5 полей характеристик в стиле БК/MMORPG -->
+        <div class="stats-container">
+            <div class="stat-box"><span class="stat-name">Сила</span><span class="stat-val" id="strVal">0</span></div>
+            <div class="stat-box"><span class="stat-name">Ловкость</span><span class="stat-val" id="aglVal">0</span></div>
+            <div class="stat-box"><span class="stat-name">Интуиция</span><span class="stat-val" id="intVal">0</span></div>
+            <div class="stat-box"><span class="stat-name">Выносливость</span><span class="stat-val" id="vitVal">0</span></div>
+            <div class="stat-box"><span class="stat-name">Мудрость</span><span class="stat-val" id="wisVal">0</span></div>
+        </div>
+
+        <!-- Чистый рабочий инпут для ввода имени -->
+        <input type="text" id="heroName" class="nickname-input" placeholder="Введите ник..." maxlength="12">
+
+        <!-- Кнопка подтверждения на самом низу -->
+        <button class="start-btn" onclick="createCharacter()">Создать</button>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        if(tg) { tg.ready(); tg.expand(); }
+
+        // 5 статов в стиле БК для каждого класса
+        const heroes = [
+            { name: 'Маг', stats: { сила: 5, ловкость: 10, интуиция: 15, выносливость: 12, мудрость: 45 } },
+            { name: 'Воин', stats: { сила: 42, ловкость: 12, интуиция: 10, выносливость: 25, мудрость: 3 } },
+            { name: 'Стрелок', stats: { сила: 15, ловкость: 40, интуиция: 25, выносливость: 15, мудрость: 5 } },
+            { name: 'Танк', stats: { сила: 20, ловкость: 5, интуиция: 5, выносливость: 55, мудрость: 2 } }
+        ];
+        
+        let currentIndex = 0;
+
+        function updateUI() {
+            const h = heroes[currentIndex];
+            // Меняем цифры в 5 золотых рамках
+            document.getElementById('strVal').innerText = h.stats.сила;
+            document.getElementById('aglVal').innerText = h.stats.ловкость;
+            document.getElementById('intVal').innerText = h.stats.интуиция;
+            document.getElementById('vitVal').innerText = h.stats.выносливость;
+            document.getElementById('wisVal').innerText = h.stats.мудрость;
+        }
+
+        function nextHero() { currentIndex = (currentIndex + 1) % heroes.length; updateUI(); if(tg&&tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light'); }
+        function prevHero() { currentIndex = (currentIndex - 1 + heroes.length) % heroes.length; updateUI(); if(tg&&tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light'); }
+
+        function createCharacter() {
+            let name = document.getElementById('heroName').value.trim();
+            if (name.length < 3) {
+                alert("Имя персонажа должно быть не короче 3 символов!");
+                return;
+            }
+            
+            if (tg && tg.HapticFeedback) { tg.HapticFeedback.impactOccurred('heavy'); }
+
+            alert(`Персонаж ${name} (${heroes[currentIndex].name}) успешно создан!`);
+            window.location.href = "city.html"; 
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
