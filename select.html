@@ -1,152 +1,346 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Создание персонажа - Puzzle & Power</title>
-    <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; font-family: 'Arial', sans-serif; }
-        
-        .wrapper { 
-            width: 100%; height: 100%; 
-            background: url('select_light_final.png') no-repeat center center; 
-            background-size: cover; position: relative; 
-        }
-        
-        /* Спрайт героя на подиуме СЛЕВА */
-        .hero-portrait {
-            position: absolute; 
-            bottom: 26%; left: 24%;
-            height: 50%; transition: all 0.25s ease; z-index: 2;
-        }
-        
-        /* Кнопки-стрелочки (накладываются на стрелки из картинки) */
-        .arrow {
-            position: absolute; bottom: 18%; width: 45px; height: 45px;
-            background: rgba(22, 54, 84, 0.1); border: 2px solid #163654; border-radius: 50%;
-            color: #163654; font-size: 22px; font-weight: bold; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; z-index: 10;
-            box-shadow: 0 0 10px rgba(22, 54, 84, 0.2); transition: 0.1s;
-        }
-        .arrow-left { left: 8%; }
-        .arrow-right { left: 40%; }
-        .arrow:active { background: rgba(22, 54, 84, 0.3); transform: scale(0.9); }
-
-        /* Заголовок «ХАРАКТЕРИСТИКИ» (поверх круглой золотой плашки) */
-        .title-box {
-            position: absolute; right: 12.3%; top: 22%; width: 33%; text-align: center;
-            color: #bc933d; font-weight: bold; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
-        }
-
-        /* Контейнер для характеристик (РОВНО НА 5 РАМОК СПРАВА) */
-        .stats-container {
-            position: absolute; 
-            right: 12.3%; top: 29.5%; 
-            height: 48%; width: 33%;
-            display: flex; flex-direction: column; justify-content: space-between;
-            z-index: 5; pointer-events: none;
-        }
-
-        /* Строчка статов внутри одной рамки */
-        .stat-box {
-            height: 18%; width: 100%;
-            display: flex; align-items: center; justify-content: space-between;
-            box-sizing: border-box; padding: 0 15px;
-            color: #163654; font-weight: bold;
-        }
-        .stat-name { font-size: 11px; color: #4b6584; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-val { font-size: 16px; color: #bc933d; text-shadow: 0 0 4px rgba(188, 147, 61, 0.3); }
-
-        /* Поле ввода НИКНЕЙМА (поверх нижней золотой рамки) */
-        .nickname-input {
-            position: absolute; 
-            bottom: 10.3%; left: 50%; transform: translateX(-50%);
-            width: 32%; height: 35px;
-            background: transparent; border: none; outline: none;
-            color: #163654; text-align: center; font-size: 16px; font-weight: bold;
-            letter-spacing: 1px; z-index: 10;
-        }
-        .nickname-input::placeholder { color: rgba(22, 54, 84, 0.4); font-style: italic; font-size: 13px; }
-
-        /* Прозрачная рабочая кнопка «Создать» на самом низу */
-        .start-btn {
-            position: absolute; bottom: 3%; left: 50%; transform: translateX(-50%);
-            width: 40%; height: 40px; background: transparent; border: none; cursor: pointer;
-            color: #163654; font-size: 15px; font-weight: bold; text-transform: uppercase;
-            letter-spacing: 2px; z-index: 10;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Puzzle & Power - Создание Персонажа</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+    body {
+      background: #111;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .game-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 450px;
+      background-image: url('assets/bg_creation.png');
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+    .left-zone {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 56%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .gender-selector {
+      width: 100%;
+      height: 60%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      position: relative;
+    }
+    .hero-avatar {
+      position: absolute;
+      bottom: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 80%; 
+      object-fit: contain;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 3;
+    }
+    .arrow-nav {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stats-container {
+      width: 90%;
+      height: 32%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 204, 0, 0.2);
+      border-radius: 10px;
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      margin-bottom: 5%;
+    }
+    .stat-box {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #e0e0e0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 2px;
+    }
+    .stat-name { font-weight: 500; }
+    .stat-val { color: #ffcc00; font-weight: bold; }
+    .right-menu {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 44%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      z-index: 2;
+    }
+    .title-plate {
+      margin-top: 10%;
+      height: 8%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 13px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 4px #000;
+    }
+    .class-holder {
+      margin-top: 5%;
+      height: 51%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0 8px;
+    }
+    .class-option {
+      height: 22%;
+      background: transparent;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      color: #3d2314;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .class-option.selected {
+      border-color: #ffcc00;
+      background: rgba(255, 204, 0, 0.15);
+      color: #fff;
+      text-shadow: 0 1px 3px #000;
+      box-shadow: inset 0 0 10px rgba(255,204,0,0.4);
+    }
+    .name-holder {
+      margin-top: 8%;
+      height: 9%;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+    }
+    .nickname-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      text-align: center;
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 1px 2px #000;
+      outline: none;
+    }
+    .nickname-input::placeholder { color: rgba(255, 255, 255, 0.4); }
+    .btn-start {
+      margin-top: auto;
+      margin-bottom: 6%;
+      height: 8%;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+    .btn-start:active { background: rgba(255, 255, 255, 0.1); }
+  </style>
 </head>
 <body>
 
-    <div class="wrapper">
-        <!-- Спрайт героя слева (пока заглушка, завтра вырежем) -->
-        <img id="heroImage" class="hero-portrait" src="mage.png" alt="Hero" onerror="this.style.display='none'">
-
-        <!-- Заголовок правой панели -->
-        <div class="title-box">СТАТЫ БК</div>
-
-        <!-- Стрелки переключения вокруг героя -->
-        <button class="arrow arrow-left" onclick="prevHero()">&langle;</button>
-        <button class="arrow arrow-right" onclick="nextHero()">&rangle;</button>
-
-        <!-- 5 полей характеристик в стиле БК/MMORPG -->
-        <div class="stats-container">
-            <div class="stat-box"><span class="stat-name">Сила</span><span class="stat-val" id="strVal">0</span></div>
-            <div class="stat-box"><span class="stat-name">Ловкость</span><span class="stat-val" id="aglVal">0</span></div>
-            <div class="stat-box"><span class="stat-name">Интуиция</span><span class="stat-val" id="intVal">0</span></div>
-            <div class="stat-box"><span class="stat-name">Выносливость</span><span class="stat-val" id="vitVal">0</span></div>
-            <div class="stat-box"><span class="stat-name">Мудрость</span><span class="stat-val" id="wisVal">0</span></div>
-        </div>
-
-        <!-- Чистый рабочий инпут для ввода имени -->
-        <input type="text" id="heroName" class="nickname-input" placeholder="Введите ник..." maxlength="12">
-
-        <!-- Кнопка подтверждения на самом низу -->
-        <button class="start-btn" onclick="createCharacter()">Создать</button>
+<div class="game-container">
+  <div class="left-zone">
+    <div class="gender-selector">
+      <button class="arrow-nav" onclick="switchGender()">◀</button>
+      <img id="character-view" src="assets/char_male.png" class="hero-avatar" alt="Hero">
+      <button class="arrow-nav" onclick="switchGender()">▶</button>
     </div>
+    <div class="stats-container">
+      <div class="stat-box"><span class="stat-name" id="lblStr">Сила</span><span class="stat-val" id="strVal">10</span></div>
+      <div class="stat-box"><span class="stat-name" id="lblAgl">Ловкость</span><span class="stat-val" id="aglVal">10</span></div>
+      <div class="stat-box"><span class="stat-name" id="lblInt">Интуиция</span><span class="stat-val" id="intVal">10</span></div>
+      <div class="stat-box"><span class="stat-name" id="lblVit">Выносливость</span><span class="stat-val" id="vitVal">10</span></div>
+      <div class="stat-box"><span class="stat-name" id="lblWis">Мудрость</span><span class="stat-val" id="wisVal">10</span></div>
+    </div>
+  </div>
+  <div class="right-menu">
+    <div class="title-plate" id="lblTitlePlate">Создать персонажа</div>
+    <div class="class-holder">
+      <button class="class-option selected" id="btnClassWarrior" onclick="pickClass(this, 'warrior')">⚔️ Воин</button>
+      <button class="class-option" id="btnClassTank" onclick="pickClass(this, 'tank')">🛡️ Танк</button>
+      <button class="class-option" id="btnClassElf" onclick="pickClass(this, 'elf')">🧝 Эльф</button>
+      <button class="class-option" id="btnClassMage" onclick="pickClass(this, 'mage')">🔮 Маг</button>
+    </div>
+    <div class="name-holder">
+      <input type="text" id="hero-name" class="nickname-input" placeholder="Имя героя..." maxlength="12">
+    </div>
+    <button class="btn-start" id="lblBtnStart" onclick="finishCreation()">Начать игру</button>
+  </div>
+</div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        if(tg) { tg.ready(); tg.expand(); }
+<script>
+  const translations = {
+    ru: {
+      titlePlate: "Создать персонажа", btnStart: "Начать игру", placeholderName: "Имя героя...",
+      alertName: "Дай имя своему герою!", alertExist: "Персонаж для этого аккаунта уже создан!", alertError: "Ошибка сохранения: ",
+      classes: { warrior: "⚔️ Воин", tank: "🛡️ Танк", elf: "🧝 Эльф", mage: "🔮 Маг" },
+      stats: { str: "Сила", agl: "Ловкость", int: "Интуиция", vit: "Выносливость", wis: "Мудрость" }
+    },
+    en: {
+      titlePlate: "Create Character", btnStart: "Start Game", placeholderName: "Hero name...",
+      alertName: "Give a name to your hero!", alertExist: "Character for this account is already created!", alertError: "Save error: ",
+      classes: { warrior: "⚔️ Warrior", tank: "🛡️ Tank", elf: "🧝 Elf", mage: "🔮 Mage" },
+      stats: { str: "Strength", agl: "Agility", int: "Intuition", vit: "Vitality", wis: "Wisdom" }
+    }
+  };
+  let currentLang = 'ru';
+  const classStats = {
+    warrior: { str: 15, agl: 12, int: 10, vit: 13, wis: 5 },
+    tank:    { str: 12, agl: 8,  int: 10, vit: 20, wis: 5 },
+    elf:     { str: 10, agl: 18, int: 14, vit: 9,  wis: 4 },
+    mage:    { str: 5,  agl: 9,  int: 11, vit: 10, wis: 20 }
+  };
 
-        // 5 статов в стиле БК для каждого класса
-        const heroes = [
-            { name: 'Маг', stats: { сила: 5, ловкость: 10, интуиция: 15, выносливость: 12, мудрость: 45 } },
-            { name: 'Воин', stats: { сила: 42, ловкость: 12, интуиция: 10, выносливость: 25, мудрость: 3 } },
-            { name: 'Стрелок', stats: { сила: 15, ловкость: 40, интуиция: 25, выносливость: 15, мудрость: 5 } },
-            { name: 'Танк', stats: { сила: 20, ловкость: 5, интуиция: 5, выносливость: 55, мудрость: 2 } }
-        ];
-        
-        let currentIndex = 0;
+  let newHero = { gender: 'male', class: 'warrior', name: '' };
+  const characterImages = { male: 'assets/char_male.png', female: 'assets/char_female.png' };
 
-        function updateUI() {
-            const h = heroes[currentIndex];
-            // Меняем цифры в 5 золотых рамках
-            document.getElementById('strVal').innerText = h.stats.сила;
-            document.getElementById('aglVal').innerText = h.stats.ловкость;
-            document.getElementById('intVal').innerText = h.stats.интуиция;
-            document.getElementById('vitVal').innerText = h.stats.выносливость;
-            document.getElementById('wisVal').innerText = h.stats.мудрость;
-        }
+  // Твоя постоянная безопасная HTTPS-ссылка ngrok до твоего ПК!
+  const SERVER_URL = 'https://ngrok-free.dev';
 
-        function nextHero() { currentIndex = (currentIndex + 1) % heroes.length; updateUI(); if(tg&&tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light'); }
-        function prevHero() { currentIndex = (currentIndex - 1 + heroes.length) % heroes.length; updateUI(); if(tg&&tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light'); }
+  function applyLanguage(lang) {
+    currentLang = lang; const t = translations[lang];
+    document.getElementById('lblTitlePlate').innerText = t.titlePlate;
+    document.getElementById('lblBtnStart').innerText = t.btnStart;
+    document.getElementById('hero-name').placeholder = t.placeholderName;
+    document.getElementById('btnClassWarrior').innerText = t.classes.warrior;
+    document.getElementById('btnClassTank').innerText = t.classes.tank;
+    document.getElementById('btnClassElf').innerText = t.classes.elf;
+    document.getElementById('btnClassMage').innerText = t.classes.mage;
+    document.getElementById('lblStr').innerText = t.stats.str;
+    document.getElementById('lblAgl').innerText = t.stats.agl;
+    document.getElementById('lblInt').innerText = t.stats.int;
+    document.getElementById('lblVit').innerText = t.stats.vit;
+    document.getElementById('lblWis').innerText = t.stats.wis;
+  }
 
-        function createCharacter() {
-            let name = document.getElementById('heroName').value.trim();
-            if (name.length < 3) {
-                alert("Имя персонажа должно быть не короче 3 символов!");
-                return;
-            }
-            
-            if (tg && tg.HapticFeedback) { tg.HapticFeedback.impactOccurred('heavy'); }
+  function switchGender() {
+    const avatar = document.getElementById('character-view');
+    avatar.style.opacity = '0'; avatar.style.transform = 'translateX(-50%) scale(0.9)';
+    setTimeout(() => {
+      newHero.gender = newHero.gender === 'male' ? 'female' : 'male';
+      avatar.src = characterImages[newHero.gender];
+      avatar.style.opacity = '1'; avatar.style.transform = 'translateX(-50%) scale(1)';
+    }, 200);
+  }
 
-            alert(`Персонаж ${name} (${heroes[currentIndex].name}) успешно создан!`);
-            window.location.href = "city.html"; 
-        }
+  function pickClass(btnElement, selectedClass) {
+    document.querySelectorAll('.class-option').forEach(el => el.classList.remove('selected'));
+    btnElement.classList.add('selected');
+    newHero.class = selectedClass;
+    
+    const stats = classStats[selectedClass];
+    document.getElementById('strVal').innerText = stats.str;
+    document.getElementById('aglVal').innerText = stats.agl;
+    document.getElementById('intVal').innerText = stats.int;
+    document.getElementById('vitVal').innerText = stats.vit;
+    document.getElementById('wisVal').innerText = stats.wis;
+  }
 
-        updateUI();
-    </script>
+  window.onload = function() {
+    let userLang = 'ru';
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user) {
+      if (window.Telegram.WebApp.initDataUnsafe.user.language_code?.startsWith('en')) userLang = 'en';
+    } else {
+      if ((navigator.language || navigator.userLanguage)?.startsWith('en')) userLang = 'en';
+    }
+    applyLanguage(userLang);
+    pickClass(document.querySelector('.class-option'), 'warrior');
+  };
+
+  function finishCreation() {
+    const t = translations[currentLang];
+    const inputName = document.getElementById('hero-name').value.trim();
+    if (!inputName) { alert(t.alertName); return; }
+    
+    newHero.name = inputName;
+
+    const currentStats = {
+      str: parseInt(document.getElementById('strVal').innerText),
+      agl: parseInt(document.getElementById('aglVal').innerText),
+      int: parseInt(document.getElementById('intVal').innerText),
+      vit: parseInt(document.getElementById('vitVal').innerText),
+      wis: parseInt(document.getElementById('wisVal').innerText)
+    };
+
+    let tgId = 777; 
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user) {
+      tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
+    }
+
+    const payload = {
+      tg_id: tgId,
+      name: newHero.name,
+      gender: newHero.gender,
+      class_name: newHero.class, 
+      stats: currentStats
+    };
+
+    console.log("Отправка fetch-запроса на бэкенд:", payload);
+
+    fetch(`${SERVER_URL}/api/create-character`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        window.location.href = 'index.html';
+      } else {
+        alert(data.code === 'exist' ? t.alertExist : t.alertError + data.message);
+      }
+    })
+    .catch(err => {
+      console.error("Сервер не ответил через ngrok туннель:", err);
+      alert("Не удалось достучаться до сервера базы данных. Проверь, запущен ли server.py на ПК!");
+    });
+  }
+</script>
 </body>
 </html>
