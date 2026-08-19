@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Puzzle & Power - Создание Персонажа</title>
+  <title>Puzzle & Power - Создание Героя</title>
   <style>
     * {
       box-sizing: border-box;
@@ -31,6 +31,8 @@
       background-position: center;
       overflow: hidden;
     }
+    
+    /* ЛЕВАЯ СТОРОНА: Платформа, Стрелочки пола и Классы */
     .left-zone {
       position: absolute;
       top: 0;
@@ -40,77 +42,78 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
       z-index: 2;
     }
     .gender-selector {
       width: 100%;
-      height: 60%;
+      height: 65%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 15px;
+      padding: 0 4px; /* Идеальный прижим прозрачных кнопок к краям под твои стрелки */
       position: relative;
     }
     .hero-avatar {
       position: absolute;
-      bottom: 5%;
+      bottom: 12%;
       left: 50%;
       transform: translateX(-50%);
-      height: 80%; 
+      height: 65%; 
       object-fit: contain;
       transition: opacity 0.2s ease, transform 0.2s ease;
       z-index: 3;
     }
-    
-    /* Красивые фэнтези стрелочки для выбора ПОЛА */
+
+    /* АБСОЛЮТНО ПРОЗРАЧНЫЕ ЗОНЫ ПОВЕРХ ТВОИХ НАРИСОВАННЫХ СТРЕЛОЧЕК СНИЗУ КРУГА */
     .arrow-nav {
-      background: linear-gradient(135deg, #a17638, #593e1a);
-      border: 2px solid #ffcc00;
-      color: #fff;
-      font-size: 18px;
-      font-weight: bold;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
+      background: transparent;
+      border: none;
+      width: 40px;
+      height: 55px;
+      margin-top: 24%; /* Опускает кликабельные зоны ровно на высоту твоих стрелок у платформы */
       cursor: pointer;
       z-index: 5;
+      outline: none;
+      transition: transform 0.1s;
+    }
+    .arrow-nav:active {
+      transform: scale(0.85); /* Легкий отклик при нажатии на стрелочку */
+    }
+    
+    .class-holder-left {
+      width: 92%;
+      height: 25%;
+      margin-bottom: 8%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 6px;
+      padding: 5px;
+    }
+    .class-btn-left {
+      background: rgba(15, 12, 8, 0.75);
+      border: 1px solid #c3a475;
+      border-radius: 6px;
+      color: #ecd5b3;
+      font-weight: bold;
+      font-size: 13px;
+      font-family: 'Georgia', serif;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.3);
-      text-shadow: 0 2px 2px #000;
+      text-shadow: 0 1px 2px #000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      transition: all 0.15s ease;
     }
-    .arrow-nav:active {
-      transform: scale(0.9);
-      background: #ffcc00;
-      color: #000;
+    .class-btn-left.selected {
+      border-color: #ffcc00;
+      background: rgba(195, 164, 117, 0.25);
+      color: #fff;
+      box-shadow: 0 0 8px rgba(255, 204, 0, 0.4), inset 0 0 6px rgba(255,204,0,0.2);
     }
 
-    .stats-container {
-      width: 90%;
-      height: 32%;
-      background: rgba(15, 12, 8, 0.85);
-      border: 2px solid #a17638;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-      border-radius: 10px;
-      padding: 10px 14px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      margin-bottom: 5%;
-    }
-    .stat-box {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      color: #f0e6d2;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      padding-bottom: 2px;
-    }
-    .stat-name { font-weight: bold; text-shadow: 0 1px 2px #000; }
-    .stat-val { color: #ffcc00; font-weight: bold; text-shadow: 0 1px 2px #000; }
-
+    /* ПРАВАЯ СТОРОНА: Меню рамок под твой макет */
     .right-menu {
       position: absolute;
       top: 0;
@@ -122,97 +125,75 @@
       z-index: 2;
     }
     .title-plate {
-      margin-top: 10%;
-      height: 8%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffcc00;
-      font-weight: bold;
-      font-size: 13px;
-      text-transform: uppercase;
-      text-shadow: 0 2px 4px #000;
-    }
-    
-    .class-holder {
-      margin-top: 5%;
-      height: 51%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 0 10px;
-    }
-
-    /* КНОПКИ ВЫБОРА КЛАССА С РАМКАМИ И СТИЛЕМ РПГ */
-    .class-option {
-      height: 22%;
-      background: linear-gradient(180deg, #2c1e13, #1a110a);
-      border: 2px solid #593e1a;
-      border-radius: 8px;
-      color: #cdb48d;
-      font-weight: bold;
-      font-size: 14px;
-      font-family: 'Georgia', serif;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 1px 3px rgba(255,255,255,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-shadow: 0 2px 3px #000;
-    }
-    /* Эффект, когда класс выбран (горит золотом) */
-    .class-option.selected {
-      border-color: #ffcc00;
-      background: linear-gradient(180deg, #593e1a, #2c1e13);
-      color: #fff;
-      box-shadow: 0 0 12px rgba(255, 204, 0, 0.4), inset 0 1px 4px rgba(255,255,255,0.2);
-    }
-
-    .name-holder {
-      margin-top: 8%;
+      margin-top: 6.5%;
       height: 9%;
       display: flex;
       align-items: center;
-      padding: 0 12px;
+      justify-content: center;
+      color: #211508;
+      font-weight: bold;
+      font-size: 12px;
+      text-shadow: 0 1px 1px rgba(255,255,255,0.4);
     }
-    .nickname-input {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid #593e1a;
-      border-radius: 6px;
-      height: 36px;
-      text-align: center;
+    .stats-vertical-box {
+      margin-top: 2%;
+      height: 52%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0px 14px;
+    }
+    .stat-row-item {
+      height: 17%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #4a3319;
+      font-weight: bold;
+      padding: 0 6px;
+    }
+    .stat-val-orange {
+      color: #b85c00;
       font-size: 14px;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 1px 2px #000;
-      outline: none;
     }
-    .nickname-input::placeholder { color: rgba(255, 255, 255, 0.3); }
-
-    /* Металлическая крутая кнопка НАЧАТЬ ИГРУ в самом низу */
-    .btn-start {
-      margin-top: auto;
-      margin-bottom: 6%;
-      height: 8%;
-      background: linear-gradient(180deg, #a12b2b, #591313);
-      border: 2px solid #ffcc00;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 15px;
+    .name-holder-box {
+      margin-top: 6%;
+      height: 9%;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+    }
+    .nickname-input-clean {
+      width: 100%;
+      background: transparent;
+      border: none;
+      height: 100%;
+      text-align: center;
+      font-size: 13px;
       font-weight: bold;
-      text-transform: uppercase;
+      color: #4a3319;
+      outline: none;
+      font-family: 'Georgia', serif;
+    }
+    .btn-start-metal {
+      margin-top: auto;
+      margin-bottom: 5.5%;
+      height: 9.5%;
+      background: transparent;
+      border: none;
+      color: #211508;
+      font-size: 13px;
+      font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.6), inset 0 1px 3px rgba(255,255,255,0.3);
-      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      text-shadow: 0 1px 1px rgba(255,255,255,0.4);
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 100%;
     }
-    .btn-start:active {
-      transform: scale(0.97);
-      background: linear-gradient(180deg, #591313, #330b0b);
+    .btn-start-metal:active {
+      transform: scale(0.96);
     }
   </style>
 </head>
@@ -221,43 +202,45 @@
 <div class="game-container">
   <div class="left-zone">
     <div class="gender-selector">
-      <button class="arrow-nav" onclick="switchGender()">◀</button>
+      <!-- Две прозрачные зоны легли ровно поверх твоих стрелочек у каменного круга -->
+      <button class="arrow-nav" onclick="switchGender()"></button>
       <img id="character-view" src="assets/char_male.png" class="hero-avatar" alt="Hero">
-      <button class="arrow-nav" onclick="switchGender()">▶</button>
+      <button class="arrow-nav" onclick="switchGender()"></button>
     </div>
-    <div class="stats-container">
-      <div class="stat-box"><span class="stat-name" id="lblStr">Сила</span><span class="stat-val" id="strVal">10</span></div>
-      <div class="stat-box"><span class="stat-name" id="lblAgl">Ловкость</span><span class="stat-val" id="aglVal">10</span></div>
-      <div class="stat-box"><span class="stat-name" id="lblInt">Интуиция</span><span class="stat-val" id="intVal">10</span></div>
-      <div class="stat-box"><span class="stat-name" id="lblVit">Выносливость</span><span class="stat-val" id="vitVal">10</span></div>
-      <div class="stat-box"><span class="stat-name" id="lblWis">Мудрость</span><span class="stat-val" id="wisVal">10</span></div>
+    <div class="class-holder-left">
+      <button class="class-btn-left selected" id="btnClassWarrior" onclick="pickClass(this, 'warrior')">⚔️ Воин</button>
+      <button class="class-btn-left" id="idBtnClassTank" onclick="pickClass(this, 'tank')">🛡️ Танк</button>
+      <button class="class-btn-left" id="btnClassElf" onclick="pickClass(this, 'elf')">🧝 Эльф</button>
+      <button class="class-btn-left" id="btnClassMage" onclick="pickClass(this, 'mage')">🔮 Маг</button>
     </div>
   </div>
+
   <div class="right-menu">
-    <div class="title-plate" id="lblTitlePlate">Создать персонажа</div>
-    <div class="class-holder">
-      <button class="class-option selected" id="btnClassWarrior" onclick="pickClass(this, 'warrior')">⚔️ Воин</button>
-      <button class="class-option" id="idBtnClassTank" onclick="pickClass(this, 'tank')">🛡️ Танк</button>
-      <button class="class-option" id="btnClassElf" onclick="pickClass(this, 'elf')">🧝 Эльф</button>
-      <button class="class-option" id="btnClassMage" onclick="pickClass(this, 'mage')">🔮 Маг</button>
+    <div class="title-plate" id="lblTitlePlate">Характеристики</div>
+    <div class="stats-vertical-box">
+      <div class="stat-row-item"><span id="lblStr">Сила</span><span class="stat-val-orange" id="strVal">15</span></div>
+      <div class="stat-row-item"><span id="lblAgl">Ловкость</span><span class="stat-val-orange" id="aglVal">12</span></div>
+      <div class="stat-row-item"><span id="lblInt">Интуиция</span><span class="stat-val-orange" id="intVal">10</span></div>
+      <div class="stat-row-item"><span id="lblVit">Выносливость</span><span class="stat-val-orange" id="vitVal">13</span></div>
+      <div class="stat-row-item"><span id="lblWis">Мудрость</span><span class="stat-val-orange" id="wisVal">5</span></div>
     </div>
-    <div class="name-holder">
-      <input type="text" id="hero-name" class="nickname-input" placeholder="Имя героя..." maxlength="12">
+    <div class="name-holder-box">
+      <input type="text" id="hero-name" class="nickname-input-clean" value="ИМЯ" onfocus="if(this.value=='ИМЯ')this.value='';" onblur="if(this.value=='')this.value='ИМЯ';" maxlength="12">
     </div>
-    <button class="btn-start" id="lblBtnStart" onclick="finishCreation()">Начать игру</button>
+    <button class="btn-start-metal" id="lblBtnStart" onclick="finishCreation()">Создать персонажа</button>
   </div>
 </div>
 
 <script>
   const translations = {
     ru: {
-      titlePlate: "Создать персонажа", btnStart: "Начать игру", placeholderName: "Имя героя...",
+      titlePlate: "Характеристики", btnStart: "Создать персонажа", defaultName: "ИМЯ",
       alertName: "Дай имя своему герою!", alertExist: "Персонаж для этого аккаунта уже создан!", alertError: "Ошибка сохранения: ",
       classes: { warrior: "⚔️ Воин", tank: "🛡️ Танк", elf: "🧝 Эльф", mage: "🔮 Маг" },
       stats: { str: "Сила", agl: "Ловкость", int: "Интуиция", vit: "Выносливость", wis: "Мудрость" }
     },
     en: {
-      titlePlate: "Create Character", btnStart: "Start Game", placeholderName: "Hero name...",
+      titlePlate: "Stats", btnStart: "Create Character", defaultName: "NAME",
       alertName: "Give a name to your hero!", alertExist: "Character for this account is already created!", alertError: "Save error: ",
       classes: { warrior: "⚔️ Warrior", tank: "🛡️ Tank", elf: "🧝 Elf", mage: "🔮 Mage" },
       stats: { str: "Strength", agl: "Agility", int: "Intuition", vit: "Vitality", wis: "Wisdom" }
@@ -274,14 +257,16 @@
   let newHero = { gender: 'male', class: 'warrior', name: '' };
   const characterImages = { male: 'assets/char_male.png', female: 'assets/char_female.png' };
 
-  // Используем твою рабочую постоянную ссылку ngrok
   const SERVER_URL = 'https://ngrok-free.dev';
 
   function applyLanguage(lang) {
     currentLang = lang; const t = translations[lang];
     document.getElementById('lblTitlePlate').innerText = t.titlePlate;
     document.getElementById('lblBtnStart').innerText = t.btnStart;
-    document.getElementById('hero-name').placeholder = t.placeholderName;
+    const nameInput = document.getElementById('hero-name');
+    if(nameInput.value == "ИМЯ" || nameInput.value == "NAME") {
+      nameInput.value = t.defaultName;
+    }
     document.getElementById('btnClassWarrior').innerText = t.classes.warrior;
     document.getElementById('idBtnClassTank').innerText = t.classes.tank;
     document.getElementById('btnClassElf').innerText = t.classes.elf;
@@ -304,7 +289,7 @@
   }
 
   function pickClass(btnElement, selectedClass) {
-    document.querySelectorAll('.class-option').forEach(el => el.classList.remove('selected'));
+    document.querySelectorAll('.class-btn-left').forEach(el => el.classList.remove('selected'));
     btnElement.classList.add('selected');
     newHero.class = selectedClass;
     
@@ -324,13 +309,13 @@
       if ((navigator.language || navigator.userLanguage)?.startsWith('en')) userLang = 'en';
     }
     applyLanguage(userLang);
-    pickClass(document.querySelector('.class-option'), 'warrior');
+    pickClass(document.querySelector('.class-btn-left'), 'warrior');
   };
 
   function finishCreation() {
     const t = translations[currentLang];
     const inputName = document.getElementById('hero-name').value.trim();
-    if (!inputName) { alert(t.alertName); return; }
+    if (!inputName || inputName === "ИМЯ" || inputName === "NAME") { alert(t.alertName); return; }
     
     newHero.name = inputName;
 
@@ -355,7 +340,7 @@
       stats: currentStats
     };
 
-    console.log("Отправка пакета в БД:", payload);
+    console.log("Отправка в БД:", payload);
 
     fetch(`${SERVER_URL}/api/create-character`, {
       method: 'POST',
