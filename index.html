@@ -1,13 +1,14 @@
     <script>
-        // Твоя постоянная ссылка ngrok, которая ведёт прямо в базу PostgreSQL на твоём ПК!
-        const SERVER_URL = 'https://ngrok-free.dev';
+       // Твоя постоянная ссылка ngrok, которая ведёт прямо в базу PostgreSQL на твоём ПК!
+const SERVER_URL = 'https://ngrok-free.dev';
 
-        // Инициализируем Telegram WebApp
-        const tg = window.Telegram.WebApp;
-        if (tg) {
-            tg.ready();
-            tg.expand(); // Раскрываем игру на весь экран телефона
-        }
+// Безопасная инициализация Telegram WebApp без вылета ошибок на ПК
+let tg = null;
+if (window.Telegram && window.Telegram.WebApp) {
+    tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand(); // Раскрываем игру на весь экран телефона
+}
 
         function enterGame() {
             // Включаем сочную вибрацию телефона через Telegram SDK при нажатии
