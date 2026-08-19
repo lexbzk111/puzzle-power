@@ -32,12 +32,12 @@
       overflow: hidden;
     }
     
-    /* ЛЕВАЯ СТОРОНА: Платформа, Стрелочки пола и Классы */
+    /* ЛЕВАЯ ЧАСТЬ: Аватар и Классы */
     .left-zone {
       position: absolute;
       top: 0;
       left: 0;
-      width: 56%;
+      width: 54%;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -46,57 +46,57 @@
     }
     .gender-selector {
       width: 100%;
-      height: 65%;
+      height: 68%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 4px; /* Идеальный прижим прозрачных кнопок к краям под твои стрелки */
+      padding: 0;
       position: relative;
     }
     .hero-avatar {
       position: absolute;
-      bottom: 12%;
+      bottom: 21%;
       left: 50%;
       transform: translateX(-50%);
-      height: 65%; 
+      height: 62%; 
       object-fit: contain;
       transition: opacity 0.2s ease, transform 0.2s ease;
       z-index: 3;
     }
 
-    /* АБСОЛЮТНО ПРОЗРАЧНЫЕ ЗОНЫ ПОВЕРХ ТВОИХ НАРИСОВАННЫХ СТРЕЛОЧЕК СНИЗУ КРУГА */
     .arrow-nav {
       background: transparent;
       border: none;
-      width: 40px;
+      width: 45px;
       height: 55px;
-      margin-top: 24%; /* Опускает кликабельные зоны ровно на высоту твоих стрелок у платформы */
+      position: absolute;
+      bottom: 16%;
       cursor: pointer;
       z-index: 5;
       outline: none;
-      transition: transform 0.1s;
     }
-    .arrow-nav:active {
-      transform: scale(0.85); /* Легкий отклик при нажатии на стрелочку */
-    }
+    .arrow-left { left: 4px; }
+    .arrow-right { right: 4px; }
+    .arrow-nav:active { transform: scale(0.9); }
     
     .class-holder-left {
-      width: 92%;
-      height: 25%;
-      margin-bottom: 8%;
+      width: 95%;
+      height: 22%;
+      margin-top: auto;
+      margin-bottom: 9%;
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
-      gap: 6px;
-      padding: 5px;
+      gap: 5px;
+      padding: 4px;
     }
     .class-btn-left {
-      background: rgba(15, 12, 8, 0.75);
+      background: rgba(15, 12, 8, 0.8);
       border: 1px solid #c3a475;
       border-radius: 6px;
       color: #ecd5b3;
       font-weight: bold;
-      font-size: 13px;
+      font-size: 12px;
       font-family: 'Georgia', serif;
       cursor: pointer;
       display: flex;
@@ -110,56 +110,62 @@
       border-color: #ffcc00;
       background: rgba(195, 164, 117, 0.25);
       color: #fff;
-      box-shadow: 0 0 8px rgba(255, 204, 0, 0.4), inset 0 0 6px rgba(255,204,0,0.2);
+      box-shadow: 0 0 8px rgba(255, 204, 0, 0.4);
     }
 
-    /* ПРАВАЯ СТОРОНА: Меню рамок под твой макет */
+    /* ПРАВАЯ СТОРОНА: Меню из 7 рамок */
     .right-menu {
       position: absolute;
       top: 0;
       right: 0;
-      width: 44%;
+      width: 46%;
       height: 100%;
       display: flex;
       flex-direction: column;
       z-index: 2;
     }
+    
+    /* 1-я плашка: "Характеристики" */
     .title-plate {
-      margin-top: 6.5%;
+      margin-top: 6%;
       height: 9%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #211508;
+      color: #3b220e;
       font-weight: bold;
       font-size: 12px;
-      text-shadow: 0 1px 1px rgba(255,255,255,0.4);
     }
+    
+    /* 2-6 плашки: Изменили justify-content на центрирование с внутренними боковыми отступами */
     .stats-vertical-box {
-      margin-top: 2%;
+      margin-top: 1.5%;
       height: 52%;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       padding: 0px 14px;
     }
     .stat-row-item {
-      height: 17%;
+      height: 14%;
+      margin-bottom: 3.5%;
       display: flex;
-      justify-content: space-between;
+      justify-content: space-between; /* Сохраняем структуру, но зажимаем отступами padding */
       align-items: center;
       font-size: 13px;
       color: #4a3319;
       font-weight: bold;
-      padding: 0 6px;
+      padding: 0 22px; /* МЫ УВЕЛИЧИЛИ ОТСТУПЫ ПО БОКАМ, теперь текст и очки сдвинулись ближе к центру рамки! */
     }
     .stat-val-orange {
-      color: #b85c00;
+      color: #924500;
       font-size: 14px;
     }
+
+    /* 6-я рамка: ПОЛЕ ВВОДА ИМЕНИ */
     .name-holder-box {
-      margin-top: 6%;
-      height: 9%;
+      margin-top: 5.5%;
+      height: 9.5%;
       display: flex;
       align-items: center;
       padding: 0 14px;
@@ -176,25 +182,24 @@
       outline: none;
       font-family: 'Georgia', serif;
     }
+
+    /* 7-я рамка: КНОПКА "Создать персонажа" */
     .btn-start-metal {
       margin-top: auto;
       margin-bottom: 5.5%;
       height: 9.5%;
       background: transparent;
       border: none;
-      color: #211508;
+      color: #3b220e;
       font-size: 13px;
       font-weight: bold;
       cursor: pointer;
-      text-shadow: 0 1px 1px rgba(255,255,255,0.4);
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
     }
-    .btn-start-metal:active {
-      transform: scale(0.96);
-    }
+    .btn-start-metal:active { transform: scale(0.96); }
   </style>
 </head>
 <body>
@@ -202,10 +207,9 @@
 <div class="game-container">
   <div class="left-zone">
     <div class="gender-selector">
-      <!-- Две прозрачные зоны легли ровно поверх твоих стрелочек у каменного круга -->
-      <button class="arrow-nav" onclick="switchGender()"></button>
+      <button class="arrow-nav arrow-left" onclick="switchGender()"></button>
       <img id="character-view" src="assets/char_male.png" class="hero-avatar" alt="Hero">
-      <button class="arrow-nav" onclick="switchGender()"></button>
+      <button class="arrow-nav arrow-right" onclick="switchGender()"></button>
     </div>
     <div class="class-holder-left">
       <button class="class-btn-left selected" id="btnClassWarrior" onclick="pickClass(this, 'warrior')">⚔️ Воин</button>
@@ -225,7 +229,7 @@
       <div class="stat-row-item"><span id="lblWis">Мудрость</span><span class="stat-val-orange" id="wisVal">5</span></div>
     </div>
     <div class="name-holder-box">
-      <input type="text" id="hero-name" class="nickname-input-clean" value="ИМЯ" onfocus="if(this.value=='ИМЯ')this.value='';" onblur="if(this.value=='')this.value='ИМЯ';" maxlength="12">
+      <input type="text" id="hero-name" class="nickname-input-clean" value="ИМЯ" onfocus="if(this.value=='ИМЯ'||this.value=='NAME')this.value='';" onblur="if(this.value=='')this.value=translations[currentLang].defaultName;" maxlength="12">
     </div>
     <button class="btn-start-metal" id="lblBtnStart" onclick="finishCreation()">Создать персонажа</button>
   </div>
