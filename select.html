@@ -32,7 +32,7 @@
       overflow: hidden;
     }
     
-    /* ЛЕВАЯ ЧАСТЬ: Аватар и Классы */
+    /* ЛЕВАЯ ЧАСТЬ: Возвращаем героя на законное место */
     .left-zone {
       position: absolute;
       top: 0;
@@ -51,7 +51,7 @@
     }
     .hero-avatar {
       position: absolute;
-      bottom: 12%; 
+      bottom: 12%; /* ВЕРНУЛИ КАК БЫЛО — ноги стоят ровно на плоскости круга */
       left: 50%;
       transform: translateX(-50%);
       height: 76%; 
@@ -60,6 +60,7 @@
       z-index: 3;
     }
 
+    /* Клики по стрелочкам на платформе */
     .arrow-nav {
       background: transparent;
       border: none;
@@ -103,8 +104,6 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.4);
       transition: all 0.15s ease;
     }
-    
-    /* ТЕПЕРЬ ВЫБРАННЫЙ КЛАСС ГОРИТ КРАСИВЫМ ЯРКИМ СИНИМ НЕОНОМ */
     .class-btn-left.selected {
       border-color: #00bfff;
       background: rgba(0, 191, 255, 0.2);
@@ -112,7 +111,7 @@
       box-shadow: 0 0 14px rgba(0, 191, 255, 0.7), inset 0 0 6px rgba(0, 191, 255, 0.4);
     }
 
-    /* ПРАВАЯ СТОРОНА: Меню из 7 рамок */
+    /* ПРАВАЯ СТОРОНА: Ювелирно посаженные рамки */
     .right-menu {
       position: absolute;
       top: 0;
@@ -133,10 +132,8 @@
       font-weight: bold;
       font-size: 12px;
     }
-    
-    /* СДВИНУЛИ НАМНОГО НИЖЕ (с 24.5% подняли до 33.5%) И УВЕЛИЧИЛИ ШАГ МЕЖДУ СТРОКАМИ */
     .stats-vertical-box {
-      margin-top: 33.5%; /* Прямо мощно опустили вниз, чтобы Сила пробила барьер и села в рамку */
+      margin-top: 33.5%; 
       height: 42.5%; 
       display: flex;
       flex-direction: column;
@@ -145,7 +142,7 @@
     }
     .stat-row-item {
       height: 14%; 
-      margin-bottom: 5.6%; /* Растянули шаг, чтобы Мудрость и Выносливость тоже сели по местам */
+      margin-bottom: 5.6%; 
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -159,7 +156,6 @@
       font-size: 13px;
     }
 
-    /* Поле ИМЯ опустилось вслед за статами ещё ниже */
     .name-holder-box {
       margin-top: 11.5%; 
       height: 9.5%;
@@ -180,7 +176,6 @@
       font-family: 'Georgia', serif;
     }
     
-    /* Кнопка создания персонажа */
     .btn-start-metal {
       margin-top: 6.5%; 
       height: 9.5%;
