@@ -32,7 +32,7 @@
       overflow: hidden;
     }
     
-    /* ЛЕВАЯ ЧАСТЬ: Аватар и Классы */
+    /* ЛЕВАЯ ЧАСТЬ: Большой аватар и классы на самом дне */
     .left-zone {
       position: absolute;
       top: 0;
@@ -46,7 +46,7 @@
     }
     .gender-selector {
       width: 100%;
-      height: 68%;
+      height: 72%; /* Увеличили зону для большого героя */
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -55,10 +55,10 @@
     }
     .hero-avatar {
       position: absolute;
-      bottom: 21%;
+      bottom: 12%; /* Ноги встают четко на круг */
       left: 50%;
       transform: translateX(-50%);
-      height: 62%; 
+      height: 78%; /* СДЕЛАЛИ ГЕРОЯ КРУПНЫМ */
       object-fit: contain;
       transition: opacity 0.2s ease, transform 0.2s ease;
       z-index: 3;
@@ -70,7 +70,7 @@
       width: 45px;
       height: 55px;
       position: absolute;
-      bottom: 16%;
+      bottom: 6%; /* Сместили вслед за стрелочками на арте */
       cursor: pointer;
       z-index: 5;
       outline: none;
@@ -79,12 +79,12 @@
     .arrow-right { right: 4px; }
     .arrow-nav:active { transform: scale(0.9); }
     
-    /* ЕЩЁ НИЖЕ ОПУСТИЛИ КЛАССЫ В САМЫЙ НИЗ ОБЛАКОВ */
+    /* КЛАССЫ НА САМОМ ДНЕ ОБЛАКОВ */
     .class-holder-left {
       width: 95%;
-      height: 20%; /* Слегка уменьшили высоту, чтобы они сели плотнее на дно экрана */
+      height: 18%;
       margin-top: auto;
-      margin-bottom: 5%; /* Уменьшили нижний отступ, чтобы блок просел ниже */
+      margin-bottom: 2%; /* Опустили на самый край экрана */
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
@@ -92,7 +92,7 @@
       padding: 4px;
     }
     .class-btn-left {
-      background: rgba(15, 12, 8, 0.8);
+      background: rgba(15, 12, 8, 0.85);
       border: 1px solid #c3a475;
       border-radius: 6px;
       color: #ecd5b3;
@@ -125,41 +125,47 @@
       flex-direction: column;
       z-index: 2;
     }
+    
+    /* 1-я плашка: "Характеристики" */
     .title-plate {
       margin-top: 6.5%;
       height: 9%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #4a3319;
+      color: #000000; /* ЯРКИЙ ЧЕРНЫЙ ЦВЕТ */
       font-weight: bold;
       font-size: 12px;
     }
+    
+    /* ОПУСТИЛИ НАМНОГО НИЖЕ СТАТЫ */
     .stats-vertical-box {
-      margin-top: 10.5%;
-      height: 43.5%;
+      margin-top: 14.5%; /* СДВИНУЛИ НАМНОГО НИЖЕ ВНУТРЬ РАМОК */
+      height: 42.5%; 
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       padding: 0px 14px;
     }
     .stat-row-item {
-      height: 16.5%;
-      margin-bottom: 4%;
+      height: 16%; 
+      margin-bottom: 4.8%; /* Шаг между рамками */
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 13px;
-      color: #4a3319;
+      color: #000000; /* ЯРКИЙ ЧЕРНЫЙ ЦВЕТ ДЛЯ СТАТ */
       font-weight: bold;
       padding: 0 22px;
     }
     .stat-val-orange {
-      color: #924500;
+      color: #000000; /* ЦИФРЫ ТОЖЕ ЧЕРНЫЕ И ЯРКИЕ */
       font-size: 14px;
     }
+
+    /* 6-я рамка: ПОЛЕ ВВОДА ИМЕНИ */
     .name-holder-box {
-      margin-top: 7%;
+      margin-top: 6.5%; /* Сдвинули ровно в рамку ИМЯ */
       height: 9.5%;
       display: flex;
       align-items: center;
@@ -173,17 +179,19 @@
       text-align: center;
       font-size: 13px;
       font-weight: bold;
-      color: #4a3319;
+      color: #000000; /* ЧЕРНЫЙ ЦВЕТ ВВОДА */
       outline: none;
       font-family: 'Georgia', serif;
     }
+
+    /* 7-я рамка: КНОПКА "Создать персонажа" */
     .btn-start-metal {
       margin-top: auto;
       margin-bottom: 5.5%;
       height: 9.5%;
       background: transparent;
       border: none;
-      color: #4a3319;
+      color: #000000; /* ЧЕРНЫЙ ЦВЕТ КНОПКИ */
       font-size: 13px;
       font-weight: bold;
       cursor: pointer;
