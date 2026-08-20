@@ -79,11 +79,12 @@
     .arrow-right { right: 4px; }
     .arrow-nav:active { transform: scale(0.9); }
     
+    /* ЕЩЁ НИЖЕ ОПУСТИЛИ КЛАССЫ В САМЫЙ НИЗ ОБЛАКОВ */
     .class-holder-left {
       width: 95%;
-      height: 22%;
+      height: 20%; /* Слегка уменьшили высоту, чтобы они сели плотнее на дно экрана */
       margin-top: auto;
-      margin-bottom: 9%;
+      margin-bottom: 5%; /* Уменьшили нижний отступ, чтобы блок просел ниже */
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
@@ -124,47 +125,41 @@
       flex-direction: column;
       z-index: 2;
     }
-    
-    /* 1-я плашка: "Характеристики" */
     .title-plate {
-      margin-top: 6%;
+      margin-top: 6.5%;
       height: 9%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #3b220e;
+      color: #4a3319;
       font-weight: bold;
       font-size: 12px;
     }
-    
-    /* 2-6 плашки: Изменили justify-content на центрирование с внутренними боковыми отступами */
     .stats-vertical-box {
-      margin-top: 1.5%;
-      height: 52%;
+      margin-top: 10.5%;
+      height: 43.5%;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       padding: 0px 14px;
     }
     .stat-row-item {
-      height: 14%;
-      margin-bottom: 3.5%;
+      height: 16.5%;
+      margin-bottom: 4%;
       display: flex;
-      justify-content: space-between; /* Сохраняем структуру, но зажимаем отступами padding */
+      justify-content: space-between;
       align-items: center;
       font-size: 13px;
       color: #4a3319;
       font-weight: bold;
-      padding: 0 22px; /* МЫ УВЕЛИЧИЛИ ОТСТУПЫ ПО БОКАМ, теперь текст и очки сдвинулись ближе к центру рамки! */
+      padding: 0 22px;
     }
     .stat-val-orange {
       color: #924500;
       font-size: 14px;
     }
-
-    /* 6-я рамка: ПОЛЕ ВВОДА ИМЕНИ */
     .name-holder-box {
-      margin-top: 5.5%;
+      margin-top: 7%;
       height: 9.5%;
       display: flex;
       align-items: center;
@@ -182,15 +177,13 @@
       outline: none;
       font-family: 'Georgia', serif;
     }
-
-    /* 7-я рамка: КНОПКА "Создать персонажа" */
     .btn-start-metal {
       margin-top: auto;
       margin-bottom: 5.5%;
       height: 9.5%;
       background: transparent;
       border: none;
-      color: #3b220e;
+      color: #4a3319;
       font-size: 13px;
       font-weight: bold;
       cursor: pointer;
@@ -361,7 +354,7 @@
     })
     .catch(err => {
       console.error("Ошибка:", err);
-      alert("Не удалось подключиться к серверу базы данных. Проверь, работает ли server.py на ПК!");
+      alert("Не удалось подключиться к server.py на ПК!");
     });
   }
 </script>
