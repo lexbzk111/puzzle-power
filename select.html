@@ -21,7 +21,6 @@
       justify-content: center;
       align-items: center;
     }
-    /* КРАСНУЮ ВНЕШНЮЮ РАМКУ УБРАЛИ, вернули чистый контейнер */
     .game-container {
       position: relative;
       width: 100%;
@@ -52,7 +51,7 @@
     }
     .hero-avatar {
       position: absolute;
-      bottom: 2%; /* ОПУСТИЛИ ЕЩЁ НИЖЕ НА ДИСК */
+      bottom: 12%; 
       left: 50%;
       transform: translateX(-50%);
       height: 76%; 
@@ -105,12 +104,12 @@
       transition: all 0.15s ease;
     }
     
-    /* ТЕПЕРЬ ВЫБРАННЫЙ КЛАСС ГОРИТ ЯРКИМ КРАСНЫМ НЕОНОМ */
+    /* ТЕПЕРЬ ВЫБРАННЫЙ КЛАСС ГОРИТ КРАСИВЫМ ЯРКИМ СИНИМ НЕОНОМ */
     .class-btn-left.selected {
-      border-color: #ff2a2a;
-      background: rgba(255, 42, 42, 0.2);
+      border-color: #00bfff;
+      background: rgba(0, 191, 255, 0.2);
       color: #fff;
-      box-shadow: 0 0 12px rgba(255, 42, 42, 0.6), inset 0 0 6px rgba(255, 42, 42, 0.3);
+      box-shadow: 0 0 14px rgba(0, 191, 255, 0.7), inset 0 0 6px rgba(0, 191, 255, 0.4);
     }
 
     /* ПРАВАЯ СТОРОНА: Меню из 7 рамок */
@@ -135,9 +134,9 @@
       font-size: 12px;
     }
     
-    /* ОПУСТИЛИ ЕЩЁ НИЖЕ И СЖАЛИ ШАГ МЕЖДУ СТРОКАМИ */
+    /* СДВИНУЛИ НАМНОГО НИЖЕ (с 24.5% подняли до 33.5%) И УВЕЛИЧИЛИ ШАГ МЕЖДУ СТРОКАМИ */
     .stats-vertical-box {
-      margin-top: 24.5%; /* Посадили Силу идеально во вторую рамку */
+      margin-top: 33.5%; /* Прямо мощно опустили вниз, чтобы Сила пробила барьер и села в рамку */
       height: 42.5%; 
       display: flex;
       flex-direction: column;
@@ -145,8 +144,8 @@
       padding: 0px 14px;
     }
     .stat-row-item {
-      height: 15.5%; 
-      margin-bottom: 3.2%; /* Уменьшили шаг, чтобы нижние статы не уползали вниз рамок */
+      height: 14%; 
+      margin-bottom: 5.6%; /* Растянули шаг, чтобы Мудрость и Выносливость тоже сели по местам */
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -160,8 +159,9 @@
       font-size: 13px;
     }
 
+    /* Поле ИМЯ опустилось вслед за статами ещё ниже */
     .name-holder-box {
-      margin-top: 8.5%; /* Отцентровали поле ИМЯ */
+      margin-top: 11.5%; 
       height: 9.5%;
       display: flex;
       align-items: center;
@@ -180,8 +180,9 @@
       font-family: 'Georgia', serif;
     }
     
+    /* Кнопка создания персонажа */
     .btn-start-metal {
-      margin-top: 3.5%; /* Поставили Создать Персонажа ровно на металлическую плашку */
+      margin-top: 6.5%; 
       height: 9.5%;
       background: transparent;
       border: none;
