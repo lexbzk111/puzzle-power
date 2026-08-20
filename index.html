@@ -86,10 +86,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                               if (data.success) {
                     if (data.has_character) {
                         console.log("Персонаж найден в PostgreSQL! Добро пожаловать!");
-                        alert(`С возвращением, ${data.user.name}! (Уровень ${data.user.level})`);
+                        // Перенаправляем игрока прямо на карту города
+                        window.location.href = "lobby.html";
                     } else {
                         console.log("Персонажа нет. Отправляем на select.html...");
                         window.location.href = "select.html";
