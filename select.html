@@ -34,30 +34,15 @@
       position: relative;
     }
 
-    /* декоративный уголок */
-    .frame-container::before {
-      content: "✦";
-      position: absolute;
-      top: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #f0f7ff;
-      padding: 0 16px;
-      color: #4a8db7;
-      font-size: 22px;
-      letter-spacing: 6px;
-      text-shadow: 0 0 6px #6a9ec466;
-    }
-
-    /* ===== ЗАГОЛОВОК ===== */
+    /* ===== ЗАГОЛОВОК (без ромбика) ===== */
     .frame-title {
       text-align: center;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
       letter-spacing: 3px;
       color: #1a4b6d;
       text-shadow: 0 1px 0 #b8d4e8, 0 0 12px #8bb9d966;
-      margin-top: -6px;
+      margin-top: 0;
       margin-bottom: 18px;
       padding-bottom: 8px;
       border-bottom: 2px dashed #8bb9d9;
@@ -66,7 +51,7 @@
     }
     .frame-title small {
       display: block;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: normal;
       opacity: 0.7;
       letter-spacing: 2px;
@@ -100,26 +85,27 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 160px;
+      min-height: 200px;
     }
 
     .gender-btn {
       background: transparent;
       border: none;
-      font-size: 28px;
+      font-size: 32px;
       color: #4a8db7;
       cursor: pointer;
-      padding: 0 6px;
+      padding: 0 8px;
       line-height: 1;
       text-shadow: 0 0 8px #7aafd066;
       transition: 0.1s ease;
+      font-weight: bold;
     }
     .gender-btn:active { transform: scale(0.8); }
 
     .hero-avatar {
-      width: 80px;
+      width: 120px;
       height: auto;
-      max-height: 130px;
+      max-height: 160px;
       object-fit: contain;
       filter: drop-shadow(0 4px 8px #4a7a9c55);
       transition: 0.2s ease;
@@ -137,8 +123,8 @@
       background: #e4eff9;
       border: 1.5px solid #7aafd0;
       border-radius: 30px;
-      padding: 8px 2px;
-      font-size: 11px;
+      padding: 10px 2px;
+      font-size: 12px;
       font-weight: bold;
       color: #1a4b6d;
       text-shadow: 0 1px 0 #ffffff77;
@@ -172,7 +158,7 @@
       background: #eaf2fc;
       border: 1.5px solid #7aafd0;
       border-radius: 30px;
-      padding: 4px 14px 4px 18px;
+      padding: 5px 14px 5px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -216,11 +202,11 @@
       background: transparent;
       border: none;
       text-align: center;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: bold;
       color: #003153;
       font-family: 'Georgia', serif;
-      padding: 8px 4px;
+      padding: 10px 4px;
       outline: none;
       letter-spacing: 1px;
       text-shadow: 0 1px 0 #ffffffaa;
@@ -236,8 +222,8 @@
       background: #6a9ec4;
       border: 2px solid #4a8db7;
       border-radius: 60px;
-      padding: 12px 8px;
-      font-size: 16px;
+      padding: 14px 8px;
+      font-size: 17px;
       font-weight: bold;
       color: #ffffff;
       text-shadow: 0 2px 0 #2b5a7a;
@@ -260,15 +246,16 @@
       .stat-card { padding: 3px 10px 3px 14px; }
       .stat-name { font-size: 11px; }
       .stat-value { font-size: 13px; padding: 0 10px; min-width: 26px; }
-      .class-btn { font-size: 10px; padding: 6px 2px; }
-      .hero-avatar { width: 60px; }
-      .gender-btn { font-size: 22px; }
-      .frame-title { font-size: 17px; }
+      .class-btn { font-size: 10px; padding: 8px 2px; }
+      .hero-avatar { width: 90px; max-height: 130px; }
+      .gender-btn { font-size: 26px; }
+      .frame-title { font-size: 18px; }
+      .avatar-block { min-height: 160px; }
     }
 
-    /* дополнительная стилизация */
-    .stat-card:last-of-type {
-      margin-bottom: 0;
+    @media (min-width: 401px) and (max-width: 500px) {
+      .hero-avatar { width: 105px; max-height: 150px; }
+      .avatar-block { min-height: 180px; }
     }
   </style>
 </head>
@@ -466,9 +453,6 @@
         });
         */
       });
-
-      // автофокус на имя (по желанию)
-      // nameInput.focus();
     }
 
     // запускаем после загрузки
