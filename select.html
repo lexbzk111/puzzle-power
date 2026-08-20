@@ -121,6 +121,7 @@
       display: flex;
       flex-direction: column;
       z-index: 2;
+      padding: 0 8px; /* добавил отступы справа */
     }
     .title-plate {
       margin-top: 3.5%;
@@ -133,52 +134,56 @@
       font-size: 12px;
     }
     
-    /* --- ИСПРАВЛЕННЫЙ БЛОК СТАТОВ: КАЖДАЯ СТАТА В СВОЁМ ОКОШКЕ --- */
+    /* ===== НОВЫЙ БЛОК СТАТОВ — КАЖДАЯ В СВОЕЙ РАМКЕ ===== */
     .stats-vertical-box {
-      margin-top: 10.5%;
-      height: 42.5%;
+      margin-top: 8%;
+      height: 44%;
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* Равномерно распределяем статы по вертикали */
-      padding: 0px 12px; /* Немного отступов по бокам */
+      gap: 4px; /* расстояние между рамками */
+      padding: 4px 6px;
     }
     
-    /* Каждая строка-стата теперь выглядит как отдельная рамка */
     .stat-row-item {
-      /* Делаем каждую стату отдельным блоком с рамкой и фоном */
-      background: rgba(0, 0, 0, 0.25); /* Полупрозрачный фон, чтобы читался текст */
-      border: 1px solid #c3a475; /* Золотистая рамка */
+      /* Каждая стата — отдельная карточка */
+      flex: 1; /* равномерно заполняют высоту */
+      background: rgba(20, 15, 10, 0.7);
+      border: 2px solid #c3a475;
       border-radius: 6px;
-      padding: 2px 8px; /* Внутренние отступы */
-      height: 15.5%; /* Высота подстраивается под контейнер */
-      
+      padding: 2px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 11.5px;
-      color: #000000;
+      font-size: 12px;
       font-weight: bold;
-      
-      /* Тени для объёма */
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-      transition: all 0.1s ease;
+      color: #ecd5b3;
+      text-shadow: 0 1px 2px #000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      min-height: 0; /* чтобы flex не растягивал больше нужного */
+    }
+    
+    .stat-name {
+      color: #ecd5b3;
+      font-size: 12px;
     }
     
     .stat-val-orange {
-      color: #000000;
-      font-size: 13px;
-      /* Можно добавить свой фон для числа, если нужно */
-      background: rgba(255, 255, 255, 0.15);
-      padding: 0 8px;
+      color: #ffb347;
+      font-size: 14px;
+      background: rgba(0,0,0,0.3);
+      padding: 0 10px;
       border-radius: 4px;
+      border: 1px solid #8a7a5a;
+      min-width: 28px;
+      text-align: center;
     }
 
     .name-holder-box {
-      margin-top: 8.5%;
+      margin-top: 6%;
       height: 9.5%;
       display: flex;
       align-items: center;
-      padding: 0 14px;
+      padding: 0 10px;
     }
     .nickname-input-clean {
       width: 100%;
@@ -194,7 +199,7 @@
     }
     
     .btn-start-metal {
-      margin-top: 3.5%;
+      margin-top: 3%;
       height: 9.5%;
       background: transparent;
       border: none;
@@ -230,11 +235,11 @@
   <div class="right-menu">
     <div class="title-plate" id="lblTitlePlate">Характеристики</div>
     <div class="stats-vertical-box">
-      <div class="stat-row-item"><span id="lblStr">Сила</span><span class="stat-val-orange" id="strVal">15</span></div>
-      <div class="stat-row-item"><span id="lblAgl">Ловкость</span><span class="stat-val-orange" id="aglVal">12</span></div>
-      <div class="stat-row-item"><span id="lblInt">Интуиция</span><span class="stat-val-orange" id="intVal">10</span></div>
-      <div class="stat-row-item"><span id="lblVit">Выносливость</span><span class="stat-val-orange" id="vitVal">13</span></div>
-      <div class="stat-row-item"><span id="lblWis">Мудрость</span><span class="stat-val-orange" id="wisVal">5</span></div>
+      <div class="stat-row-item"><span class="stat-name" id="lblStr">Сила</span><span class="stat-val-orange" id="strVal">15</span></div>
+      <div class="stat-row-item"><span class="stat-name" id="lblAgl">Ловкость</span><span class="stat-val-orange" id="aglVal">12</span></div>
+      <div class="stat-row-item"><span class="stat-name" id="lblInt">Интуиция</span><span class="stat-val-orange" id="intVal">10</span></div>
+      <div class="stat-row-item"><span class="stat-name" id="lblVit">Выносливость</span><span class="stat-val-orange" id="vitVal">13</span></div>
+      <div class="stat-row-item"><span class="stat-name" id="lblWis">Мудрость</span><span class="stat-val-orange" id="wisVal">5</span></div>
     </div>
     <div class="name-holder-box">
       <input type="text" id="hero-name" class="nickname-input-clean" value="ИМЯ" onfocus="if(this.value=='ИМЯ'||this.value=='NAME')this.value='';" onblur="if(this.value=='')this.value=translations[currentLang].defaultName;" maxlength="12">
