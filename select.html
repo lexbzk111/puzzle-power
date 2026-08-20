@@ -30,9 +30,11 @@
       background-size: cover;
       background-position: center;
       overflow: hidden;
+      border: 3px solid #ff2a2a; 
+      box-shadow: 0 0 25px rgba(255, 42, 42, 0.6), inset 0 0 15px rgba(255, 42, 42, 0.3);
     }
     
-    /* ЛЕВАЯ ЧАСТЬ: Аватар и Классы */
+    /* ЛЕВАЯ ЧАСТЬ: Герой на диске и классы на дне */
     .left-zone {
       position: absolute;
       top: 0;
@@ -51,23 +53,22 @@
     }
     .hero-avatar {
       position: absolute;
-      bottom: 15%; /* ОПУСТИЛИ ГЕРОЯ, теперь ноги стоят точно на круге */
+      bottom: 12%; /* Ноги теперь идеально зафиксированы на диске */
       left: 50%;
       transform: translateX(-50%);
-      height: 76%; /* Крупный, сочный размер */
+      height: 76%; 
       object-fit: contain;
       transition: opacity 0.2s ease, transform 0.2s ease;
       z-index: 3;
     }
 
-    /* ЖЕЛЕЗОБЕТОННЫЕ ЗОНЫ СТРЕЛОЧЕК ПОВЕРХ ПЛАТФОРМЫ */
     .arrow-nav {
       background: transparent;
       border: none;
-      width: 50px;
-      height: 65px;
+      width: 45px;
+      height: 55px;
       position: absolute;
-      bottom: 12%; /* Привязали четко к высоте нарисованных стрелок на платформе */
+      bottom: 12%; 
       cursor: pointer;
       z-index: 5;
       outline: none;
@@ -77,10 +78,11 @@
     .arrow-nav:active { transform: scale(0.9); }
     
     .class-holder-left {
-      width: 95%;
+      width: 90%;
       height: 18%;
       margin-top: auto;
-      margin-bottom: 2%;
+      margin-bottom: 2%; 
+      margin-left: 6%; 
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
@@ -132,8 +134,9 @@
       font-size: 12px;
     }
     
+    /* ОПУСТИЛИ НАМНОГО НИЖЕ (с 14.5% увеличили до 23%) */
     .stats-vertical-box {
-      margin-top: 14.5%;
+      margin-top: 23%; /* Сила теперь железно опустится во вторую рамку сверху */
       height: 42.5%; 
       display: flex;
       flex-direction: column;
@@ -146,18 +149,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 11.5px; /* СДЕЛАЛИ ХАРАКТЕРИСТИКИ ЧУТЬ МЕНЬШЕ, ЧТОБЫ СЕЛИ ИДЕАЛЬНО */
+      font-size: 11.5px; 
       color: #000000;
       font-weight: bold;
-      padding: 0 24px; /* Чуть прижали к центру */
+      padding: 0 24px; 
     }
     .stat-val-orange {
       color: #000000;
       font-size: 13px;
     }
 
+    /* Поле ИМЯ тоже опустилось вслед за статами в свою рамку */
     .name-holder-box {
-      margin-top: 6.5%;
+      margin-top: 1%; /* Скорректировали шаг под рамку ИМЯ */
       height: 9.5%;
       display: flex;
       align-items: center;
@@ -175,9 +179,10 @@
       outline: none;
       font-family: 'Georgia', serif;
     }
+    
+    /* Кнопка "Создать персонажа" четко ложится в самую нижнюю плашку */
     .btn-start-metal {
-      margin-top: auto;
-      margin-bottom: 5.5%;
+      margin-top: 2%; 
       height: 9.5%;
       background: transparent;
       border: none;
@@ -198,7 +203,6 @@
 <div class="game-container">
   <div class="left-zone">
     <div class="gender-selector">
-      <!-- Каждая кнопка теперь ложится точно по бокам каменного круга -->
       <button class="arrow-nav arrow-left" onclick="switchGender()"></button>
       <img id="character-view" src="assets/char_male.png" class="hero-avatar" alt="Hero">
       <button class="arrow-nav arrow-right" onclick="switchGender()"></button>
@@ -336,7 +340,7 @@
       stats: currentStats
     };
 
-    print("Отправка в БД:", payload);
+    console.log("Отправка в БД:", payload);
 
     fetch(`${SERVER_URL}/api/create-character`, {
       method: 'POST',
