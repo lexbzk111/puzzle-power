@@ -21,6 +21,7 @@
       justify-content: center;
       align-items: center;
     }
+    /* КРАСНУЮ ВНЕШНЮЮ РАМКУ УБРАЛИ, вернули чистый контейнер */
     .game-container {
       position: relative;
       width: 100%;
@@ -32,7 +33,7 @@
       overflow: hidden;
     }
     
-    /* ЛЕВАЯ ЧАСТЬ: Возвращаем героя на законное место */
+    /* ЛЕВАЯ ЧАСТЬ: Аватар и Классы */
     .left-zone {
       position: absolute;
       top: 0;
@@ -51,7 +52,7 @@
     }
     .hero-avatar {
       position: absolute;
-      bottom: 12%; /* ВЕРНУЛИ КАК БЫЛО — ноги стоят ровно на плоскости круга */
+      bottom: 2%; /* ОПУСТИЛИ ЕЩЁ НИЖЕ НА ДИСК */
       left: 50%;
       transform: translateX(-50%);
       height: 76%; 
@@ -60,7 +61,6 @@
       z-index: 3;
     }
 
-    /* Клики по стрелочкам на платформе */
     .arrow-nav {
       background: transparent;
       border: none;
@@ -104,14 +104,16 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.4);
       transition: all 0.15s ease;
     }
+    
+    /* ТЕПЕРЬ ВЫБРАННЫЙ КЛАСС ГОРИТ ЯРКИМ КРАСНЫМ НЕОНОМ */
     .class-btn-left.selected {
-      border-color: #00bfff;
-      background: rgba(0, 191, 255, 0.2);
+      border-color: #ff2a2a;
+      background: rgba(255, 42, 42, 0.2);
       color: #fff;
-      box-shadow: 0 0 14px rgba(0, 191, 255, 0.7), inset 0 0 6px rgba(0, 191, 255, 0.4);
+      box-shadow: 0 0 12px rgba(255, 42, 42, 0.6), inset 0 0 6px rgba(255, 42, 42, 0.3);
     }
 
-    /* ПРАВАЯ СТОРОНА: Ювелирно посаженные рамки */
+    /* ПРАВАЯ СТОРОНА: Меню из 7 рамок */
     .right-menu {
       position: absolute;
       top: 0;
@@ -132,8 +134,10 @@
       font-weight: bold;
       font-size: 12px;
     }
+    
+    /* ОПУСТИЛИ ЕЩЁ НИЖЕ И СЖАЛИ ШАГ МЕЖДУ СТРОКАМИ */
     .stats-vertical-box {
-      margin-top: 33.5%; 
+      margin-top: 24.5%; /* Посадили Силу идеально во вторую рамку */
       height: 42.5%; 
       display: flex;
       flex-direction: column;
@@ -141,8 +145,8 @@
       padding: 0px 14px;
     }
     .stat-row-item {
-      height: 14%; 
-      margin-bottom: 5.6%; 
+      height: 15.5%; 
+      margin-bottom: 3.2%; /* Уменьшили шаг, чтобы нижние статы не уползали вниз рамок */
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -157,7 +161,7 @@
     }
 
     .name-holder-box {
-      margin-top: 11.5%; 
+      margin-top: 8.5%; /* Отцентровали поле ИМЯ */
       height: 9.5%;
       display: flex;
       align-items: center;
@@ -177,7 +181,7 @@
     }
     
     .btn-start-metal {
-      margin-top: 6.5%; 
+      margin-top: 3.5%; /* Поставили Создать Персонажа ровно на металлическую плашку */
       height: 9.5%;
       background: transparent;
       border: none;
