@@ -35,17 +35,172 @@
             justify-content: space-between;
         }
 
-        /* Верхняя панель */
+        /* ВЕРХНЯЯ ПАНЕЛЬ ИГРОКА (Двухуровневая: Сверху статы, ниже валюты) */
         .top-bar {
             width: 100%;
-            padding: 12px 15px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0));
+            padding: 10px 12px;
+            background: linear-gradient(to bottom, rgba(5, 5, 15, 0.98) 80%, rgba(5, 5, 15, 0.7) 90%, rgba(0,0,0,0));
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        /* Первая строка: Аватар, ХП, Энергия, Локация */
+        .top-main-row {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .player-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Кружок уровня персонажа */
+        .level-circle {
+            position: relative;
+            width: 44px;
+            height: 44px;
+            background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #00d2ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+        }
+
+        .level-value {
+            color: #00d2ff;
+            font-weight: 900;
+            font-size: 15px;
+            text-shadow: 0 0 5px rgba(0, 210, 255, 0.8);
+        }
+
+        /* Контейнер для полосок ХП и Энергии */
+        .bars-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            width: 120px;
+        }
+
+        .status-bar-wrapper {
+            position: relative;
+            width: 100%;
+            height: 15px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .status-bar-fill {
+            height: 100%;
+            width: 100%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ХП — теперь ЗЕЛЕНАЯ */
+        .bar-hp { border-color: rgba(34, 197, 94, 0.3); }
+        .bar-hp .status-bar-fill {
+            background: linear-gradient(to right, #15803d, #22c55e);
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+        }
+
+        /* Энергия — теперь СИНЯЯ */
+        .bar-energy { border-color: rgba(59, 130, 246, 0.3); }
+        .bar-energy .status-bar-fill {
+            background: linear-gradient(to right, #1d4ed8, #3b82f6);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+        }
+
+        .bar-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* Вторая строка: Золото, Алмазы, Мечи */
+        .top-resources-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding-left: 2px;
+        }
+
+        /* Общий вид плашки под каждую валюту */
+        .resource-box {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 75px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .resource-icon {
+            font-size: 13px;
+            filter: drop-shadow(0 0 3px rgba(255,255,255,0.2));
+        }
+
+        .resource-value {
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* Цвета контуров для разных валют */
+        .res-gold { border-color: rgba(234, 179, 8, 0.4); box-shadow: 0 0 5px rgba(234, 179, 8, 0.15); }
+        .res-gold .resource-value { color: #facc15; }
+
+        .res-diamonds { border-color: rgba(6, 182, 212, 0.4); box-shadow: 0 0 5px rgba(6, 182, 212, 0.15); }
+        .res-diamonds .resource-value { color: #22d3ee; }
+
+        .res-swords { border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 0 5px rgba(239, 68, 68, 0.15); }
+        .res-swords .resource-value { color: #f87171; }
+
+        /* Локация и язык */
+        .top-right-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .location-badge {
             color: #fff;
             font-weight: bold;
+            font-size: 12px;
             text-shadow: 1px 1px 3px #000;
-            z-index: 10;
+        }
+
+        .lang-switcher {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #00d2ff;
+            color: #00d2ff;
+            border-radius: 4px;
+            padding: 1px 4px;
+            font-size: 9px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
         /* ИГРОВАЯ ЗОНА СО ЗДАНИЯМИ */
@@ -58,7 +213,6 @@
             z-index: 5;
         }
 
-        /* Общий стиль для интерактивного здания (кликовая зона) */
         .building-zone {
             position: absolute;
             display: flex;
@@ -66,11 +220,9 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            /* Включаем дебаг-рамку, чтобы видеть зону при настройке. Удали border, когда закончишь! */
-            border: 1px dashed rgba(0, 210, 255, 0.4); 
+            border: 1px dashed rgba(0, 210, 255, 0.3); 
         }
 
-        /* Стильные таблички-надписи над зданиями */
         .building-label {
             background: rgba(10, 15, 30, 0.85);
             border: 1px solid #00d2ff;
@@ -83,11 +235,10 @@
             text-transform: uppercase;
             white-space: nowrap;
             box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
-            pointer-events: none; /* Чтобы клик проходил сквозь текст на саму зону */
+            pointer-events: none;
             transition: all 0.2s ease;
         }
 
-        /* Эффект при наведении (для ПК) и при тапе (для смартфонов) */
         .building-zone:hover .building-label,
         .building-zone:active .building-label {
             background: #00d2ff;
@@ -96,42 +247,13 @@
             transform: scale(1.05);
         }
 
-        /* КООРДИНАТЫ ЗДАНИЙ (ПРИМЕРНЫЕ - ПОДПРАВЬ ПОД СВОЙ АРТ) */
-        
-        /* 1. ТАВЕРНА (слева сверху) */
-        .zone-tavern {
-            top: 35%;
-            left: 10%;
-            width: 25%;
-            height: 20%;
-        }
+        /* Координаты зданий */
+        .zone-tavern { top: 35%; left: 10%; width: 25%; height: 20%; }
+        .zone-forge { top: 30%; right: 10%; width: 25%; height: 22%; }
+        .zone-arena { top: 55%; left: 35%; width: 30%; height: 20%; }
+        .zone-castle { top: 15%; left: 37%; width: 26%; height: 18%; }
 
-        /* 2. КУЗНИЦА (справа сверху) */
-        .zone-forge {
-            top: 30%;
-            right: 10%;
-            width: 25%;
-            height: 22%;
-        }
-
-        /* 3. АРЕНА (по центру / внизу) */
-        .zone-arena {
-            top: 55%;
-            left: 35%;
-            width: 30%;
-            height: 20%;
-        }
-
-        /* 4. ЗАМОК / ЦИТАДЕЛЬ (в глубине по центру) */
-        .zone-castle {
-            top: 15%;
-            left: 37%;
-            width: 26%;
-            height: 18%;
-        }
-
-
-        /* КНОПКА И ШТОРКА ЧАТА (ОСТАВЛЯЕМ НА ПОТОМ) */
+        /* Кнопка вызова чата */
         .chat-toggle-btn {
             position: absolute;
             bottom: 20px;
@@ -149,55 +271,83 @@
             z-index: 20;
         }
         .chat-icon { width: 24px; height: 24px; fill: #ff007f; }
-        .chat-panel {
-            position: absolute;
-            bottom: -450px;
-            left: 0;
-            width: 100%;
-            height: 420px;
-            background: rgba(10, 15, 30, 0.95);
-            border-top: 3px solid #ff007f;
-            border-radius: 20px 20px 0 0;
-            z-index: 30;
-            transition: bottom 0.3s ease;
-        }
     </style>
 </head>
 <body>
 
     <div class="game-container">
-        <!-- Верхняя инфо-панель -->
+        
+        <!-- НОВЫЙ ДВУХУРОВЕНЬ ПАНЕЛИ: СТАТЫ + ТРИ ВАЛЮТЫ -->
         <div class="top-bar">
-            <span id="player-hero-name">Загрузка героя...</span>
-            <span>📍 Столица</span>
+            <!-- Верхняя строка: Профиль и локация -->
+            <div class="top-main-row">
+                <div class="player-profile">
+                    <!-- Кружок уровня -->
+                    <div class="level-circle">
+                        <span id="player-level" class="level-value">1</span>
+                    </div>
+                    <!-- Полоски ХП и Энергии -->
+                    <div class="bars-container">
+                        <!-- Зеленое ХП -->
+                        <div class="status-bar-wrapper bar-hp">
+                            <div id="hp-fill" class="status-bar-fill" style="width: 100%;"></div>
+                            <div id="hp-text" class="bar-text">1000 / 1000</div>
+                        </div>
+                        <!-- Синяя Энергия -->
+                        <div class="status-bar-wrapper bar-energy">
+                            <div id="energy-fill" class="status-bar-fill" style="width: 100%;"></div>
+                            <div id="energy-text" class="bar-text">60 / 60</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Правый блок инфо -->
+                <div class="top-right-block">
+                    <span id="txt-location" class="location-badge">📍 Capital</span>
+                    <button class="lang-switcher" onclick="toggleLanguage()">Language: RU</button>
+                </div>
+            </div>
+
+            <!-- Нижняя строка: Золото, Алмазы, Мечи -->
+            <div class="top-resources-row">
+                <!-- Золото -->
+                <div class="resource-box res-gold">
+                    <span class="resource-icon">💰</span>
+                    <span id="res-gold-val" class="resource-value">1,250</span>
+                </div>
+                <!-- Алмазы -->
+                <div class="resource-box res-diamonds">
+                    <span class="resource-icon">💎</span>
+                    <span id="res-diam-val" class="resource-value">150</span>
+                </div>
+                <!-- Мечи -->
+                <div class="resource-box res-swords">
+                    <span class="resource-icon">⚔️</span>
+                    <span id="res-swords-val" class="resource-value">45</span>
+                </div>
+            </div>
         </div>
 
         <!-- СЛОЙ ИНТЕРАКТИВНЫХ ЗДАНИЙ -->
         <div class="world-content">
-            
-            <!-- Таверна -->
             <div class="building-zone zone-tavern" onclick="openLocation('tavern')">
-                <div class="building-label">Таверна</div>
+                <div id="lbl-tavern" class="building-label">Tavern</div>
             </div>
 
-            <!-- Кузница -->
             <div class="building-zone zone-forge" onclick="openLocation('forge')">
-                <div class="building-label">Кузница</div>
+                <div id="lbl-forge" class="building-label">Forge</div>
             </div>
 
-            <!-- Арена -->
-            <div class="building-zone zone-arena" onclick="openLocation('arena')">
-                <div class="building-label">Арена PvP</div>
+            <div class="building-zone zone-arena" onclick="openLocation('square')">
+                <div id="lbl-square" class="building-label">Square</div>
             </div>
 
-            <!-- Замок -->
-            <div class="building-zone zone-castle" onclick="openLocation('castle')">
-                <div class="building-label">Замок Царя</div>
+            <div class="building-zone zone-castle" onclick="openLocation('pvp_arena')">
+                <div id="lbl-castle" class="building-label">PvP Arena</div>
             </div>
-
         </div>
 
-        <!-- Кнопка вызова чата (пусть пока просто висит визуально) -->
+        <!-- Кнопка чата -->
         <div class="chat-toggle-btn">
             <svg class="chat-icon" viewBox="0 0 24 24">
                 <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
@@ -206,27 +356,88 @@
     </div>
 
     <script>
-        // Инициализация Telegram WebApp
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand(); // Разворачиваем на весь экран смартфона
+        const SERVER_URL = 'https://ngrok-free.dev';
+        let currentLang = 'ru'; 
+
+        const LANGUAGES = {
+            ru: {
+                location: "📍 Столица",
+                tavern: "Таверна",
+                forge: "Кузница",
+                square: "Рыночная площадь",
+                castle: "Арена PvP",
+                entered: "Вы вошли в локацию: "
+            },
+            en: {
+                location: "📍 Capital",
+                tavern: "Tavern",
+                forge: "Forge",
+                square: "Market Square",
+                castle: "PvP Arena",
+                entered: "You entered location: "
+            }
+        };
+
+        // ФУНКЦИЯ ОБНОВЛЕНИЯ ХП, ЭНЕРГИИ И УРОВНЯ
+        function updatePlayerStatsUI(currentHp, maxHp, currentEnergy, maxEnergy, level) {
+            document.getElementById('player-level').innerText = level;
+
+            const hpPercent = Math.max(0, Math.min(100, (currentHp / maxHp) * 100));
+            const energyPercent = Math.max(0, Math.min(100, (currentEnergy / maxEnergy) * 100));
+
+            document.getElementById('hp-fill').style.width = `${hpPercent}%`;
+            document.getElementById('energy-fill').style.width = `${energyPercent}%`;
+
+            document.getElementById('hp-text').innerText = `${currentHp} / ${maxHp}`;
+            document.getElementById('energy-text').innerText = `${currentEnergy} / ${maxEnergy}`;
         }
 
-        // Функция клика по зданиям
-        function openLocation(locationId) {
-            console.log("Вы нажали на локацию:", locationId);
-            
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.HapticFeedback.impactOccurred('medium'); // Легкая вибрация телефона при клике!
-            }
+        // ФУНКЦИЯ ОБНОВЛЕНИЯ ИГРОВЫХ ВАЛЮТ
+        function updatePlayerResourcesUI(gold, diamonds, swords) {
+            document.getElementById('res-gold-val').innerText = gold.toLocaleString();
+            document.getElementById('res-diam-val').innerText = diamonds.toLocaleString();
+            document.getElementById('res-swords-val').innerText = swords.toLocaleString();
+        }
 
-            // Пока просто выводим алерт, далее будем открывать модалки или новые окна
-            alert("Вы вошли в локацию: " + locationId.toUpperCase());
+        function applyLocalization() {
+            const t = LANGUAGES[currentLang];
+            document.getElementById('txt-location').innerText = t.location;
+            document.getElementById('lbl-tavern').innerText = t.tavern;
+            document.getElementById('lbl-forge').innerText = t.forge;
+            document.getElementById('lbl-square').innerText = t.square;
+            document.getElementById('lbl-castle').innerText = t.castle;
+            document.querySelector('.lang-switcher').innerText = `Language: ${currentLang.toUpperCase()}`;
+        }
+
+        function toggleLanguage() {
+            currentLang = (currentLang === 'ru') ? 'en' : 'ru';
+            applyLocalization();
+        }
+
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+            const tgLang = window.Telegram.WebApp.initDataUnsafe?.user?.language_code;
+            if (tgLang && LANGUAGES[tgLang]) {
+                currentLang = tgLang;
+            }
+        }
+
+        function openLocation(locationId) {
+            if (window.Telegram?.WebApp?.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            }
+            const t = LANGUAGES[currentLang];
+            let locName = t[locationId === 'pvp_arena' ? 'castle' : (locationId === 'square' ? 'square' : locationId)];
+            alert(t.entered + locName);
         }
 
         window.onload = function() {
-            // Временная заглушка имени игрока
-            document.getElementById('player-hero-name').innerText = "Рыцарь Света";
+            applyLocalization();
+            
+            // Тестовое заполнение шкал и кошельков (в будущем прилетит из FastAPI)
+            updatePlayerStatsUI(1000, 1000, 60, 60, 1); // Полное Здоровье и Энергия, 1 уровень
+            updatePlayerResourcesUI(500, 10, 0); // Стартовый капитал: 500 золота, 10 алмазов, 0 мечей
         };
     </script>
 </body>
