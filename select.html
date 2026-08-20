@@ -1,364 +1,436 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Puzzle & Power - Создание Героя</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-    }
-    body {
-      background: #111;
-      font-family: 'Georgia', serif;
-      overflow: hidden;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    /* КРАСНУЮ ВНЕШНЮЮ РАМКУ УБРАЛИ, вернули чистый контейнер */
-    .game-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      max-width: 450px;
-      background-image: url('assets/bg_creation.png');
-      background-size: cover;
-      background-position: center;
-      overflow: hidden;
-    }
-    
-    /* ЛЕВАЯ ЧАСТЬ: Аватар и Классы */
-    .left-zone {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 54%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 2;
-    }
-    .gender-selector {
-      width: 100%;
-      height: 72%;
-      position: relative;
-    }
-    .hero-avatar {
-      position: absolute;
-      bottom: 2%; /* ОПУСТИЛИ ЕЩЁ НИЖЕ НА ДИСК */
-      left: 50%;
-      transform: translateX(-50%);
-      height: 76%; 
-      object-fit: contain;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-      z-index: 3;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Puzzle & Power - Создание Героя</title>
+    <!-- Подключаем Telegram WebApp SDK -->
+    <script src="https://telegram.org"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
 
-    .arrow-nav {
-      background: transparent;
-      border: none;
-      width: 45px;
-      height: 55px;
-      position: absolute;
-      bottom: 12%; 
-      cursor: pointer;
-      z-index: 5;
-      outline: none;
-    }
-    .arrow-left { left: 2px; }
-    .arrow-right { right: 2px; }
-    .arrow-nav:active { transform: scale(0.9); }
-    
-    .class-holder-left {
-      width: 90%;
-      height: 18%;
-      margin-top: auto;
-      margin-bottom: 2%; 
-      margin-left: 6%; 
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 5px;
-      padding: 4px;
-    }
-    .class-btn-left {
-      background: rgba(15, 12, 8, 0.85);
-      border: 1px solid #c3a475;
-      border-radius: 6px;
-      color: #ecd5b3;
-      font-weight: bold;
-      font-size: 12px;
-      font-family: 'Georgia', serif;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-shadow: 0 1px 2px #000;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-      transition: all 0.15s ease;
-    }
-    
-    /* ТЕПЕРЬ ВЫБРАННЫЙ КЛАСС ГОРИТ ЯРКИМ КРАСНЫМ НЕОНОМ */
-    .class-btn-left.selected {
-      border-color: #ff2a2a;
-      background: rgba(255, 42, 42, 0.2);
-      color: #fff;
-      box-shadow: 0 0 12px rgba(255, 42, 42, 0.6), inset 0 0 6px rgba(255, 42, 42, 0.3);
-    }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #020208;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    /* ПРАВАЯ СТОРОНА: Меню из 7 рамок */
-    .right-menu {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 46%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      z-index: 2;
-    }
-    .title-plate {
-      margin-top: 6.5%;
-      height: 9%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000000;
-      font-weight: bold;
-      font-size: 12px;
-    }
-    
-    /* ОПУСТИЛИ ЕЩЁ НИЖЕ И СЖАЛИ ШАГ МЕЖДУ СТРОКАМИ */
-    .stats-vertical-box {
-      margin-top: 24.5%; /* Посадили Силу идеально во вторую рамку */
-      height: 42.5%; 
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding: 0px 14px;
-    }
-    .stat-row-item {
-      height: 15.5%; 
-      margin-bottom: 3.2%; /* Уменьшили шаг, чтобы нижние статы не уползали вниз рамок */
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11.5px; 
-      color: #000000;
-      font-weight: bold;
-      padding: 0 24px; 
-    }
-    .stat-val-orange {
-      color: #000000;
-      font-size: 13px;
-    }
+        /* Главный контейнер с фоном создания персонажа */
+        .creation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-image: url('assets/bg_creation.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
 
-    .name-holder-box {
-      margin-top: 8.5%; /* Отцентровали поле ИМЯ */
-      height: 9.5%;
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-    }
-    .nickname-input-clean {
-      width: 100%;
-      background: transparent;
-      border: none;
-      height: 100%;
-      text-align: center;
-      font-size: 13px;
-      font-weight: bold;
-      color: #000000;
-      outline: none;
-      font-family: 'Georgia', serif;
-    }
-    
-    .btn-start-metal {
-      margin-top: 3.5%; /* Поставили Создать Персонажа ровно на металлическую плашку */
-      height: 9.5%;
-      background: transparent;
-      border: none;
-      color: #000000;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
-    .btn-start-metal:active { transform: scale(0.96); }
-  </style>
+        /* ЛЕВАЯ ЧАСТЬ: ПЛАТФОРМА И ПЕРСОНАЖ */
+        .left-side {
+            position: relative;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 40px;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: -20px;
+            z-index: 2;
+        }
+
+        .char-avatar {
+            height: 65vh;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        /* Стрелочки переключения пола */
+        .gender-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #00d2ff;
+            color: #00d2ff;
+            font-size: 24px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+            z-index: 10;
+            transition: all 0.2s ease;
+        }
+
+        .gender-arrow:active { transform: translateY(-50%) scale(0.9); }
+        .arrow-left { left: 10px; }
+        .arrow-right { right: 10px; }
+
+        /* Парящая платформа под персонажем */
+        .platform {
+            width: 80%;
+            height: 60px;
+            background: radial-gradient(ellipse at center, rgba(0,210,255,0.4) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            animation: floatPlatform 4s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        @keyframes floatPlatform {
+            0% { transform: translateY(0px) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-10px) scale(1.05); opacity: 1; }
+            100% { transform: translateY(0px) scale(1); opacity: 0.8; }
+        }
+
+        /* Синие неоновые кнопки выбора классов (внизу в облаках) */
+        .class-selector-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 5%;
+            width: 90%;
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            z-index: 5;
+        }
+
+        .class-btn {
+            flex: 1;
+            background: rgba(10, 15, 30, 0.75);
+            border: 1px solid #00d2ff;
+            border-radius: 12px;
+            color: #00d2ff;
+            padding: 12px 5px;
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .class-btn.active {
+            background: #00d2ff;
+            color: #020208;
+            box-shadow: 0 0 20px #00d2ff;
+        }
+
+        /* ПРАВАЯ ЧАСТЬ: ИНТЕРФЕЙС И ХАРАКТЕРИСТИКИ */
+        .right-side {
+            width: 45%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+            z-index: 5;
+        }
+
+        /* Вертикальный блок из 5 текстовых рамок характеристик */
+        .stats-block {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 210, 255, 0.15);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+
+        .stat-name {
+            font-weight: 500;
+            color: #94a3b8;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #00d2ff;
+            text-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
+        }
+
+        /* Рамка ввода имени "ИМЯ" */
+        .name-input-wrapper {
+            width: 100%;
+        }
+
+        .hero-name-input {
+            width: 100%;
+            background: rgba(10, 15, 30, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            outline: none;
+            letter-spacing: 1px;
+            transition: border-color 0.2s;
+        }
+
+        .hero-name-input:focus {
+            border-color: #00d2ff;
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
+        }
+
+        /* Кнопка отправки персонажа в БД */
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #00d2ff 0%, #0066ff 100%);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(0, 102, 255, 0.4);
+        }
+</style>
 </head>
 <body>
 
-<div class="game-container">
-  <div class="left-zone">
-    <div class="gender-selector">
-      <button class="arrow-nav arrow-left" onclick="switchGender()"></button>
-      <img id="character-view" src="assets/char_male.png" class="hero-avatar" alt="Hero">
-      <button class="arrow-nav arrow-right" onclick="switchGender()"></button>
+    <div class="creation-container">
+        
+        <!-- ЛЕВАЯ ЧАСТЬ: ПЕРСОНАЖ И СТРЕЛКИ -->
+        <div class="left-side">
+            <!-- Стрелочки выбора пола -->
+            <button class="gender-arrow arrow-left" onclick="changeGender('left')">&#10094;</button>
+            
+            <div class="avatar-wrapper">
+                <img id="char-avatar" class="char-avatar" src="assets/char_male.png" alt="Персонаж">
+            </div>
+            
+            <!-- Парящая платформа -->
+            <div class="platform"></div>
+
+            <button class="gender-arrow arrow-right" onclick="changeGender('right')">&#10095;</button>
+
+            <!-- Синие кнопки классов под платформой -->
+            <div class="class-selector-bar">
+                <button id="btn-warrior" class="class-btn active" onclick="selectClass('warrior')">Воин</button>
+                <button id="btn-mage" class="class-btn" onclick="selectClass('mage')">Маг</button>
+                <button id="btn-rogue" class="class-btn" onclick="selectClass('rogue')">Разбойник</button>
+            </div>
+        </div>
+
+        <!-- ПРАВАЯ ЧАСТЬ: ХАРАКТЕРИСТИКИ И ВВОД ИМЕНИ -->
+        <div class="right-side">
+            
+            <!-- Вертикальный блок из 5 характеристик -->
+            <div class="stats-block">
+                <div class="stat-box">
+                    <span class="stat-name">Сила</span>
+                    <span id="stat-str" class="stat-value">14</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">Ловкость</span>
+                    <span id="stat-dex" class="stat-value">10</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">Интеллект</span>
+                    <span id="stat-int" class="stat-value">6</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">Стойкость</span>
+                    <span id="stat-sta" class="stat-value">12</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">Удача</span>
+                    <span id="stat-luc" class="stat-value">8</span>
+                </div>
+            </div>
+
+            <!-- Ввод имени -->
+            <div class="name-input-wrapper">
+                <input type="text" id="hero-name" class="hero-name-input" placeholder="ИМЯ" maxlength="16" autocomplete="off">
+            </div>
+
+            <!-- Кнопка подтверждения -->
+            <button class="submit-btn" onclick="createCharacter()">Создать Героя</button>
+
+        </div>
+
     </div>
-    <div class="class-holder-left">
-      <button class="class-btn-left selected" id="btnClassWarrior" onclick="pickClass(this, 'warrior')">⚔️ Воин</button>
-      <button class="class-btn-left" id="idBtnClassTank" onclick="pickClass(this, 'tank')">🛡️ Танк</button>
-      <button class="class-btn-left" id="btnClassElf" onclick="pickClass(this, 'elf')">🧝 Эльф</button>
-      <button class="class-btn-left" id="btnClassMage" onclick="pickClass(this, 'mage')">🔮 Маг</button>
-    </div>
-  </div>
 
-  <div class="right-menu">
-    <div class="title-plate" id="lblTitlePlate">Характеристики</div>
-    <div class="stats-vertical-box">
-      <div class="stat-row-item"><span id="lblStr">Сила</span><span class="stat-val-orange" id="strVal">15</span></div>
-      <div class="stat-row-item"><span id="lblAgl">Ловкость</span><span class="stat-val-orange" id="aglVal">12</span></div>
-      <div class="stat-row-item"><span id="lblInt">Интуиция</span><span class="stat-val-orange" id="intVal">10</span></div>
-      <div class="stat-row-item"><span id="lblVit">Выносливость</span><span class="stat-val-orange" id="vitVal">13</span></div>
-      <div class="stat-row-item"><span id="lblWis">Мудрость</span><span class="stat-val-orange" id="wisVal">5</span></div>
-    </div>
-    <div class="name-holder-box">
-      <input type="text" id="hero-name" class="nickname-input-clean" value="ИМЯ" onfocus="if(this.value=='ИМЯ'||this.value=='NAME')this.value='';" onblur="if(this.value=='')this.value=translations[currentLang].defaultName;" maxlength="12">
-    </div>
-    <button class="btn-start-metal" id="lblBtnStart" onclick="finishCreation()">Создать персонажа</button>
-  </div>
-</div>
+    <!-- ЛОГИКА И СЕТЬ -->
+    <script>
+        // НАСТРОЙКА СЕТИ И СЕРВЕРА
+        const SERVER_URL = 'https://ngrok-free.dev';
 
-<script>
-  const translations = {
-    ru: {
-      titlePlate: "Характеристики", btnStart: "Создать персонажа", defaultName: "ИМЯ",
-      alertName: "Дай имя своему герою!", alertExist: "Персонаж для этого аккаунта уже создан!", alertError: "Ошибка сохранения: ",
-      classes: { warrior: "⚔️ Воин", tank: "🛡️ Танк", elf: "🧝 Эльф", mage: "🔮 Маг" },
-      stats: { str: "Сила", agl: "Ловкость", int: "Интуиция", vit: "Выносливость", wis: "Мудрость" }
-    },
-    en: {
-      titlePlate: "Stats", btnStart: "Create Character", defaultName: "NAME",
-      alertName: "Give a name to your hero!", alertExist: "Character for this account is already created!", alertError: "Save error: ",
-      classes: { warrior: "⚔️ Warrior", tank: "🛡️ Tank", elf: "🧝 Elf", mage: "🔮 Mage" },
-      stats: { str: "Strength", agl: "Agility", int: "Intuition", vit: "Vitality", wis: "Wisdom" }
-    }
-  };
-  let currentLang = 'ru';
-  const classStats = {
-    warrior: { str: 15, agl: 12, int: 10, vit: 13, wis: 5 },
-    tank:    { str: 12, agl: 8,  int: 10, vit: 20, wis: 5 },
-    elf:     { str: 10, agl: 18, int: 14, vit: 9,  wis: 4 },
-    mage:    { str: 5,  agl: 9,  int: 11, vit: 10, wis: 20 }
-  };
+        // Инициализация Telegram WebApp и получение ID игрока
+        let tgId = 777; // Дефолтный ID для тестов в браузере ПК
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+            if (window.Telegram.WebApp.initDataUnsafe?.user) {
+                tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
+            }
+        }
 
-  let newHero = { gender: 'male', class: 'warrior', name: '' };
-  const characterImages = { male: 'assets/char_male.png', female: 'assets/char_female.png' };
+        // Текущее состояние выбора персонажа
+        let currentGender = 'male';
+        let currentClass = 'warrior';
 
-  const SERVER_URL = 'https://shanty-haven-silo.ngrok-free.dev';
+        // Базовые характеристики классов
+        const classStats = {
+            warrior: { strength: 14, dexterity: 10, intelligence: 6, stamina: 12, luck: 8 },
+            mage:    { strength: 5,  dexterity: 9,  intelligence: 15, stamina: 7,  luck: 10 },
+            rogue:   { strength: 9,  dexterity: 14, intelligence: 8,  stamina: 9,  luck: 12 }
+        };
 
-  function applyLanguage(lang) {
-    currentLang = lang; const t = translations[lang];
-    document.getElementById('lblTitlePlate').innerText = t.titlePlate;
-    document.getElementById('lblBtnStart').innerText = t.btnStart;
-    const nameInput = document.getElementById('hero-name');
-    if(nameInput.value == "ИМЯ" || nameInput.value == "NAME") {
-      nameInput.value = t.defaultName;
-    }
-    document.getElementById('btnClassWarrior').innerText = t.classes.warrior;
-    document.getElementById('idBtnClassTank').innerText = t.classes.tank;
-    document.getElementById('btnClassElf').innerText = t.classes.elf;
-    document.getElementById('btnClassMage').innerText = t.classes.mage;
-    document.getElementById('lblStr').innerText = t.stats.str;
-    document.getElementById('lblAgl').innerText = t.stats.agl;
-    document.getElementById('lblInt').innerText = t.stats.int;
-    document.getElementById('lblVit').innerText = t.stats.vit;
-    document.getElementById('lblWis').innerText = t.stats.wis;
-  }
+        // Текущие характеристики на экране
+        let stats = { ...classStats.warrior };
 
-  function switchGender() {
-    const avatar = document.getElementById('character-view');
-    avatar.style.opacity = '0'; avatar.style.transform = 'translateX(-50%) scale(0.9)';
-    setTimeout(() => {
-      newHero.gender = newHero.gender === 'male' ? 'female' : 'male';
-      avatar.src = characterImages[newHero.gender];
-      avatar.style.opacity = '1'; avatar.style.transform = 'translateX(-50%) scale(1)';
-    }, 200);
-  }
+        // 1. ФУНКЦИЯ ПЕРЕКЛЮЧЕНИЯ ПОЛА (Стрелочки)
+        function changeGender(direction) {
+            currentGender = (currentGender === 'male') ? 'female' : 'male';
+            
+            // Обновляем картинку аватара персонажа
+            const avatarImg = document.getElementById('char-avatar');
+            if (avatarImg) {
+                avatarImg.src = `assets/char_${currentGender}.png`;
+            }
+            
+            console.log("Выбран пол:", currentGender);
+            if (window.Telegram?.WebApp?.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            }
+        }
 
-  function pickClass(btnElement, selectedClass) {
-    document.querySelectorAll('.class-btn-left').forEach(el => el.classList.remove('selected'));
-    btnElement.classList.add('selected');
-    newHero.class = selectedClass;
-    
-    const stats = classStats[selectedClass];
-    document.getElementById('strVal').innerText = stats.str;
-    document.getElementById('aglVal').innerText = stats.agl;
-    document.getElementById('intVal').innerText = stats.int;
-    document.getElementById('vitVal').innerText = stats.vit;
-    document.getElementById('wisVal').innerText = stats.wis;
-  }
+        // 2. ФУНКЦИЯ ВЫБОРА КЛАССА (Синие неоновые кнопки)
+        function selectClass(className) {
+            currentClass = className;
+            
+            // Сбрасываем активный класс у всех кнопок и красим выбранную
+            document.querySelectorAll('.class-btn').forEach(btn => btn.classList.remove('active'));
+            const selectedBtn = document.getElementById(`btn-${className}`);
+            if (selectedBtn) selectedBtn.classList.add('active');
 
-  window.onload = function() {
-    let userLang = 'ru';
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user) {
-      if (window.Telegram.WebApp.initDataUnsafe.user.language_code?.startsWith('en')) userLang = 'en';
-    } else {
-      if ((navigator.language || navigator.userLanguage)?.startsWith('en')) userLang = 'en';
-    }
-    applyLanguage(userLang);
-    pickClass(document.querySelector('.class-btn-left'), 'warrior');
-  };
+            // Копируем базовые статы выбранного класса
+            stats = { ...classStats[className] };
+            updateStatsUI();
 
-  function finishCreation() {
-    const t = translations[currentLang];
-    const inputName = document.getElementById('hero-name').value.trim();
-    if (!inputName || inputName === "ИМЯ" || inputName === "NAME") { alert(t.alertName); return; }
-    
-    newHero.name = inputName;
+            console.log("Выбран класс:", currentClass);
+            if (window.Telegram?.WebApp?.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            }
+        }
 
-    const currentStats = {
-      str: parseInt(document.getElementById('strVal').innerText),
-      agl: parseInt(document.getElementById('aglVal').innerText),
-      int: parseInt(document.getElementById('intVal').innerText),
-      vit: parseInt(document.getElementById('vitVal').innerText),
-      wis: parseInt(document.getElementById('wisVal').innerText)
-    };
+        // 3. ФУНКЦИЯ ОБНОВЛЕНИЯ ХАРАКТЕРИСТИК НА ЭКРАНЕ
+        function updateStatsUI() {
+            const statElements = {
+                strength: document.getElementById('stat-str'),
+                dexterity: document.getElementById('stat-dex'),
+                intelligence: document.getElementById('stat-int'),
+                stamina: document.getElementById('stat-sta'),
+                luck: document.getElementById('stat-luc')
+            };
 
-    let tgId = 777; 
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user) {
-      tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
-    }
+            for (const key in statElements) {
+                if (statElements[key]) {
+                    statElements[key].innerText = stats[key];
+                }
+            }
+        }
 
-    const payload = {
-      tg_id: tgId,
-      name: newHero.name,
-      gender: newHero.gender,
-      class_name: newHero.class, 
-      stats: currentStats
-    };
+        // 4. ФУНКЦИЯ ОТПРАВКИ ПЕРСОНАЖА В БАЗУ ДАННЫХ И ПЕРЕХОД В ГОРОД
+        function createCharacter() {
+            const nameInput = document.getElementById('hero-name');
+            const heroName = nameInput ? nameInput.value.trim() : '';
 
-    console.log("Отправка в БД:", payload);
+            if (!heroName || heroName === 'ИМЯ') {
+                alert('Пожалуйста, введите уникальное имя вашего героя!');
+                return;
+            }
 
-    fetch(`${SERVER_URL}/api/create-character`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        window.location.href = 'lobby.html';
-      } else {
-        alert(data.code === 'exist' ? t.alertExist : t.alertError + data.message);
-      }
-    })
-    .catch(err => {
-      console.error("Ошибка:", err);
-      alert("Не удалось подключиться к server.py на ПК!");
-    });
-  }
-</script>
+            const payload = {
+                tg_id: tgId,
+                name: heroName,
+                gender: currentGender,
+                class: currentClass,
+                stats: stats
+            };
+
+            console.log("Отправка персонажа на server.py:", payload);
+
+            fetch(`${SERVER_URL}/api/create-character`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true' // Обходим заглушку ngrok
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("Персонаж успешно создан в PostgreSQL!");
+                    // Мгновенный бесшовный переход на карту города!
+                    window.location.href = "lobby.html"; 
+                } else {
+                    alert("Ошибка при создании персонажа: " + data.message);
+                }
+            })
+            .catch(err => {
+                console.error("Ошибка сети при создании героя:", err);
+                // Резервный пропуск в город для тестов интерфейса без запущенного Python
+                window.location.href = "lobby.html"; 
+            });
+        }
+
+        // Первичная настройка статов при загрузке страницы
+        window.onload = function() {
+            updateStatsUI();
+        };
+    </script>
 </body>
 </html>
