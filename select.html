@@ -29,50 +29,50 @@
       background: #f0f7ff;
       border: 6px double #6a9ec4;
       border-radius: 32px 32px 28px 28px;
-      padding: 20px 16px 24px;
+      padding: 16px 14px 20px;
       box-shadow: 0 20px 40px rgba(0, 40, 80, 0.25), 0 0 0 2px #b8d4e8 inset, 0 0 0 4px #8bb9d9 inset;
       position: relative;
     }
 
-    /* ===== ЗАГОЛОВОК (без ромбика) ===== */
+    /* ===== ЗАГОЛОВОК ===== */
     .frame-title {
       text-align: center;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
       letter-spacing: 3px;
       color: #1a4b6d;
       text-shadow: 0 1px 0 #b8d4e8, 0 0 12px #8bb9d966;
       margin-top: 0;
-      margin-bottom: 18px;
-      padding-bottom: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
       border-bottom: 2px dashed #8bb9d9;
       text-transform: uppercase;
       word-break: break-word;
     }
     .frame-title small {
       display: block;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: normal;
       opacity: 0.7;
       letter-spacing: 2px;
-      margin-top: 2px;
+      margin-top: 1px;
       color: #4a7a9c;
     }
 
     /* ===== СЕТКА: лево (аватар+классы) / право (статы) ===== */
     .creation-grid {
       display: flex;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     /* ---- ЛЕВАЯ КОЛОНКА ---- */
     .left-col {
       flex: 1 1 150px;
-      min-width: 140px;
+      min-width: 130px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
     }
 
     .avatar-block {
@@ -81,20 +81,21 @@
       border-radius: 40px 40px 24px 24px;
       border: 2px solid #7aafd0;
       box-shadow: inset 0 0 20px #c5ddf0, 0 6px 10px #6a9ec444;
-      padding: 10px 4px 6px;
+      padding: 8px 4px 4px;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 200px;
+      min-height: 220px;
+      flex: 1;
     }
 
     .gender-btn {
       background: transparent;
       border: none;
-      font-size: 32px;
+      font-size: 30px;
       color: #4a8db7;
       cursor: pointer;
-      padding: 0 8px;
+      padding: 0 6px;
       line-height: 1;
       text-shadow: 0 0 8px #7aafd066;
       transition: 0.1s ease;
@@ -103,28 +104,28 @@
     .gender-btn:active { transform: scale(0.8); }
 
     .hero-avatar {
-      width: 120px;
+      width: 140px;
       height: auto;
-      max-height: 160px;
+      max-height: 180px;
       object-fit: contain;
       filter: drop-shadow(0 4px 8px #4a7a9c55);
       transition: 0.2s ease;
       image-rendering: pixelated;
     }
 
-    /* классы (сетка 2x2) */
+    /* классы (сетка 2x2) - уменьшены */
     .class-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      gap: 4px;
     }
 
     .class-btn {
       background: #e4eff9;
       border: 1.5px solid #7aafd0;
-      border-radius: 30px;
-      padding: 10px 2px;
-      font-size: 12px;
+      border-radius: 20px;
+      padding: 5px 2px;
+      font-size: 10px;
       font-weight: bold;
       color: #1a4b6d;
       text-shadow: 0 1px 0 #ffffff77;
@@ -133,32 +134,32 @@
       box-shadow: 0 2px 4px #6a9ec444;
       font-family: 'Georgia', serif;
       text-align: center;
-      line-height: 1.2;
-      letter-spacing: 0.3px;
+      line-height: 1.1;
+      letter-spacing: 0.2px;
     }
 
     .class-btn.selected {
       border-color: #2b7aaa;
       background: #b8ddf5;
       color: #003153;
-      box-shadow: 0 0 16px #6a9ec488, inset 0 0 8px #6a9ec466;
+      box-shadow: 0 0 12px #6a9ec488, inset 0 0 6px #6a9ec466;
     }
 
     /* ---- ПРАВАЯ КОЛОНКА (статы + имя + кнопка) ---- */
     .right-col {
-      flex: 2 1 180px;
-      min-width: 160px;
+      flex: 2 1 170px;
+      min-width: 150px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 7px;
     }
 
     /* каждая характеристика — отдельная рамка */
     .stat-card {
       background: #eaf2fc;
       border: 1.5px solid #7aafd0;
-      border-radius: 30px;
-      padding: 5px 14px 5px 18px;
+      border-radius: 25px;
+      padding: 3px 12px 3px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -167,22 +168,22 @@
 
     .stat-name {
       color: #1a4b6d;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       text-shadow: 0 1px 0 #ffffffaa;
     }
 
     .stat-value {
       background: #ffffff;
       border: 1px solid #7aafd0;
-      border-radius: 40px;
-      padding: 0 14px;
-      font-size: 15px;
+      border-radius: 30px;
+      padding: 0 12px;
+      font-size: 14px;
       font-weight: bold;
       color: #005a8c;
       text-shadow: 0 0 8px #6a9ec466;
-      min-width: 32px;
+      min-width: 28px;
       text-align: center;
       box-shadow: inset 0 0 6px #c5ddf0;
     }
@@ -192,8 +193,8 @@
       margin-top: 2px;
       background: #eaf2fc;
       border: 2px solid #7aafd0;
-      border-radius: 60px;
-      padding: 4px 8px;
+      border-radius: 50px;
+      padding: 3px 8px;
       box-shadow: inset 0 0 12px #c5ddf0;
     }
 
@@ -202,11 +203,11 @@
       background: transparent;
       border: none;
       text-align: center;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       color: #003153;
       font-family: 'Georgia', serif;
-      padding: 10px 4px;
+      padding: 7px 4px;
       outline: none;
       letter-spacing: 1px;
       text-shadow: 0 1px 0 #ffffffaa;
@@ -221,9 +222,9 @@
     .create-btn {
       background: #6a9ec4;
       border: 2px solid #4a8db7;
-      border-radius: 60px;
-      padding: 14px 8px;
-      font-size: 17px;
+      border-radius: 50px;
+      padding: 11px 8px;
+      font-size: 16px;
       font-weight: bold;
       color: #ffffff;
       text-shadow: 0 2px 0 #2b5a7a;
@@ -232,7 +233,7 @@
       box-shadow: 0 4px 0 #2b5a7a, 0 6px 16px #4a7a9c66;
       font-family: 'Georgia', serif;
       letter-spacing: 1.5px;
-      margin-top: 4px;
+      margin-top: 2px;
       text-align: center;
     }
     .create-btn:active {
@@ -242,20 +243,38 @@
 
     /* ----- АДАПТИВ ----- */
     @media (max-width: 400px) {
-      .frame-container { padding: 14px 12px 18px; }
-      .stat-card { padding: 3px 10px 3px 14px; }
-      .stat-name { font-size: 11px; }
-      .stat-value { font-size: 13px; padding: 0 10px; min-width: 26px; }
-      .class-btn { font-size: 10px; padding: 8px 2px; }
-      .hero-avatar { width: 90px; max-height: 130px; }
-      .gender-btn { font-size: 26px; }
-      .frame-title { font-size: 18px; }
-      .avatar-block { min-height: 160px; }
+      .frame-container { padding: 12px 10px 16px; }
+      .frame-title { font-size: 17px; }
+      .frame-title small { font-size: 10px; }
+      
+      .left-col { min-width: 110px; }
+      .right-col { min-width: 130px; }
+      
+      .stat-card { padding: 2px 10px 2px 12px; }
+      .stat-name { font-size: 10px; }
+      .stat-value { font-size: 12px; padding: 0 8px; min-width: 22px; }
+      .class-btn { font-size: 9px; padding: 4px 2px; }
+      
+      .hero-avatar { width: 110px; max-height: 150px; }
+      .avatar-block { min-height: 170px; }
+      .gender-btn { font-size: 24px; padding: 0 4px; }
+      
+      .name-input { font-size: 13px; padding: 5px 4px; }
+      .create-btn { font-size: 14px; padding: 9px 8px; }
     }
 
     @media (min-width: 401px) and (max-width: 500px) {
-      .hero-avatar { width: 105px; max-height: 150px; }
-      .avatar-block { min-height: 180px; }
+      .hero-avatar { width: 125px; max-height: 165px; }
+      .avatar-block { min-height: 200px; }
+      .class-btn { font-size: 11px; padding: 6px 2px; }
+      .stat-name { font-size: 12px; }
+    }
+
+    /* большие экраны — ещё больше герой */
+    @media (min-width: 501px) {
+      .hero-avatar { width: 160px; max-height: 200px; }
+      .avatar-block { min-height: 250px; }
+      .class-btn { font-size: 11px; padding: 6px 2px; }
     }
   </style>
 </head>
@@ -355,7 +374,6 @@
       if (gender !== 'male' && gender !== 'female') return;
       currentGender = gender;
       avatar.src = IMAGES[gender];
-      // небольшая анимация (микроподтверждение)
       avatar.style.transform = 'scale(0.92)';
       setTimeout(() => { avatar.style.transform = 'scale(1)'; }, 100);
     }
@@ -370,7 +388,6 @@
     // ===== ВЫБОР КЛАССА =====
     function selectClass(className) {
       currentClass = className;
-      // подсветка
       classBtns.forEach(btn => {
         btn.classList.toggle('selected', btn.dataset.class === className);
       });
@@ -379,25 +396,20 @@
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
     function init() {
-      // вешаем события на кнопки пола
       prevBtn.addEventListener('click', () => switchGender(-1));
       nextBtn.addEventListener('click', () => switchGender(1));
 
-      // события для классов
       classBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function() {
           const cls = this.dataset.class;
           if (cls) selectClass(cls);
         });
       });
 
-      // устанавливаем значения по умолчанию
       setGender('male');
       selectClass('warrior');
-      // имя по умолчанию
       if (nameInput.value.trim() === '') nameInput.value = 'ИМЯ';
 
-      // ===== КНОПКА СОЗДАТЬ =====
       createBtn.addEventListener('click', function() {
         const name = nameInput.value.trim();
         if (!name || name === 'ИМЯ' || name === 'NAME') {
@@ -405,7 +417,6 @@
           return;
         }
 
-        // собираем данные
         const stats = {
           str: parseInt(statStr.textContent, 10),
           agl: parseInt(statAgl.textContent, 10),
@@ -414,7 +425,6 @@
           wis: parseInt(statWis.textContent, 10)
         };
 
-        // получаем tg_id (если есть)
         let tgId = 777;
         if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user) {
           tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
@@ -429,10 +439,9 @@
         };
 
         console.log('📦 Отправка в БД:', payload);
-
-        // Вместо реального запроса — показываем успех (для демонстрации)
         alert(`✅ Герой "${name}" (${currentClass}) создан!\nСтаты: ${stats.str}/${stats.agl}/${stats.int}/${stats.vit}/${stats.wis}`);
-        // Раскомментируйте fetch ниже для реальной работы
+        
+        // Раскомментируйте для реальной работы:
         /*
         fetch('https://ngrok-free.dev/api/create-character', {
           method: 'POST',
@@ -455,7 +464,6 @@
       });
     }
 
-    // запускаем после загрузки
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', init);
     } else {
