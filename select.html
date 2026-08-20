@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puzzle & Power - Login</title>
     <style>
-        /* Сброс стилей */
+        /* Базовые настройки */
         * {
             margin: 0;
             padding: 0;
@@ -13,126 +13,157 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* Фон страницы (светло-голубой) */
         body {
-            background: linear-gradient(135deg, #e0f2fe, #bae6fd); /* Светло-голубой градиент */
+            background: linear-gradient(160deg, #dbeafe 0%, #eff6ff 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
         }
 
-        .login-container {
-            background: rgba(255, 255, 255, 0.8); /* Белый полупрозрачный фон */
-            backdrop-filter: blur(15px); /* Эффект стекла */
-            padding: 40px 30px;
+        /* Сама белая карточка (рамка) */
+        .auth-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 380px;
+            padding: 35px 30px 25px;
             border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.2); /* Мягкая голубая тень */
-            width: 100%;
-            max-width: 400px;
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.15); /* Голубая тень */
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        /* КРУПНЫЙ ПЕРСОНАЖ */
+        /* Блок с персонажем (сделал его крупнее) */
+        .character-container {
+            margin-bottom: 15px;
+        }
+
         .character-img {
-            width: 100%;
-            max-width: 220px; /* Увеличили размер картинки */
-            height: auto;
-            margin: 0 auto 20px auto;
-            display: block;
-            border-radius: 15px;
-            /* Ниже замените URL на вашу картинку с персонажем */
-            content: url('https://via.placeholder.com/220x300/89CFF0/FFFFFF?text=Персонаж'); 
+            width: 130px; /* Увеличили размер */
+            height: 130px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #f0f9ff; /* Светло-голубой круг под персонажем */
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            /* Ссылка на картинку. Если картинка не прогрузится, будет иконка */
+            content: url('https://cdn-icons-png.flaticon.com/512/4322/4322991.png');
         }
 
+        /* Заголовки */
         h1 {
-            color: #0284c7; /* Насыщенный синий цвет логотипа */
+            color: #0ea5e9; /* Голубой цвет логотипа */
             font-size: 28px;
             font-weight: 800;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
         }
 
         .subtitle {
             color: #64748b;
+            font-size: 14px;
             margin-bottom: 25px;
-            font-weight: 500;
         }
 
+        /* Поля ввода */
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             text-align: left;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #475569;
+            font-size: 14px;
             font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
         }
 
         .input-group input {
             width: 100%;
-            padding: 14px 15px;
-            border: 2px solid #cbd5e1;
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            font-size: 16px;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0; /* Светло-серая рамка */
+            border-radius: 20px;
+            background: #f8fafc;
+            font-size: 15px;
             outline: none;
             transition: 0.3s;
         }
 
         .input-group input:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+            border-color: #0ea5e9; /* Голубая рамка при нажатии */
+            background: #ffffff;
         }
 
+        /* Кнопка входа */
         .btn-login {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(to right, #3b82f6, #2563eb); /* Голубой градиент */
+            background: #0ea5e9; /* Ярко-голубой фон */
             color: white;
             border: none;
-            border-radius: 15px;
-            font-size: 18px;
+            border-radius: 20px;
+            font-size: 17px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+            margin-top: 5px;
         }
 
         .btn-login:hover {
+            background: #0284c7;
             transform: scale(1.02);
-            background: linear-gradient(to right, #2563eb, #1d4ed8);
         }
 
+        /* Ссылки внизу */
         .footer-links {
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 13px;
             color: #94a3b8;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
         }
 
         .footer-links a {
-            color: #3b82f6;
+            color: #0ea5e9;
             text-decoration: none;
-            margin: 0 10px;
+            font-weight: 600;
         }
 
         .footer-links a:hover {
             text-decoration: underline;
         }
+        
+        /* Крестик закрытия (как на скрине) */
+        .close-icon {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 20px;
+            color: #94a3b8;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
-        <!-- СЮДА ВСТАВЬТЕ ССЫЛКУ НА ВАШЕГО ПЕРСОНАЖА -->
-        <img class="character-img" src="https://via.placeholder.com/220x300/89CFF0/FFFFFF?text=Персонаж" alt="Персонаж">
+    <div class="auth-card">
+        <!-- Крестик закрытия -->
+        <div class="close-icon">✕</div>
 
+        <!-- Картинка персонажа (крупная) -->
+        <div class="character-container">
+            <img class="character-img" src="https://cdn-icons-png.flaticon.com/512/4322/4322991.png" alt="Персонаж">
+        </div>
+
+        <!-- Тексты -->
         <h1>PUZZLE & POWER</h1>
         <p class="subtitle">Войдите в мир приключений</p>
 
+        <!-- Форма -->
         <form>
             <div class="input-group">
                 <label>Логин или Email</label>
@@ -142,12 +173,17 @@
                 <label>Пароль</label>
                 <input type="password" placeholder="Введите пароль">
             </div>
-            <button type="submit" class="btn-login">Войти</button>
+            <button type="button" class="btn-login">Войти</button>
         </form>
 
+        <!-- Ссылки -->
         <div class="footer-links">
             <a href="#">Забыли пароль?</a>
             <a href="#">Регистрация</a>
+        </div>
+        
+        <div style="margin-top: 15px; font-size: 12px; color: #cbd5e1;">
+            @puzzlepower_bot
         </div>
     </div>
 
