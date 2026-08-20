@@ -19,7 +19,7 @@
       justify-content: center;
       align-items: center;
       font-family: 'Georgia', 'Times New Roman', serif;
-      padding: 12px;
+      padding: 10px;
     }
 
     /* ===== ГЛАВНАЯ РАМКА ===== */
@@ -29,37 +29,14 @@
       background: #f0f7ff;
       border: 6px double #6a9ec4;
       border-radius: 32px 32px 28px 28px;
-      padding: 16px 14px 20px;
+      padding: 14px 14px 18px;
       box-shadow: 0 20px 40px rgba(0, 40, 80, 0.25), 0 0 0 2px #b8d4e8 inset, 0 0 0 4px #8bb9d9 inset;
       position: relative;
     }
 
-    /* ===== ЗАГОЛОВОК ===== */
-    .frame-title {
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-      letter-spacing: 3px;
-      color: #1a4b6d;
-      text-shadow: 0 1px 0 #b8d4e8, 0 0 12px #8bb9d966;
-      margin-top: 0;
-      margin-bottom: 12px;
-      padding-bottom: 6px;
-      border-bottom: 2px dashed #8bb9d9;
-      text-transform: uppercase;
-      word-break: break-word;
-    }
-    .frame-title small {
-      display: block;
-      font-size: 11px;
-      font-weight: normal;
-      opacity: 0.7;
-      letter-spacing: 2px;
-      margin-top: 1px;
-      color: #4a7a9c;
-    }
+    /* ===== ЗАГОЛОВОК УБРАН ===== */
 
-    /* ===== СЕТКА: лево (аватар+классы) / право (статы) ===== */
+    /* ===== СЕТКА: лево (аватар) / право (статы) ===== */
     .creation-grid {
       display: flex;
       gap: 12px;
@@ -68,64 +45,67 @@
 
     /* ---- ЛЕВАЯ КОЛОНКА ---- */
     .left-col {
-      flex: 1 1 150px;
-      min-width: 130px;
+      flex: 1 1 160px;
+      min-width: 140px;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
 
+    /* большой блок с аватаром */
     .avatar-block {
       position: relative;
       background: #e4eff9;
       border-radius: 40px 40px 24px 24px;
       border: 2px solid #7aafd0;
       box-shadow: inset 0 0 20px #c5ddf0, 0 6px 10px #6a9ec444;
-      padding: 8px 4px 4px;
+      padding: 6px 4px 4px;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 220px;
+      min-height: 260px;
       flex: 1;
     }
 
     .gender-btn {
       background: transparent;
       border: none;
-      font-size: 30px;
+      font-size: 34px;
       color: #4a8db7;
       cursor: pointer;
-      padding: 0 6px;
+      padding: 0 8px;
       line-height: 1;
       text-shadow: 0 0 8px #7aafd066;
       transition: 0.1s ease;
       font-weight: bold;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .gender-btn:active { transform: scale(0.8); }
 
     .hero-avatar {
-      width: 140px;
+      width: 160px;
       height: auto;
-      max-height: 180px;
+      max-height: 210px;
       object-fit: contain;
       filter: drop-shadow(0 4px 8px #4a7a9c55);
       transition: 0.2s ease;
       image-rendering: pixelated;
     }
 
-    /* классы (сетка 2x2) - уменьшены */
+    /* большой блок с классами (2x2, крупнее) */
     .class-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4px;
+      gap: 6px;
     }
 
     .class-btn {
       background: #e4eff9;
-      border: 1.5px solid #7aafd0;
-      border-radius: 20px;
-      padding: 5px 2px;
-      font-size: 10px;
+      border: 2px solid #7aafd0;
+      border-radius: 30px;
+      padding: 10px 4px;
+      font-size: 14px;
       font-weight: bold;
       color: #1a4b6d;
       text-shadow: 0 1px 0 #ffffff77;
@@ -134,16 +114,19 @@
       box-shadow: 0 2px 4px #6a9ec444;
       font-family: 'Georgia', serif;
       text-align: center;
-      line-height: 1.1;
-      letter-spacing: 0.2px;
+      line-height: 1.3;
+      letter-spacing: 0.5px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .class-btn.selected {
       border-color: #2b7aaa;
       background: #b8ddf5;
       color: #003153;
-      box-shadow: 0 0 12px #6a9ec488, inset 0 0 6px #6a9ec466;
+      box-shadow: 0 0 16px #6a9ec488, inset 0 0 8px #6a9ec466;
     }
+    .class-btn:active { transform: scale(0.95); }
 
     /* ---- ПРАВАЯ КОЛОНКА (статы + имя + кнопка) ---- */
     .right-col {
@@ -154,12 +137,12 @@
       gap: 7px;
     }
 
-    /* каждая характеристика — отдельная рамка */
+    /* каждая характеристика — отдельная рамка, крупнее */
     .stat-card {
       background: #eaf2fc;
       border: 1.5px solid #7aafd0;
-      border-radius: 25px;
-      padding: 3px 12px 3px 16px;
+      border-radius: 30px;
+      padding: 5px 14px 5px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -168,9 +151,9 @@
 
     .stat-name {
       color: #1a4b6d;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: bold;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.5px;
       text-shadow: 0 1px 0 #ffffffaa;
     }
 
@@ -178,23 +161,23 @@
       background: #ffffff;
       border: 1px solid #7aafd0;
       border-radius: 30px;
-      padding: 0 12px;
-      font-size: 14px;
+      padding: 0 14px;
+      font-size: 16px;
       font-weight: bold;
       color: #005a8c;
       text-shadow: 0 0 8px #6a9ec466;
-      min-width: 28px;
+      min-width: 32px;
       text-align: center;
       box-shadow: inset 0 0 6px #c5ddf0;
     }
 
-    /* поле ввода имени */
+    /* поле ввода имени — чуть мельче */
     .name-box {
       margin-top: 2px;
       background: #eaf2fc;
       border: 2px solid #7aafd0;
       border-radius: 50px;
-      padding: 3px 8px;
+      padding: 2px 8px;
       box-shadow: inset 0 0 12px #c5ddf0;
     }
 
@@ -203,11 +186,11 @@
       background: transparent;
       border: none;
       text-align: center;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: bold;
       color: #003153;
       font-family: 'Georgia', serif;
-      padding: 7px 4px;
+      padding: 6px 4px;
       outline: none;
       letter-spacing: 1px;
       text-shadow: 0 1px 0 #ffffffaa;
@@ -218,13 +201,13 @@
       opacity: 0.6;
     }
 
-    /* кнопка создания */
+    /* кнопка создания — чуть мельче */
     .create-btn {
       background: #6a9ec4;
       border: 2px solid #4a8db7;
       border-radius: 50px;
-      padding: 11px 8px;
-      font-size: 16px;
+      padding: 9px 8px;
+      font-size: 15px;
       font-weight: bold;
       color: #ffffff;
       text-shadow: 0 2px 0 #2b5a7a;
@@ -235,6 +218,8 @@
       letter-spacing: 1.5px;
       margin-top: 2px;
       text-align: center;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .create-btn:active {
       transform: translateY(4px);
@@ -243,49 +228,44 @@
 
     /* ----- АДАПТИВ ----- */
     @media (max-width: 400px) {
-      .frame-container { padding: 12px 10px 16px; }
-      .frame-title { font-size: 17px; }
-      .frame-title small { font-size: 10px; }
+      .frame-container { padding: 10px 8px 14px; }
       
       .left-col { min-width: 110px; }
-      .right-col { min-width: 130px; }
+      .right-col { min-width: 120px; gap: 5px; }
       
-      .stat-card { padding: 2px 10px 2px 12px; }
-      .stat-name { font-size: 10px; }
-      .stat-value { font-size: 12px; padding: 0 8px; min-width: 22px; }
-      .class-btn { font-size: 9px; padding: 4px 2px; }
+      .stat-card { padding: 3px 10px 3px 12px; }
+      .stat-name { font-size: 11px; }
+      .stat-value { font-size: 13px; padding: 0 8px; min-width: 24px; }
       
-      .hero-avatar { width: 110px; max-height: 150px; }
-      .avatar-block { min-height: 170px; }
-      .gender-btn { font-size: 24px; padding: 0 4px; }
+      .class-btn { font-size: 11px; padding: 7px 2px; border-radius: 20px; }
       
-      .name-input { font-size: 13px; padding: 5px 4px; }
-      .create-btn { font-size: 14px; padding: 9px 8px; }
+      .hero-avatar { width: 120px; max-height: 160px; }
+      .avatar-block { min-height: 190px; }
+      .gender-btn { font-size: 26px; padding: 0 4px; }
+      
+      .name-input { font-size: 12px; padding: 4px 4px; }
+      .create-btn { font-size: 13px; padding: 7px 8px; }
     }
 
     @media (min-width: 401px) and (max-width: 500px) {
-      .hero-avatar { width: 125px; max-height: 165px; }
-      .avatar-block { min-height: 200px; }
-      .class-btn { font-size: 11px; padding: 6px 2px; }
-      .stat-name { font-size: 12px; }
+      .hero-avatar { width: 140px; max-height: 185px; }
+      .avatar-block { min-height: 230px; }
+      .class-btn { font-size: 13px; padding: 9px 4px; }
+      .stat-name { font-size: 13px; }
     }
 
-    /* большие экраны — ещё больше герой */
     @media (min-width: 501px) {
-      .hero-avatar { width: 160px; max-height: 200px; }
-      .avatar-block { min-height: 250px; }
-      .class-btn { font-size: 11px; padding: 6px 2px; }
+      .hero-avatar { width: 180px; max-height: 230px; }
+      .avatar-block { min-height: 280px; }
+      .class-btn { font-size: 15px; padding: 12px 4px; }
+      .stat-name { font-size: 15px; }
+      .stat-value { font-size: 17px; padding: 0 16px; }
     }
   </style>
 </head>
 <body>
 
 <div class="frame-container">
-  <div class="frame-title">
-    Puzzle &amp; Power
-    <small>⚡ создание героя ⚡</small>
-  </div>
-
   <div class="creation-grid">
     <!-- ЛЕВАЯ ЧАСТЬ: аватар + классы -->
     <div class="left-col">
@@ -295,6 +275,7 @@
         <button class="gender-btn" id="nextGenderBtn" aria-label="следующий пол">▶</button>
       </div>
 
+      <!-- Классы в большом окне -->
       <div class="class-grid">
         <button class="class-btn selected" id="classWarrior" data-class="warrior">⚔️ Воин</button>
         <button class="class-btn" id="classTank" data-class="tank">🛡️ Танк</button>
@@ -312,12 +293,12 @@
       <div class="stat-card"><span class="stat-name">❤️ Выносливость</span><span class="stat-value" id="statVit">13</span></div>
       <div class="stat-card"><span class="stat-name">🕯️ Мудрость</span><span class="stat-value" id="statWis">5</span></div>
 
-      <!-- Имя -->
+      <!-- Имя (чуть мельче) -->
       <div class="name-box">
         <input type="text" id="heroNameInput" class="name-input" placeholder="ИМЯ ГЕРОЯ" maxlength="14" value="ИМЯ">
       </div>
 
-      <!-- Кнопка -->
+      <!-- Кнопка (чуть мельче) -->
       <button class="create-btn" id="createHeroBtn">⚡ СОЗДАТЬ</button>
     </div>
   </div>
@@ -396,21 +377,29 @@
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
     function init() {
-      prevBtn.addEventListener('click', () => switchGender(-1));
-      nextBtn.addEventListener('click', () => switchGender(1));
+      // Используем touch и mouse события для надёжности на мобильных
+      prevBtn.addEventListener('click', (e) => { e.preventDefault(); switchGender(-1); });
+      prevBtn.addEventListener('touchstart', (e) => { e.preventDefault(); switchGender(-1); });
+      
+      nextBtn.addEventListener('click', (e) => { e.preventDefault(); switchGender(1); });
+      nextBtn.addEventListener('touchstart', (e) => { e.preventDefault(); switchGender(1); });
 
       classBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
+        const clickHandler = function(e) {
+          e.preventDefault();
           const cls = this.dataset.class;
           if (cls) selectClass(cls);
-        });
+        };
+        btn.addEventListener('click', clickHandler);
+        btn.addEventListener('touchstart', clickHandler, { passive: false });
       });
 
       setGender('male');
       selectClass('warrior');
       if (nameInput.value.trim() === '') nameInput.value = 'ИМЯ';
 
-      createBtn.addEventListener('click', function() {
+      createBtn.addEventListener('click', function(e) {
+        e.preventDefault();
         const name = nameInput.value.trim();
         if (!name || name === 'ИМЯ' || name === 'NAME') {
           alert('Дай имя своему герою!');
@@ -440,27 +429,6 @@
 
         console.log('📦 Отправка в БД:', payload);
         alert(`✅ Герой "${name}" (${currentClass}) создан!\nСтаты: ${stats.str}/${stats.agl}/${stats.int}/${stats.vit}/${stats.wis}`);
-        
-        // Раскомментируйте для реальной работы:
-        /*
-        fetch('https://ngrok-free.dev/api/create-character', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            window.location.href = 'index.html';
-          } else {
-            alert('Ошибка: ' + (data.message || 'неизвестная'));
-          }
-        })
-        .catch(err => {
-          alert('Не удалось подключиться к серверу.');
-          console.error(err);
-        });
-        */
       });
     }
 
