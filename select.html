@@ -21,6 +21,7 @@
       justify-content: center;
       align-items: center;
     }
+    /* КРАСНУЮ ВНЕШНЮЮ РАМКУ УБРАЛИ, вернули чистый контейнер */
     .game-container {
       position: relative;
       width: 100%;
@@ -30,11 +31,9 @@
       background-size: cover;
       background-position: center;
       overflow: hidden;
-      border: 3px solid #ff2a2a; 
-      box-shadow: 0 0 25px rgba(255, 42, 42, 0.6), inset 0 0 15px rgba(255, 42, 42, 0.3);
     }
     
-    /* ЛЕВАЯ ЧАСТЬ: Герой на диске и классы на дне */
+    /* ЛЕВАЯ ЧАСТЬ: Аватар и Классы */
     .left-zone {
       position: absolute;
       top: 0;
@@ -53,7 +52,7 @@
     }
     .hero-avatar {
       position: absolute;
-      bottom: 12%; /* Ноги теперь идеально зафиксированы на диске */
+      bottom: 2%; /* ОПУСТИЛИ ЕЩЁ НИЖЕ НА ДИСК */
       left: 50%;
       transform: translateX(-50%);
       height: 76%; 
@@ -105,11 +104,13 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.4);
       transition: all 0.15s ease;
     }
+    
+    /* ТЕПЕРЬ ВЫБРАННЫЙ КЛАСС ГОРИТ ЯРКИМ КРАСНЫМ НЕОНОМ */
     .class-btn-left.selected {
-      border-color: #ffcc00;
-      background: rgba(195, 164, 117, 0.25);
+      border-color: #ff2a2a;
+      background: rgba(255, 42, 42, 0.2);
       color: #fff;
-      box-shadow: 0 0 8px rgba(255, 204, 0, 0.4);
+      box-shadow: 0 0 12px rgba(255, 42, 42, 0.6), inset 0 0 6px rgba(255, 42, 42, 0.3);
     }
 
     /* ПРАВАЯ СТОРОНА: Меню из 7 рамок */
@@ -134,9 +135,9 @@
       font-size: 12px;
     }
     
-    /* ОПУСТИЛИ НАМНОГО НИЖЕ (с 14.5% увеличили до 23%) */
+    /* ОПУСТИЛИ ЕЩЁ НИЖЕ И СЖАЛИ ШАГ МЕЖДУ СТРОКАМИ */
     .stats-vertical-box {
-      margin-top: 23%; /* Сила теперь железно опустится во вторую рамку сверху */
+      margin-top: 24.5%; /* Посадили Силу идеально во вторую рамку */
       height: 42.5%; 
       display: flex;
       flex-direction: column;
@@ -144,8 +145,8 @@
       padding: 0px 14px;
     }
     .stat-row-item {
-      height: 16%; 
-      margin-bottom: 4.8%; 
+      height: 15.5%; 
+      margin-bottom: 3.2%; /* Уменьшили шаг, чтобы нижние статы не уползали вниз рамок */
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -159,9 +160,8 @@
       font-size: 13px;
     }
 
-    /* Поле ИМЯ тоже опустилось вслед за статами в свою рамку */
     .name-holder-box {
-      margin-top: 1%; /* Скорректировали шаг под рамку ИМЯ */
+      margin-top: 8.5%; /* Отцентровали поле ИМЯ */
       height: 9.5%;
       display: flex;
       align-items: center;
@@ -180,14 +180,13 @@
       font-family: 'Georgia', serif;
     }
     
-    /* Кнопка "Создать персонажа" четко ложится в самую нижнюю плашку */
     .btn-start-metal {
-      margin-top: 2%; 
+      margin-top: 3.5%; /* Поставили Создать Персонажа ровно на металлическую плашку */
       height: 9.5%;
       background: transparent;
       border: none;
       color: #000000;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
       cursor: pointer;
       display: flex;
