@@ -35,18 +35,18 @@
             justify-content: space-between;
         }
 
-        /* ВЕРХНЯЯ ПАНЕЛЬ ИГРОКА (Двухуровневая: Сверху статы, ниже валюты) */
+        /* ВЕРХНЯЯ ПАНЕЛЬ ИГРОКА */
         .top-bar {
             width: 100%;
-            padding: 10px 12px;
-            background: linear-gradient(to bottom, rgba(5, 5, 15, 0.98) 80%, rgba(5, 5, 15, 0.7) 90%, rgba(0,0,0,0));
+            padding: 12px 15px 10px 15px;
+            background: linear-gradient(to bottom, rgba(5, 5, 15, 0.98) 60%, rgba(5, 5, 15, 0.5) 85%, rgba(0,0,0,0));
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             z-index: 10;
         }
 
-        /* Первая строка: Аватар, ХП, Энергия, Локация */
+        /* Первая строка: Аватар, Лвл, ХП, Энергия, Локация */
         .top-main-row {
             display: flex;
             justify-content: space-between;
@@ -60,11 +60,31 @@
             gap: 10px;
         }
 
+        /* ===== КРУГЛАЯ АВАТАРКА (НОВАЯ) ===== */
+        .avatar-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid #a0aec0;
+            background: #0f172a;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            flex-shrink: 0;
+        }
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         /* Кружок уровня персонажа */
         .level-circle {
             position: relative;
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
             border: 2px solid #00d2ff;
             border-radius: 50%;
@@ -72,6 +92,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+            flex-shrink: 0;
         }
 
         .level-value {
@@ -81,41 +102,60 @@
             text-shadow: 0 0 5px rgba(0, 210, 255, 0.8);
         }
 
-        /* Контейнер для полосок ХП и Энергии */
-        .bars-container {
+        /* ===== СТИЛЬНЫЙ БЛОК ПОЛОСОК (ХП И ЭНЕРГИЯ) ===== */
+        .stats-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            width: 120px;
+            gap: 5px;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            width: 145px;
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-icon {
+            font-size: 12px;
+            width: 16px;
+            text-align: center;
+            text-shadow: 0 0 4px rgba(255,255,255,0.4);
         }
 
         .status-bar-wrapper {
             position: relative;
-            width: 100%;
-            height: 15px;
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 4px;
+            flex-grow: 1;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
             overflow: hidden;
+            box-shadow: inset 0 2px 3px rgba(0,0,0,0.9);
         }
 
         .status-bar-fill {
             height: 100%;
             width: 100%;
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 6px;
         }
 
-        /* ХП — ЗЕЛЕНАЯ */
-        .bar-hp { border-color: rgba(34, 197, 94, 0.3); }
+        /* ХП — КРАСНЫЙ ГРАДИЕНТ (для фэнтези) */
         .bar-hp .status-bar-fill {
-            background: linear-gradient(to right, #15803d, #22c55e);
-            box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+            background: linear-gradient(90deg, #dc2626, #ef4444, #fca5a5);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
         }
 
-        /* Энергия — СИНЯЯ */
-        .bar-energy { border-color: rgba(59, 130, 246, 0.3); }
+        /* Энергия — СИНИЙ ГРАДИЕНТ */
         .bar-energy .status-bar-fill {
-            background: linear-gradient(to right, #1d4ed8, #3b82f6);
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #93c5fd);
             box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
         }
 
@@ -129,9 +169,10 @@
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-size: 9px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px #000;
+            font-size: 8px;
+            font-weight: 900;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 0 0 4px #000;
+            letter-spacing: 0.5px;
         }
 
         /* Вторая строка: Золото, Алмазы, Мечи */
@@ -142,7 +183,6 @@
             padding-left: 2px;
         }
 
-        /* Общий вид плашки под каждую валюту */
         .resource-box {
             background: rgba(15, 23, 42, 0.75);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -167,7 +207,6 @@
             text-shadow: 1px 1px 2px #000;
         }
 
-        /* Цвета контуров для разных валют */
         .res-gold { border-color: rgba(234, 179, 8, 0.4); box-shadow: 0 0 5px rgba(234, 179, 8, 0.15); }
         .res-gold .resource-value { color: #facc15; }
 
@@ -177,7 +216,7 @@
         .res-swords { border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 0 5px rgba(239, 68, 68, 0.15); }
         .res-swords .resource-value { color: #f87171; }
 
-        /* Локация и язык */
+        /* Локация */
         .top-right-block {
             display: flex;
             flex-direction: column;
@@ -211,6 +250,7 @@
             width: 100%;
             height: 100%;
             z-index: 5;
+            pointer-events: none; /* Чтобы клики проходили к зданиям */
         }
 
         .building-zone {
@@ -220,7 +260,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            border: 1px dashed rgba(0, 210, 255, 0.3); 
+            pointer-events: auto;
         }
 
         .building-label {
@@ -282,21 +322,34 @@
             <!-- Верхняя строка: Профиль и локация -->
             <div class="top-main-row">
                 <div class="player-profile">
+                    
+                    <!-- АВАТАРКА (Замените src на путь к вашей картинке) -->
+                    <div class="avatar-circle">
+                        <img src="assets/avatar_placeholder.jpg" alt="Avatar">
+                    </div>
+
                     <!-- Кружок уровня -->
                     <div class="level-circle">
                         <span id="player-level" class="level-value">1</span>
                     </div>
-                    <!-- Полоски ХП и Энергии -->
-                    <div class="bars-container">
-                        <!-- Зеленое ХП -->
-                        <div class="status-bar-wrapper bar-hp">
-                            <div id="hp-fill" class="status-bar-fill" style="width: 100%;"></div>
-                            <div id="hp-text" class="bar-text">1000 / 1000</div>
+
+                    <!-- КРАСИВЫЕ ПОЛОСКИ ХП И ЭНЕРГИИ (Чуть правее) -->
+                    <div class="stats-wrapper">
+                        <!-- Зеленое ХП (с иконкой сердечка) -->
+                        <div class="stat-row">
+                            <span class="stat-icon">❤️</span>
+                            <div class="status-bar-wrapper bar-hp">
+                                <div id="hp-fill" class="status-bar-fill" style="width: 100%;"></div>
+                                <div id="hp-text" class="bar-text">1000 / 1000</div>
+                            </div>
                         </div>
-                        <!-- Синяя Энергия -->
-                        <div class="status-bar-wrapper bar-energy">
-                            <div id="energy-fill" class="status-bar-fill" style="width: 100%;"></div>
-                            <div id="energy-text" class="bar-text">60 / 60</div>
+                        <!-- Синяя Энергия (с иконкой молнии) -->
+                        <div class="stat-row">
+                            <span class="stat-icon">⚡</span>
+                            <div class="status-bar-wrapper bar-energy">
+                                <div id="energy-fill" class="status-bar-fill" style="width: 100%;"></div>
+                                <div id="energy-text" class="bar-text">60 / 60</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -310,17 +363,14 @@
 
             <!-- Нижняя строка: Золото, Алмазы, Мечи -->
             <div class="top-resources-row">
-                <!-- Золото -->
                 <div class="resource-box res-gold">
                     <span class="resource-icon">💰</span>
                     <span id="res-gold-val" class="resource-value">1,250</span>
                 </div>
-                <!-- Алмазы -->
                 <div class="resource-box res-diamonds">
                     <span class="resource-icon">💎</span>
                     <span id="res-diam-val" class="resource-value">150</span>
                 </div>
-                <!-- Мечи -->
                 <div class="resource-box res-swords">
                     <span class="resource-icon">⚔️</span>
                     <span id="res-swords-val" class="resource-value">45</span>
@@ -437,7 +487,6 @@
 
         // ===== ЗАГРУЗКА ДАННЫХ ИГРОКА =====
         function loadPlayerData() {
-            // Получаем tg_id
             let tgId = 777;
             if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 tgId = tg.initDataUnsafe.user.id;
@@ -445,7 +494,6 @@
 
             console.log("Загрузка данных игрока для TG_ID:", tgId);
 
-            // Запрашиваем данные игрока с сервера
             fetch(`${SERVER_URL}/api/get-player-data`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -455,7 +503,6 @@
             .then(data => {
                 if (data.success && data.player) {
                     const player = data.player;
-                    // Обновляем UI
                     updatePlayerStatsUI(
                         player.hp || 1000,
                         player.max_hp || 1000,
@@ -474,7 +521,6 @@
             })
             .catch(err => {
                 console.error("Ошибка загрузки данных игрока:", err);
-                // Используем значения по умолчанию
                 updatePlayerStatsUI(1000, 1000, 60, 60, 1);
                 updatePlayerResourcesUI(500, 10, 0);
             });
@@ -483,7 +529,6 @@
         // ===== СТАРТ =====
         window.onload = function() {
             applyLocalization();
-            // Загружаем данные игрока с сервера
             loadPlayerData();
         };
     </script>
