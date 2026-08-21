@@ -1,440 +1,442 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Puzzle & Power — Создание Героя</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Puzzle & Power - Город</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
 
-    body {
-      background: #d4e4f7;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Georgia', 'Times New Roman', serif;
-      padding: 8px;
-    }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    .frame-container {
-      max-width: 500px;
-      width: 100%;
-      background: #f0f7ff;
-      border: 6px double #6a9ec4;
-      border-radius: 32px 32px 28px 28px;
-      padding: 12px 14px 18px;
-      box-shadow: 0 20px 40px rgba(0, 40, 80, 0.25), 0 0 0 2px #b8d4e8 inset, 0 0 0 4px #8bb9d9 inset;
-      position: relative;
-    }
+        /* Главный контейнер города */
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-image: url('assets/city/bg_lobby.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-    .creation-grid {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+        /* ВЕРХНЯЯ ПАНЕЛЬ (Прозрачная, Flex строка) */
+        .top-bar {
+            width: 100%;
+            padding: 10px 15px;
+            background: transparent;
+            display: flex;
+            justify-content: space-between; /* Распределяем ЛЕВО и ПРАВО */
+            align-items: flex-start; /* Выравнивание по верху */
+            z-index: 10;
+        }
 
-    .left-col {
-      flex: 1 1 170px;
-      min-width: 140px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+        /* ===== ЛЕВАЯ ЧАСТЬ (Уровень + 3 полоски в одну линию) ===== */
+        .left-stats {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    .avatar-block {
-      position: relative;
-      background: #e4eff9;
-      border-radius: 40px 40px 24px 24px;
-      border: 2px solid #7aafd0;
-      box-shadow: inset 0 0 20px #c5ddf0, 0 6px 10px #6a9ec444;
-      padding: 4px 4px 2px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 300px;
-      flex: 1;
-    }
+        /* Уменьшенный кружок уровня */
+        .level-circle {
+            width: 36px;
+            height: 36px;
+            background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #00d2ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+            flex-shrink: 0;
+        }
 
-    .gender-btn {
-      background: transparent;
-      border: none;
-      font-size: 38px;
-      color: #4a8db7;
-      cursor: pointer;
-      padding: 0 10px;
-      line-height: 1;
-      text-shadow: 0 0 8px #7aafd066;
-      transition: 0.1s ease;
-      font-weight: bold;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    .gender-btn:active { transform: scale(0.8); }
+        .level-value {
+            color: #00d2ff;
+            font-weight: 900;
+            font-size: 14px;
+            text-shadow: 0 0 8px rgba(0, 210, 255, 0.8);
+        }
 
-    .hero-avatar {
-      width: 190px;
-      height: auto;
-      max-height: 250px;
-      object-fit: contain;
-      filter: drop-shadow(0 4px 8px #4a7a9c55);
-      transition: 0.2s ease;
-      image-rendering: pixelated;
-    }
+        /* Общий блок полосок (ХП, Энергия, XP) */
+        .stats-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(5px);
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            width: 155px;
+        }
 
-    .class-label {
-      text-align: center;
-      font-size: 13px;
-      font-weight: bold;
-      color: #1a4b6d;
-      letter-spacing: 3px;
-      text-shadow: 0 1px 0 #ffffffaa;
-      padding: 2px 0;
-      border-bottom: 1px dashed #8bb9d9;
-      margin-bottom: 2px;
-    }
+        .stat-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
-    .class-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
+        .stat-icon {
+            font-size: 10px;
+            width: 12px;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(255,255,255,0.3);
+            color: #f8fafc;
+        }
 
-    .class-btn {
-      background: #e4eff9;
-      border: 2px solid #7aafd0;
-      border-radius: 30px;
-      padding: 10px 4px;
-      font-size: 14px;
-      font-weight: bold;
-      color: #1a4b6d;
-      text-shadow: 0 1px 0 #ffffff77;
-      cursor: pointer;
-      transition: 0.15s ease;
-      box-shadow: 0 2px 4px #6a9ec444;
-      font-family: 'Georgia', serif;
-      text-align: center;
-      line-height: 1.3;
-      letter-spacing: 0.5px;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
+        .status-bar-wrapper {
+            position: relative;
+            flex-grow: 1;
+            height: 8px; /* Чуть тоньше полоски */
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.9);
+        }
 
-    .class-btn.selected {
-      border-color: #2b7aaa;
-      background: #b8ddf5;
-      color: #003153;
-      box-shadow: 0 0 16px #6a9ec488, inset 0 0 8px #6a9ec466;
-    }
-    .class-btn:active { transform: scale(0.95); }
+        .status-bar-fill {
+            height: 100%;
+            width: 100%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 4px;
+        }
 
-    .right-col {
-      flex: 2 1 170px;
-      min-width: 150px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+        /* ХП — КРАСНЫЙ */
+        .bar-hp .status-bar-fill {
+            background: linear-gradient(90deg, #b91c1c, #ef4444, #fca5a5);
+            box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+        }
 
-    .stat-card {
-      background: #eaf2fc;
-      border: 1.5px solid #7aafd0;
-      border-radius: 30px;
-      padding: 4px 14px 4px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: inset 0 2px 6px #c5ddf0, 0 2px 4px #6a9ec444;
-    }
+        /* Энергия — СИНИЙ */
+        .bar-energy .status-bar-fill {
+            background: linear-gradient(90deg, #1d4ed8, #3b82f6, #93c5fd);
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
+        }
 
-    .stat-name {
-      color: #1a4b6d;
-      font-size: 14px;
-      font-weight: bold;
-      letter-spacing: 0.5px;
-      text-shadow: 0 1px 0 #ffffffaa;
-    }
+        /* Опыт (XP) — ФИОЛЕТОВЫЙ */
+        .bar-xp .status-bar-fill {
+            background: linear-gradient(90deg, #7c3aed, #a855f7, #fbbf24);
+            box-shadow: 0 0 6px rgba(168, 85, 247, 0.4);
+        }
 
-    .stat-value {
-      background: #ffffff;
-      border: 1px solid #7aafd0;
-      border-radius: 30px;
-      padding: 0 14px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #005a8c;
-      text-shadow: 0 0 8px #6a9ec466;
-      min-width: 32px;
-      text-align: center;
-      box-shadow: inset 0 0 6px #c5ddf0;
-    }
+        .bar-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 6px; /* Очень мелкий шрифт для чисел */
+            font-weight: 900;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 0 0 4px #000;
+            letter-spacing: 0.5px;
+        }
 
-    .name-box {
-      margin-top: 2px;
-      background: #eaf2fc;
-      border: 2px solid #7aafd0;
-      border-radius: 50px;
-      padding: 2px 8px;
-      box-shadow: inset 0 0 12px #c5ddf0;
-    }
+        /* ===== ПРАВАЯ ЧАСТЬ (Валюты в одну линию) ===== */
+        .right-resources {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
 
-    .name-input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      text-align: center;
-      font-size: 14px;
-      font-weight: bold;
-      color: #003153;
-      font-family: 'Georgia', serif;
-      padding: 6px 4px;
-      outline: none;
-      letter-spacing: 1px;
-      text-shadow: 0 1px 0 #ffffffaa;
-    }
+        .resource-box {
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 3px 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            height: 26px; /* Чтобы все три плашки были одной высоты */
+        }
 
-    .create-btn {
-      background: #6a9ec4;
-      border: 2px solid #4a8db7;
-      border-radius: 50px;
-      padding: 9px 8px;
-      font-size: 15px;
-      font-weight: bold;
-      color: #ffffff;
-      text-shadow: 0 2px 0 #2b5a7a;
-      cursor: pointer;
-      transition: 0.15s ease;
-      box-shadow: 0 4px 0 #2b5a7a, 0 6px 16px #4a7a9c66;
-      font-family: 'Georgia', serif;
-      letter-spacing: 1.5px;
-      margin-top: 2px;
-      text-align: center;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    .create-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0 #2b5a7a, 0 6px 12px #4a7a9c66;
-    }
+        .resource-icon {
+            font-size: 12px;
+            filter: drop-shadow(0 0 4px rgba(0,0,0,0.5));
+        }
 
-    @media (max-width: 400px) {
-      .frame-container { padding: 8px 8px 12px; }
-      .left-col { min-width: 110px; }
-      .right-col { min-width: 120px; gap: 4px; }
-      .stat-card { padding: 3px 10px 3px 12px; }
-      .stat-name { font-size: 11px; }
-      .stat-value { font-size: 13px; padding: 0 8px; min-width: 24px; }
-      .class-label { font-size: 11px; letter-spacing: 2px; }
-      .class-btn { font-size: 11px; padding: 7px 2px; border-radius: 20px; }
-      .hero-avatar { width: 140px; max-height: 190px; }
-      .avatar-block { min-height: 220px; }
-      .gender-btn { font-size: 28px; padding: 0 4px; }
-      .name-input { font-size: 12px; padding: 4px 4px; }
-      .create-btn { font-size: 13px; padding: 7px 8px; }
-    }
+        .resource-value {
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+        }
 
-    @media (min-width: 401px) and (max-width: 500px) {
-      .hero-avatar { width: 160px; max-height: 215px; }
-      .avatar-block { min-height: 260px; }
-      .class-btn { font-size: 13px; padding: 9px 4px; }
-      .stat-name { font-size: 13px; }
-    }
+        .res-gold .resource-value { color: #facc15; }
+        .res-diamonds .resource-value { color: #22d3ee; }
+        .res-swords .resource-value { color: #f87171; }
 
-    @media (min-width: 501px) {
-      .hero-avatar { width: 210px; max-height: 270px; }
-      .avatar-block { min-height: 320px; }
-      .class-btn { font-size: 15px; padding: 12px 4px; }
-      .stat-name { font-size: 15px; }
-      .stat-value { font-size: 17px; padding: 0 16px; }
-      .class-label { font-size: 14px; }
-    }
-  </style>
+        /* ===== ИГРОВАЯ ЗОНА (Сияющие точки на карте) ===== */
+        .world-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .building-zone {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            width: 60px;
+            height: 60px;
+        }
+
+        .building-dot {
+            width: 16px;
+            height: 16px;
+            background: #00d2ff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.8), 0 0 5px rgba(0,0,0,0.8);
+            border: 2px solid #fff;
+            transition: all 0.2s ease;
+        }
+
+        .building-zone:hover .building-dot,
+        .building-zone:active .building-dot {
+            transform: scale(1.5);
+            background: #fff;
+            box-shadow: 0 0 30px #00d2ff, 0 0 10px #00d2ff;
+        }
+
+        /* Позиции зданий */
+        .zone-tavern { top: 48%; left: 16%; }
+        .zone-forge { top: 30%; right: 14%; }
+        .zone-arena { top: 70%; left: 35%; }
+        .zone-castle { top: 18%; left: 42%; }
+
+    </style>
 </head>
 <body>
 
-<div class="frame-container">
-  <div class="creation-grid">
-    <div class="left-col">
-      <div class="avatar-block">
-        <button class="gender-btn" id="prevGenderBtn">◀</button>
-        <img id="characterAvatar" class="hero-avatar" src="assets/char_male.png" alt="Герой">
-        <button class="gender-btn" id="nextGenderBtn">▶</button>
-      </div>
+    <div class="game-container">
+        
+        <!-- ВЕРХНЯЯ ПАНЕЛЬ: ЛЕВО (Статы) и ПРАВО (Валюты) -->
+        <div class="top-bar">
+            
+            <!-- ЛЕВАЯ ЧАСТЬ: Уровень + Полоски -->
+            <div class="left-stats">
+                
+                <!-- Кружок уровня -->
+                <div class="level-circle">
+                    <span id="player-level" class="level-value">1</span>
+                </div>
 
-      <div class="class-label">✦ ВЫБОР КЛАССА ✦</div>
+                <!-- Три полоски в ряд -->
+                <div class="stats-wrapper">
+                    
+                    <!-- ХП -->
+                    <div class="stat-row">
+                        <span class="stat-icon">❤️</span>
+                        <div class="status-bar-wrapper bar-hp">
+                            <div id="hp-fill" class="status-bar-fill" style="width: 100%;"></div>
+                            <div id="hp-text" class="bar-text">1000 / 1000</div>
+                        </div>
+                    </div>
 
-      <div class="class-grid">
-        <button class="class-btn selected" id="classWarrior" data-class="warrior">⚔️ Воин</button>
-        <button class="class-btn" id="classTank" data-class="tank">🛡️ Танк</button>
-        <button class="class-btn" id="classElf" data-class="elf">🧝 Эльф</button>
-        <button class="class-btn" id="classMage" data-class="mage">🔮 Маг</button>
-      </div>
+                    <!-- ЭНЕРГИЯ -->
+                    <div class="stat-row">
+                        <span class="stat-icon">⚡</span>
+                        <div class="status-bar-wrapper bar-energy">
+                            <div id="energy-fill" class="status-bar-fill" style="width: 100%;"></div>
+                            <div id="energy-text" class="bar-text">60 / 60</div>
+                        </div>
+                    </div>
+
+                    <!-- ОПЫТ (XP) -->
+                    <div class="stat-row">
+                        <span class="stat-icon">✦</span>
+                        <div class="status-bar-wrapper bar-xp">
+                            <div id="xp-fill" class="status-bar-fill" style="width: 45%;"></div>
+                            <div id="xp-text" class="bar-text">450 / 1000</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ПРАВАЯ ЧАСТЬ: Валюты в одну линию -->
+            <div class="right-resources">
+                <div class="resource-box res-gold">
+                    <span class="resource-icon">💰</span>
+                    <span id="res-gold-val" class="resource-value">1,250</span>
+                </div>
+                <div class="resource-box res-diamonds">
+                    <span class="resource-icon">💎</span>
+                    <span id="res-diam-val" class="resource-value">150</span>
+                </div>
+                <div class="resource-box res-swords">
+                    <span class="resource-icon">⚔️</span>
+                    <span id="res-swords-val" class="resource-value">45</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- СЛОЙ ИНТЕРАКТИВНЫХ ТОЧЕК НА КАРТЕ -->
+        <div class="world-content">
+            <div class="building-zone zone-tavern" onclick="openLocation('tavern')">
+                <div class="building-dot"></div>
+            </div>
+
+            <div class="building-zone zone-forge" onclick="openLocation('forge')">
+                <div class="building-dot"></div>
+            </div>
+
+            <div class="building-zone zone-arena" onclick="openLocation('square')">
+                <div class="building-dot"></div>
+            </div>
+
+            <div class="building-zone zone-castle" onclick="openLocation('pvp_arena')">
+                <div class="building-dot"></div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="right-col">
-      <div class="stat-card"><span class="stat-name">💪 Сила</span><span class="stat-value" id="statStr">15</span></div>
-      <div class="stat-card"><span class="stat-name">🏹 Ловкость</span><span class="stat-value" id="statAgl">12</span></div>
-      <div class="stat-card"><span class="stat-name">🧠 Интуиция</span><span class="stat-value" id="statInt">10</span></div>
-      <div class="stat-card"><span class="stat-name">❤️ Выносливость</span><span class="stat-value" id="statVit">13</span></div>
-      <div class="stat-card"><span class="stat-name">🕯️ Мудрость</span><span class="stat-value" id="statWis">5</span></div>
+    <script>
+        // ===== КОНСТАНТЫ =====
+        const SERVER_URL = 'https://shanty-haven-silo.ngrok-free.dev';
+        let currentLang = 'en'; 
 
-      <div class="name-box">
-        <input type="text" id="heroNameInput" class="name-input" placeholder="ИМЯ ГЕРОЯ" maxlength="14" value="ИМЯ">
-      </div>
-
-      <button class="create-btn" id="createHeroBtn">⚡ СОЗДАТЬ</button>
-    </div>
-  </div>
-</div>
-
-<script>
-  (function() {
-    const STATS_BY_CLASS = {
-      warrior: { str: 15, agl: 12, int: 10, vit: 13, wis: 5 },
-      tank:    { str: 12, agl: 8,  int: 10, vit: 20, wis: 5 },
-      elf:     { str: 10, agl: 18, int: 14, vit: 9,  wis: 4 },
-      mage:    { str: 5,  agl: 9,  int: 11, vit: 10, wis: 20 }
-    };
-
-    const IMAGES = {
-      male: 'assets/char_male.png',
-      female: 'assets/char_female.png'
-    };
-
-    let currentGender = 'male';
-    let currentClass = 'warrior';
-
-    const avatar = document.getElementById('characterAvatar');
-    const prevBtn = document.getElementById('prevGenderBtn');
-    const nextBtn = document.getElementById('nextGenderBtn');
-    const classBtns = document.querySelectorAll('.class-btn');
-    const statStr = document.getElementById('statStr');
-    const statAgl = document.getElementById('statAgl');
-    const statInt = document.getElementById('statInt');
-    const statVit = document.getElementById('statVit');
-    const statWis = document.getElementById('statWis');
-    const nameInput = document.getElementById('heroNameInput');
-    const createBtn = document.getElementById('createHeroBtn');
-
-    const SERVER_URL = 'https://shanty-haven-silo.ngrok-free.dev';
-
-    function updateStats(className) {
-      const s = STATS_BY_CLASS[className];
-      if (!s) return;
-      statStr.textContent = s.str;
-      statAgl.textContent = s.agl;
-      statInt.textContent = s.int;
-      statVit.textContent = s.vit;
-      statWis.textContent = s.wis;
-    }
-
-    function setGender(gender) {
-      if (gender !== 'male' && gender !== 'female') return;
-      currentGender = gender;
-      avatar.src = IMAGES[gender];
-      avatar.style.transform = 'scale(0.92)';
-      setTimeout(() => { avatar.style.transform = 'scale(1)'; }, 100);
-    }
-
-    function switchGender(direction) {
-      const genders = ['male', 'female'];
-      let idx = genders.indexOf(currentGender);
-      idx = (idx + direction + genders.length) % genders.length;
-      setGender(genders[idx]);
-    }
-
-    function selectClass(className) {
-      currentClass = className;
-      classBtns.forEach(btn => {
-        btn.classList.toggle('selected', btn.dataset.class === className);
-      });
-      updateStats(className);
-    }
-
-    function init() {
-      prevBtn.addEventListener('click', (e) => { e.preventDefault(); switchGender(-1); });
-      prevBtn.addEventListener('touchstart', (e) => { e.preventDefault(); switchGender(-1); }, { passive: false });
-      
-      nextBtn.addEventListener('click', (e) => { e.preventDefault(); switchGender(1); });
-      nextBtn.addEventListener('touchstart', (e) => { e.preventDefault(); switchGender(1); }, { passive: false });
-
-      classBtns.forEach(btn => {
-        const clickHandler = function(e) {
-          e.preventDefault();
-          const cls = this.dataset.class;
-          if (cls) selectClass(cls);
+        const LANGUAGES = {
+            ru: {
+                tavern: "Таверна",
+                forge: "Кузница",
+                square: "Рыночная площадь",
+                castle: "Арена PvP",
+                entered: "Вы вошли в локацию: "
+            },
+            en: {
+                tavern: "Tavern",
+                forge: "Forge",
+                square: "Square",
+                castle: "PvP Arena",
+                entered: "You entered location: "
+            }
         };
-        btn.addEventListener('click', clickHandler);
-        btn.addEventListener('touchstart', clickHandler, { passive: false });
-      });
 
-      setGender('male');
-      selectClass('warrior');
-      if (nameInput.value.trim() === '') nameInput.value = 'ИМЯ';
-
-      createBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        const name = nameInput.value.trim();
-        if (!name || name === 'ИМЯ' || name === 'NAME') {
-          alert('Дай имя своему герою!');
-          return;
+        // ===== ИНИЦИАЛИЗАЦИЯ TELEGRAM =====
+        let tg = null;
+        if (window.Telegram && window.Telegram.WebApp) {
+            tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
+            const tgLang = tg.initDataUnsafe?.user?.language_code;
+            if (tgLang && LANGUAGES[tgLang]) {
+                currentLang = tgLang;
+            }
         }
 
-        let tgId = 777;
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user) {
-          tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        // ===== ФУНКЦИИ ОБНОВЛЕНИЯ UI =====
+        function updatePlayerStatsUI(currentHp, maxHp, currentEnergy, maxEnergy, level, currentXp, maxXp) {
+            document.getElementById('player-level').innerText = level;
+
+            const hpPercent = Math.max(0, Math.min(100, (currentHp / maxHp) * 100));
+            const energyPercent = Math.max(0, Math.min(100, (currentEnergy / maxEnergy) * 100));
+            const xpPercent = Math.max(0, Math.min(100, (currentXp / maxXp) * 100));
+
+            document.getElementById('hp-fill').style.width = `${hpPercent}%`;
+            document.getElementById('energy-fill').style.width = `${energyPercent}%`;
+            document.getElementById('xp-fill').style.width = `${xpPercent}%`;
+
+            document.getElementById('hp-text').innerText = `${currentHp} / ${maxHp}`;
+            document.getElementById('energy-text').innerText = `${currentEnergy} / ${maxEnergy}`;
+            document.getElementById('xp-text').innerText = `${currentXp} / ${maxXp}`;
         }
 
-        const stats = {
-          str: parseInt(statStr.textContent, 10),
-          agl: parseInt(statAgl.textContent, 10),
-          int: parseInt(statInt.textContent, 10),
-          vit: parseInt(statVit.textContent, 10),
-          wis: parseInt(statWis.textContent, 10)
+        function updatePlayerResourcesUI(gold, diamonds, swords) {
+            document.getElementById('res-gold-val').innerText = gold.toLocaleString();
+            document.getElementById('res-diam-val').innerText = diamonds.toLocaleString();
+            document.getElementById('res-swords-val').innerText = swords.toLocaleString();
+        }
+
+        function openLocation(locationId) {
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+            const t = LANGUAGES[currentLang];
+            let locName = t[locationId === 'pvp_arena' ? 'castle' : (locationId === 'square' ? 'square' : locationId)];
+            alert(t.entered + locName);
+        }
+
+        // ===== ЗАГРУЗКА ДАННЫХ ИГРОКА =====
+        function loadPlayerData() {
+            let tgId = 777;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                tgId = tg.initDataUnsafe.user.id;
+            }
+
+            console.log("Загрузка данных игрока для TG_ID:", tgId);
+
+            fetch(`${SERVER_URL}/api/get-player-data`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tg_id: tgId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.player) {
+                    const player = data.player;
+                    updatePlayerStatsUI(
+                        player.hp || 1000,
+                        player.max_hp || 1000,
+                        player.energy || 60,
+                        player.max_energy || 60,
+                        player.level || 1,
+                        player.xp || 450,
+                        player.max_xp || 1000
+                    );
+                    updatePlayerResourcesUI(
+                        player.gold || 500,
+                        player.diamonds || 10,
+                        player.swords || 0
+                    );
+                } else {
+                    console.warn("Не удалось загрузить данные игрока, используем значения по умолчанию");
+                }
+            })
+            .catch(err => {
+                console.error("Ошибка загрузки данных игрока:", err);
+                updatePlayerStatsUI(1000, 1000, 60, 60, 1, 450, 1000);
+                updatePlayerResourcesUI(500, 10, 0);
+            });
+        }
+
+        // ===== СТАРТ =====
+        window.onload = function() {
+            loadPlayerData();
         };
-
-        const payload = {
-          tg_id: tgId,
-          name: name,
-          gender: currentGender,
-          class_name: currentClass,
-          stats: stats
-        };
-
-        console.log('📦 Отправка в БД:', payload);
-
-        fetch(`${SERVER_URL}/api/create-character`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert('✅ Персонаж создан! Добро пожаловать в игру!');
-            window.location.href = 'lobby.html';
-          } else {
-            alert('Ошибка: ' + (data.message || 'Неизвестная ошибка'));
-          }
-        })
-        .catch(err => {
-          console.error('Ошибка:', err);
-          alert('Не удалось подключиться к серверу!');
-        });
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
-  })();
-</script>
+    </script>
 </body>
 </html>
