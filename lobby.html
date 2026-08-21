@@ -35,22 +35,21 @@
             justify-content: space-between;
         }
 
-        /* ВЕРХНЯЯ ПАНЕЛЬ ИГРОКА (БЕЗ ЧЕРНОГО ФОНА СВЕРХУ!) */
+        /* ВЕРХНЯЯ ПАНЕЛЬ ИГРОКА (Прозрачная) */
         .top-bar {
             width: 100%;
-            padding: 12px 15px 10px 15px;
-            /* Убрали gradient background, теперь он прозрачный */
-            background: transparent; 
+            padding: 15px 15px 10px 15px;
+            background: transparent;
             display: flex;
             flex-direction: column;
             gap: 8px;
             z-index: 10;
         }
 
-        /* Первая строка: Аватар, Лвл, ХП, Энергия */
+        /* Ряд: Уровень, ХП, Энергия, Опыт */
         .top-main-row {
             display: flex;
-            justify-content: flex-start; /* Прижали все влево */
+            justify-content: flex-start; /* Всё в левый край */
             align-items: center;
             width: 100%;
         }
@@ -59,26 +58,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        /* ===== КРУГЛАЯ АВАТАРКА ===== */
-        .avatar-circle {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid #cbd5e1;
-            background: #0f172a;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
-            flex-shrink: 0;
-        }
-        .avatar-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         /* Кружок уровня персонажа */
@@ -92,7 +71,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
             flex-shrink: 0;
         }
 
@@ -103,29 +82,29 @@
             text-shadow: 0 0 8px rgba(0, 210, 255, 0.8);
         }
 
-        /* ===== БЛОК ПОЛОСОК (ХП И ЭНЕРГИЯ) ===== */
+        /* ===== ОБЩИЙ БЛОК ПОЛОСОК (ХП, ЭНЕРГИЯ, XP) ===== */
         .stats-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            padding: 6px 12px;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(5px);
+            padding: 5px 12px;
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            width: 155px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            width: 170px;
         }
 
         .stat-row {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .stat-icon {
-            font-size: 12px;
-            width: 16px;
+            font-size: 11px;
+            width: 14px;
             text-align: center;
             text-shadow: 0 0 5px rgba(255,255,255,0.3);
             color: #f8fafc;
@@ -134,10 +113,10 @@
         .status-bar-wrapper {
             position: relative;
             flex-grow: 1;
-            height: 12px;
+            height: 10px;
             background: rgba(0, 0, 0, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
+            border-radius: 5px;
             overflow: hidden;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.9);
         }
@@ -146,19 +125,25 @@
             height: 100%;
             width: 100%;
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 6px;
+            border-radius: 5px;
         }
 
-        /* ХП — КРАСНЫЙ ГРАДИЕНТ */
+        /* ХП — КРАСНЫЙ */
         .bar-hp .status-bar-fill {
             background: linear-gradient(90deg, #b91c1c, #ef4444, #fca5a5);
-            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
         }
 
-        /* Энергия — СИНИЙ ГРАДИЕНТ */
+        /* Энергия — СИНИЙ */
         .bar-energy .status-bar-fill {
             background: linear-gradient(90deg, #1d4ed8, #3b82f6, #93c5fd);
-            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Опыт (XP) — ФИОЛЕТОВЫЙ/ЗОЛОТОЙ */
+        .bar-xp .status-bar-fill {
+            background: linear-gradient(90deg, #7c3aed, #a855f7, #fbbf24);
+            box-shadow: 0 0 6px rgba(168, 85, 247, 0.4);
         }
 
         .bar-text {
@@ -171,7 +156,7 @@
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-size: 8px;
+            font-size: 7px;
             font-weight: 900;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 0 0 4px #000;
             letter-spacing: 0.5px;
@@ -180,32 +165,32 @@
         /* Вторая строка: Золото, Алмазы, Мечи */
         .top-resources-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
             padding-left: 2px;
         }
 
         .resource-box {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 5px 10px;
+            border-radius: 6px;
+            padding: 4px 8px;
             display: flex;
             align-items: center;
-            gap: 6px;
-            min-width: 70px;
+            gap: 5px;
+            min-width: 65px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         }
 
         .resource-icon {
-            font-size: 14px;
+            font-size: 13px;
             filter: drop-shadow(0 0 4px rgba(0,0,0,0.5));
         }
 
         .resource-value {
             color: #fff;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             text-shadow: 1px 1px 2px #000;
         }
@@ -214,7 +199,7 @@
         .res-diamonds .resource-value { color: #22d3ee; }
         .res-swords .resource-value { color: #f87171; }
 
-        /* ИГРОВАЯ ЗОНА СО ЗДАНИЯМИ */
+        /* ===== ИГРОВАЯ ЗОНА (ТОЧКИ НА КАРТЕ ВМЕСТО НАЗВАНИЙ) ===== */
         .world-content {
             position: absolute;
             top: 0;
@@ -222,91 +207,66 @@
             width: 100%;
             height: 100%;
             z-index: 5;
-            pointer-events: none;
+            pointer-events: none; /* Чтобы клики шли к зданиям */
         }
 
         .building-zone {
             position: absolute;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             pointer-events: auto;
+            /* Делаем область клика большой */
+            width: 60px;
+            height: 60px;
         }
 
-        .building-label {
-            background: rgba(10, 15, 30, 0.85);
-            border: 2px solid #00d2ff;
-            border-radius: 8px;
-            padding: 6px 12px;
-            color: #fff;
-            font-size: 13px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            white-space: nowrap;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
-            pointer-events: none;
+        /* Красивая сияющая точка вместо названия */
+        .building-dot {
+            width: 16px;
+            height: 16px;
+            background: #00d2ff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.8), 0 0 5px rgba(0,0,0,0.8);
+            border: 2px solid #fff;
             transition: all 0.2s ease;
         }
 
-        .building-zone:hover .building-label,
-        .building-zone:active .building-label {
-            background: #00d2ff;
-            color: #000;
-            box-shadow: 0 0 25px #00d2ff;
-            transform: scale(1.05);
+        .building-zone:hover .building-dot,
+        .building-zone:active .building-dot {
+            transform: scale(1.5);
+            background: #fff;
+            box-shadow: 0 0 30px #00d2ff, 0 0 10px #00d2ff;
         }
 
-        /* Координаты зданий */
-        .zone-tavern { top: 35%; left: 10%; width: 25%; height: 20%; }
-        .zone-forge { top: 30%; right: 10%; width: 25%; height: 22%; }
-        .zone-arena { top: 55%; left: 35%; width: 30%; height: 20%; }
-        .zone-castle { top: 15%; left: 37%; width: 26%; height: 18%; }
+        /* Позиции зданий (РАСПРЕДЕЛЕНЫ ПО ДИАГОНАЛИ, ЧТОБЫ НЕ СЛИПАЛИСЬ) */
+        .zone-tavern { top: 48%; left: 16%; }   /* Слева пониже */
+        .zone-forge { top: 30%; right: 14%; }   /* Справа повыше */
+        .zone-arena { top: 70%; left: 35%; }    /* Слева внизу */
+        .zone-castle { top: 18%; left: 42%; }   /* По центру, но выше всех */
 
-        /* Кнопка вызова чата */
-        .chat-toggle-btn {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 55px;
-            height: 55px;
-            background: rgba(15, 23, 42, 0.85);
-            border: 2px solid #ff007f;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
-            z-index: 20;
-        }
-        .chat-icon { width: 24px; height: 24px; fill: #ff007f; }
     </style>
 </head>
 <body>
 
     <div class="game-container">
         
-        <!-- ВЕРХНЯЯ ПАНЕЛЬ (ПРОЗРАЧНАЯ) -->
+        <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
         <div class="top-bar">
-            <!-- Верхняя строка: Аватар, Лвл, ХП, Энергия -->
+            <!-- Верхняя строка: Лвл, ХП, Энергия, Опыт -->
             <div class="top-main-row">
                 <div class="player-profile">
                     
-                    <!-- АВАТАРКА -->
-                    <div class="avatar-circle">
-                        <img src="assets/avatar_placeholder.jpg" alt="Avatar">
-                    </div>
-
                     <!-- Кружок уровня -->
                     <div class="level-circle">
                         <span id="player-level" class="level-value">1</span>
                     </div>
 
-                    <!-- ПОЛОСКИ ХП И ЭНЕРГИИ -->
+                    <!-- ПОЛОСКИ (ХП, ЭНЕРГИЯ, XP) -->
                     <div class="stats-wrapper">
+                        
+                        <!-- ХП -->
                         <div class="stat-row">
                             <span class="stat-icon">❤️</span>
                             <div class="status-bar-wrapper bar-hp">
@@ -314,6 +274,8 @@
                                 <div id="hp-text" class="bar-text">1000 / 1000</div>
                             </div>
                         </div>
+
+                        <!-- ЭНЕРГИЯ -->
                         <div class="stat-row">
                             <span class="stat-icon">⚡</span>
                             <div class="status-bar-wrapper bar-energy">
@@ -321,6 +283,16 @@
                                 <div id="energy-text" class="bar-text">60 / 60</div>
                             </div>
                         </div>
+
+                        <!-- ОПЫТ (XP) - НОВАЯ ПОЛОСКА -->
+                        <div class="stat-row">
+                            <span class="stat-icon">✦</span>
+                            <div class="status-bar-wrapper bar-xp">
+                                <div id="xp-fill" class="status-bar-fill" style="width: 45%;"></div>
+                                <div id="xp-text" class="bar-text">450 / 1000</div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -342,37 +314,31 @@
             </div>
         </div>
 
-        <!-- СЛОЙ ИНТЕРАКТИВНЫХ ЗДАНИЙ -->
+        <!-- СЛОЙ ИНТЕРАКТИВНЫХ ТОЧЕК НА КАРТЕ -->
         <div class="world-content">
             <div class="building-zone zone-tavern" onclick="openLocation('tavern')">
-                <div id="lbl-tavern" class="building-label">Tavern</div>
+                <div class="building-dot"></div>
             </div>
 
             <div class="building-zone zone-forge" onclick="openLocation('forge')">
-                <div id="lbl-forge" class="building-label">Forge</div>
+                <div class="building-dot"></div>
             </div>
 
             <div class="building-zone zone-arena" onclick="openLocation('square')">
-                <div id="lbl-square" class="building-label">Square</div>
+                <div class="building-dot"></div>
             </div>
 
             <div class="building-zone zone-castle" onclick="openLocation('pvp_arena')">
-                <div id="lbl-castle" class="building-label">PvP Arena</div>
+                <div class="building-dot"></div>
             </div>
         </div>
 
-        <!-- Кнопка чата -->
-        <div class="chat-toggle-btn">
-            <svg class="chat-icon" viewBox="0 0 24 24">
-                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
-            </svg>
-        </div>
     </div>
 
     <script>
         // ===== КОНСТАНТЫ =====
         const SERVER_URL = 'https://shanty-haven-silo.ngrok-free.dev';
-        let currentLang = 'en'; // По умолчанию английский, но мы удалили кнопку языка
+        let currentLang = 'en'; 
 
         const LANGUAGES = {
             ru: {
@@ -404,31 +370,26 @@
         }
 
         // ===== ФУНКЦИИ ОБНОВЛЕНИЯ UI =====
-        function updatePlayerStatsUI(currentHp, maxHp, currentEnergy, maxEnergy, level) {
+        function updatePlayerStatsUI(currentHp, maxHp, currentEnergy, maxEnergy, level, currentXp, maxXp) {
             document.getElementById('player-level').innerText = level;
 
             const hpPercent = Math.max(0, Math.min(100, (currentHp / maxHp) * 100));
             const energyPercent = Math.max(0, Math.min(100, (currentEnergy / maxEnergy) * 100));
+            const xpPercent = Math.max(0, Math.min(100, (currentXp / maxXp) * 100));
 
             document.getElementById('hp-fill').style.width = `${hpPercent}%`;
             document.getElementById('energy-fill').style.width = `${energyPercent}%`;
+            document.getElementById('xp-fill').style.width = `${xpPercent}%`;
 
             document.getElementById('hp-text').innerText = `${currentHp} / ${maxHp}`;
             document.getElementById('energy-text').innerText = `${currentEnergy} / ${maxEnergy}`;
+            document.getElementById('xp-text').innerText = `${currentXp} / ${maxXp}`;
         }
 
         function updatePlayerResourcesUI(gold, diamonds, swords) {
             document.getElementById('res-gold-val').innerText = gold.toLocaleString();
             document.getElementById('res-diam-val').innerText = diamonds.toLocaleString();
             document.getElementById('res-swords-val').innerText = swords.toLocaleString();
-        }
-
-        function applyLocalization() {
-            const t = LANGUAGES[currentLang];
-            document.getElementById('lbl-tavern').innerText = t.tavern;
-            document.getElementById('lbl-forge').innerText = t.forge;
-            document.getElementById('lbl-square').innerText = t.square;
-            document.getElementById('lbl-castle').innerText = t.castle;
         }
 
         function openLocation(locationId) {
@@ -463,7 +424,9 @@
                         player.max_hp || 1000,
                         player.energy || 60,
                         player.max_energy || 60,
-                        player.level || 1
+                        player.level || 1,
+                        player.xp || 450,     /* Добавили XP */
+                        player.max_xp || 1000 /* Добавили MAX XP */
                     );
                     updatePlayerResourcesUI(
                         player.gold || 500,
@@ -476,14 +439,13 @@
             })
             .catch(err => {
                 console.error("Ошибка загрузки данных игрока:", err);
-                updatePlayerStatsUI(1000, 1000, 60, 60, 1);
+                updatePlayerStatsUI(1000, 1000, 60, 60, 1, 450, 1000);
                 updatePlayerResourcesUI(500, 10, 0);
             });
         }
 
         // ===== СТАРТ =====
         window.onload = function() {
-            applyLocalization();
             loadPlayerData();
         };
     </script>
