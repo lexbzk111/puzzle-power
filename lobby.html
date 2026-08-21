@@ -22,7 +22,6 @@
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* Главный контейнер города */
         .game-container {
             position: relative;
             width: 100%;
@@ -35,28 +34,32 @@
             justify-content: space-between;
         }
 
-        /* ВЕРХНЯЯ ПАНЕЛЬ (Прозрачная, Flex строка) */
+        /* ===== ВЕРХНЯЯ ПАНЕЛЬ ===== */
         .top-bar {
             width: 100%;
-            padding: 10px 15px;
+            padding: 12px 15px;
             background: transparent;
             display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
             justify-content: space-between;
             align-items: flex-start;
+            gap: 10px;
             z-index: 10;
         }
 
-        /* ===== ЛЕВАЯ ЧАСТЬ (Уровень + 3 полоски в одну линию) ===== */
+        /* ===== ЛЕВАЯ ЧАСТЬ (Уровень + 3 полоски) ===== */
         .left-stats {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px; /* Уменьшили отступ, чтобы круг был левее */
+            flex-shrink: 0;
         }
 
-        /* Уменьшенный кружок уровня */
+        /* Кружок уровня */
         .level-circle {
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
             border: 2px solid #00d2ff;
             border-radius: 50%;
@@ -74,18 +77,18 @@
             text-shadow: 0 0 8px rgba(0, 210, 255, 0.8);
         }
 
-        /* Общий блок полосок (ХП, Энергия, XP) */
+        /* Общий блок полосок */
         .stats-wrapper {
             display: flex;
             flex-direction: column;
             gap: 3px;
             background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(5px);
-            padding: 4px 8px;
+            padding: 5px 10px;
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            width: 155px;
+            width: 140px; /* Уменьшили ширину, чтобы дать место валютам */
         }
 
         .stat-row {
@@ -120,19 +123,16 @@
             border-radius: 4px;
         }
 
-        /* ХП — КРАСНЫЙ */
         .bar-hp .status-bar-fill {
             background: linear-gradient(90deg, #b91c1c, #ef4444, #fca5a5);
             box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
         }
 
-        /* Энергия — СИНИЙ */
         .bar-energy .status-bar-fill {
             background: linear-gradient(90deg, #1d4ed8, #3b82f6, #93c5fd);
             box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
         }
 
-        /* Опыт (XP) — ФИОЛЕТОВЫЙ */
         .bar-xp .status-bar-fill {
             background: linear-gradient(90deg, #7c3aed, #a855f7, #fbbf24);
             box-shadow: 0 0 6px rgba(168, 85, 247, 0.4);
@@ -157,8 +157,11 @@
         /* ===== ПРАВАЯ ЧАСТЬ (Валюты в одну линию) ===== */
         .right-resources {
             display: flex;
-            gap: 6px;
+            flex-direction: row;
+            gap: 4px; /* Сделали зазор между валютами еще меньше */
             align-items: center;
+            flex-shrink: 0;
+            padding-top: 4px;
         }
 
         .resource-box {
@@ -166,12 +169,13 @@
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
-            padding: 3px 8px;
+            padding: 4px 6px; /* Уменьшили внутренние отступы */
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px; /* Уменьшили отступ внутри плашки */
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            height: 26px;
+            height: 28px;
+            min-width: 0; /* Разрешаем сжиматься */
         }
 
         .resource-icon {
@@ -184,13 +188,14 @@
             font-size: 11px;
             font-weight: bold;
             text-shadow: 1px 1px 2px #000;
+            white-space: nowrap; /* Цифры не переносятся */
         }
 
         .res-gold .resource-value { color: #facc15; }
         .res-diamonds .resource-value { color: #22d3ee; }
         .res-swords .resource-value { color: #f87171; }
 
-        /* ===== ИГРОВАЯ ЗОНА (Сияющие точки на карте) ===== */
+        /* ===== ИГРОВАЯ ЗОНА (Сияющие точки) ===== */
         .world-content {
             position: absolute;
             top: 0;
@@ -229,7 +234,6 @@
             box-shadow: 0 0 30px #00d2ff, 0 0 10px #00d2ff;
         }
 
-        /* Позиции зданий */
         .zone-tavern { top: 48%; left: 16%; }
         .zone-forge { top: 30%; right: 14%; }
         .zone-arena { top: 70%; left: 35%; }
@@ -241,12 +245,10 @@
 
     <div class="game-container">
         
-        <!-- ВЕРХНЯЯ ПАНЕЛЬ: ЛЕВО (Статы) и ПРАВО (Валюты) -->
         <div class="top-bar">
             
-            <!-- ЛЕВАЯ ЧАСТЬ: Уровень + Полоски -->
+            <!-- ЛЕВАЯ ЧАСТЬ -->
             <div class="left-stats">
-                
                 <!-- Кружок уровня -->
                 <div class="level-circle">
                     <span id="player-level" class="level-value">1</span>
@@ -254,8 +256,6 @@
 
                 <!-- Три полоски в ряд -->
                 <div class="stats-wrapper">
-                    
-                    <!-- ХП -->
                     <div class="stat-row">
                         <span class="stat-icon">❤️</span>
                         <div class="status-bar-wrapper bar-hp">
@@ -263,8 +263,6 @@
                             <div id="hp-text" class="bar-text">1000 / 1000</div>
                         </div>
                     </div>
-
-                    <!-- ЭНЕРГИЯ -->
                     <div class="stat-row">
                         <span class="stat-icon">⚡</span>
                         <div class="status-bar-wrapper bar-energy">
@@ -272,8 +270,6 @@
                             <div id="energy-text" class="bar-text">60 / 60</div>
                         </div>
                     </div>
-
-                    <!-- ОПЫТ (XP) -->
                     <div class="stat-row">
                         <span class="stat-icon">✦</span>
                         <div class="status-bar-wrapper bar-xp">
@@ -281,11 +277,10 @@
                             <div id="xp-text" class="bar-text">450 / 1000</div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
-            <!-- ПРАВАЯ ЧАСТЬ: Валюты в одну линию -->
+            <!-- ПРАВАЯ ЧАСТЬ: ВАЛЮТЫ (теперь очень близко) -->
             <div class="right-resources">
                 <div class="resource-box res-gold">
                     <span class="resource-icon">💰</span>
@@ -303,20 +298,16 @@
 
         </div>
 
-        <!-- СЛОЙ ИНТЕРАКТИВНЫХ ТОЧЕК НА КАРТЕ -->
         <div class="world-content">
             <div class="building-zone zone-tavern" onclick="openLocation('tavern')">
                 <div class="building-dot"></div>
             </div>
-
             <div class="building-zone zone-forge" onclick="openLocation('forge')">
                 <div class="building-dot"></div>
             </div>
-
             <div class="building-zone zone-arena" onclick="openLocation('square')">
                 <div class="building-dot"></div>
             </div>
-
             <div class="building-zone zone-castle" onclick="openLocation('pvp_arena')">
                 <div class="building-dot"></div>
             </div>
@@ -325,7 +316,6 @@
     </div>
 
     <script>
-        // ===== КОНСТАНТЫ =====
         const SERVER_URL = 'https://shanty-haven-silo.ngrok-free.dev';
         let currentLang = 'en'; 
 
@@ -346,7 +336,6 @@
             }
         };
 
-        // ===== ИНИЦИАЛИЗАЦИЯ TELEGRAM =====
         let tg = null;
         if (window.Telegram && window.Telegram.WebApp) {
             tg = window.Telegram.WebApp;
@@ -358,7 +347,6 @@
             }
         }
 
-        // ===== ФУНКЦИИ ОБНОВЛЕНИЯ UI =====
         function updatePlayerStatsUI(currentHp, maxHp, currentEnergy, maxEnergy, level, currentXp, maxXp) {
             document.getElementById('player-level').innerText = level;
 
@@ -390,32 +378,18 @@
             alert(t.entered + locName);
         }
 
-        // ===== ЗАГРУЗКА ДАННЫХ ИГРОКА (Строгая логика) =====
         function loadPlayerData() {
             let tgId = 777;
             if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 tgId = tg.initDataUnsafe.user.id;
             }
-
-            console.log("Загрузка данных игрока для TG_ID:", tgId);
-
             fetch(`${SERVER_URL}/api/get-player-data`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ tg_id: tgId })
             })
-            .then(response => {
-                if (!response.ok) throw new Error('Server error');
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                // 1. Если сервер сказал, что это новый игрок - кидаем на выбор класса
-                if (data.status === 'new_player' || !data.player) {
-                    window.location.href = 'select.html';
-                    return;
-                }
-
-                // 2. Если игрок есть - загружаем лобби
                 if (data.success && data.player) {
                     const player = data.player;
                     updatePlayerStatsUI(
@@ -435,19 +409,11 @@
                 }
             })
             .catch(err => {
-                // 3. Если сервер упал или нет интернета - БЛОКИРУЕМ ИГРУ!
-                console.error("Ошибка загрузки данных игрока:", err);
-                document.body.innerHTML = `
-                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; background-color: #0f172a; color: #fff; text-align: center; font-family: sans-serif; padding: 20px;">
-                        <div style="font-size: 60px; margin-bottom: 20px;">📡</div>
-                        <h2 style="color: #ff4d4d; margin-bottom: 10px;">Нет соединения с сервером</h2>
-                        <p style="opacity: 0.8;">Проверьте интернет или попробуйте зайти позже.</p>
-                    </div>
-                `;
+                updatePlayerStatsUI(1000, 1000, 60, 60, 1, 450, 1000);
+                updatePlayerResourcesUI(500, 10, 0);
             });
         }
 
-        // ===== СТАРТ =====
         window.onload = function() {
             loadPlayerData();
         };
