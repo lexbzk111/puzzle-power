@@ -4,57 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Puzzle & Power</title>
-    <!-- Подключаем официальный скрипт Telegram, чтобы WebApp работал на смартфонах -->
     <script src="https://telegram.org"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; background-color: #ffffff;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #ffffff;
             font-family: 'Georgia', serif;
         }
-        /* Ставим твою светлую заставку на весь экран */
         .background {
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             background: url('welcome_light.png') no-repeat center center;
-            background-size: cover; position: relative;
+            background-size: cover;
+            position: relative;
         }
-        /* Создаем невидимую кнопку поверх нарисованной серебряной плашки */
         .login-btn {
             position: absolute;
-            bottom: 3.5%; left: 50%; /* Идеальные координаты под плашку на твоем арте */
+            bottom: 3.5%;
+            left: 50%;
             transform: translateX(-50%);
-            width: 75%; height: 60px;
+            width: 75%;
+            height: 60px;
             cursor: pointer;
-            background: transparent; /* Делаем саму кнопку прозрачной */
+            background: transparent;
             border: none;
             outline: none;
-            
-            /* Стилизуем текст внутри рамки под цвет логотипа */
-            color: #163654; 
+            color: #163654;
             font-size: 20px;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: 0.1s;
         }
-        /* Эффект легкого сжатия при тапе пальцем на телефоне */
         .login-btn:active {
             transform: translateX(-50%) scale(0.96);
+        }
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 10;
+        }
+        .loading-overlay.active {
+            display: flex;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #eaf2fc;
+            border-top: 4px solid #6a9ec4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: #1a4b6d;
+            font-size: 16px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-
     <div class="background">
-        <!-- Надпись пишется кодом прямо внутри серебряной рамки вашей картинки -->
         <button class="login-btn" onclick="enterGame()">Начать играть</button>
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+            <div class="loading-text">Проверка данных...</div>
+        </div>
     </div>
+    
     <script>
-        // Твоя постоянная безопасная ссылка ngrok до твоего ПК
         const SERVER_URL = 'https://shanty-haven-silo.ngrok-free.dev';
 
-        // Безопасная инициализация Telegram WebApp без падения ошибок в браузере ПК
         let tg = null;
         if (window.Telegram && window.Telegram.WebApp) {
             tg = window.Telegram.WebApp;
@@ -62,23 +104,26 @@
             tg.expand();
         }
 
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (show) overlay.classList.add('active');
+            else overlay.classList.remove('active');
+        }
+
         function enterGame() {
-            // Включаем тактильную вибрацию на смартфонах через Telegram SDK
             if (tg && tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
             }
             
-            // ID игрока по умолчанию для тестов на компьютере
-            let tgId = 777;
+            showLoading(true);
             
-            // Если открыли внутри реального Telegram — подтягиваем настоящий ID аккаунта
+            let tgId = 777;
             if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 tgId = tg.initDataUnsafe.user.id;
             }
 
             console.log("Запрос авторизации для TG_ID:", tgId);
 
-            // Отправляем пакет на твой локальный FastAPI сервер
             fetch(`${SERVER_URL}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -86,13 +131,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                               if (data.success) {
+                showLoading(false);
+                if (data.success) {
                     if (data.has_character) {
-                        console.log("Персонаж найден в PostgreSQL! Добро пожаловать!");
-                        // Перенаправляем игрока прямо на карту города
                         window.location.href = "lobby.html";
                     } else {
-                        console.log("Персонажа нет. Отправляем на select.html...");
                         window.location.href = "select.html";
                     }
                 } else {
@@ -100,8 +143,9 @@
                 }
             })
             .catch(err => {
-                console.error("Сервер игры не отвечает через туннель:", err);
-                // Форсированный пропуск на select.html для автономного тестирования дизайна экранов
+                showLoading(false);
+                console.error("Сервер не отвечает:", err);
+                alert("Не удалось подключиться к серверу. Переход в режим создания персонажа.");
                 window.location.href = "select.html";
             });
         }
