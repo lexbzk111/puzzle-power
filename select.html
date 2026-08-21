@@ -22,7 +22,6 @@
       padding: 8px;
     }
 
-    /* ===== ГЛАВНАЯ РАМКА ===== */
     .frame-container {
       max-width: 500px;
       width: 100%;
@@ -34,14 +33,12 @@
       position: relative;
     }
 
-    /* ===== СЕТКА ===== */
     .creation-grid {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
 
-    /* ---- ЛЕВАЯ КОЛОНКА ---- */
     .left-col {
       flex: 1 1 170px;
       min-width: 140px;
@@ -50,7 +47,6 @@
       gap: 6px;
     }
 
-    /* большой блок с аватаром */
     .avatar-block {
       position: relative;
       background: #e4eff9;
@@ -91,7 +87,6 @@
       image-rendering: pixelated;
     }
 
-    /* надпись "ВЫБОР КЛАССА" */
     .class-label {
       text-align: center;
       font-size: 13px;
@@ -104,7 +99,6 @@
       margin-bottom: 2px;
     }
 
-    /* блок с классами (2x2) */
     .class-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -139,7 +133,6 @@
     }
     .class-btn:active { transform: scale(0.95); }
 
-    /* ---- ПРАВАЯ КОЛОНКА (статы + имя + кнопка) ---- */
     .right-col {
       flex: 2 1 170px;
       min-width: 150px;
@@ -148,7 +141,6 @@
       gap: 6px;
     }
 
-    /* каждая характеристика — отдельная рамка */
     .stat-card {
       background: #eaf2fc;
       border: 1.5px solid #7aafd0;
@@ -182,7 +174,6 @@
       box-shadow: inset 0 0 6px #c5ddf0;
     }
 
-    /* поле ввода имени */
     .name-box {
       margin-top: 2px;
       background: #eaf2fc;
@@ -206,13 +197,7 @@
       letter-spacing: 1px;
       text-shadow: 0 1px 0 #ffffffaa;
     }
-    .name-input::placeholder {
-      color: #8bb9d9;
-      font-weight: normal;
-      opacity: 0.6;
-    }
 
-    /* кнопка создания */
     .create-btn {
       background: #6a9ec4;
       border: 2px solid #4a8db7;
@@ -237,24 +222,18 @@
       box-shadow: 0 2px 0 #2b5a7a, 0 6px 12px #4a7a9c66;
     }
 
-    /* ----- АДАПТИВ ----- */
     @media (max-width: 400px) {
       .frame-container { padding: 8px 8px 12px; }
-      
       .left-col { min-width: 110px; }
       .right-col { min-width: 120px; gap: 4px; }
-      
       .stat-card { padding: 3px 10px 3px 12px; }
       .stat-name { font-size: 11px; }
       .stat-value { font-size: 13px; padding: 0 8px; min-width: 24px; }
-      
       .class-label { font-size: 11px; letter-spacing: 2px; }
       .class-btn { font-size: 11px; padding: 7px 2px; border-radius: 20px; }
-      
       .hero-avatar { width: 140px; max-height: 190px; }
       .avatar-block { min-height: 220px; }
       .gender-btn { font-size: 28px; padding: 0 4px; }
-      
       .name-input { font-size: 12px; padding: 4px 4px; }
       .create-btn { font-size: 13px; padding: 7px 8px; }
     }
@@ -280,18 +259,15 @@
 
 <div class="frame-container">
   <div class="creation-grid">
-    <!-- ЛЕВАЯ ЧАСТЬ: аватар + классы -->
     <div class="left-col">
       <div class="avatar-block">
-        <button class="gender-btn" id="prevGenderBtn" aria-label="предыдущий пол">◀</button>
+        <button class="gender-btn" id="prevGenderBtn">◀</button>
         <img id="characterAvatar" class="hero-avatar" src="assets/char_male.png" alt="Герой">
-        <button class="gender-btn" id="nextGenderBtn" aria-label="следующий пол">▶</button>
+        <button class="gender-btn" id="nextGenderBtn">▶</button>
       </div>
 
-      <!-- Надпись "ВЫБОР КЛАССА" -->
       <div class="class-label">✦ ВЫБОР КЛАССА ✦</div>
 
-      <!-- Классы -->
       <div class="class-grid">
         <button class="class-btn selected" id="classWarrior" data-class="warrior">⚔️ Воин</button>
         <button class="class-btn" id="classTank" data-class="tank">🛡️ Танк</button>
@@ -300,21 +276,17 @@
       </div>
     </div>
 
-    <!-- ПРАВАЯ ЧАСТЬ: статы + имя + кнопка -->
     <div class="right-col">
-      <!-- Каждая стата в своей рамке -->
       <div class="stat-card"><span class="stat-name">💪 Сила</span><span class="stat-value" id="statStr">15</span></div>
       <div class="stat-card"><span class="stat-name">🏹 Ловкость</span><span class="stat-value" id="statAgl">12</span></div>
       <div class="stat-card"><span class="stat-name">🧠 Интуиция</span><span class="stat-value" id="statInt">10</span></div>
       <div class="stat-card"><span class="stat-name">❤️ Выносливость</span><span class="stat-value" id="statVit">13</span></div>
       <div class="stat-card"><span class="stat-name">🕯️ Мудрость</span><span class="stat-value" id="statWis">5</span></div>
 
-      <!-- Имя -->
       <div class="name-box">
         <input type="text" id="heroNameInput" class="name-input" placeholder="ИМЯ ГЕРОЯ" maxlength="14" value="ИМЯ">
       </div>
 
-      <!-- Кнопка -->
       <button class="create-btn" id="createHeroBtn">⚡ СОЗДАТЬ</button>
     </div>
   </div>
@@ -322,7 +294,6 @@
 
 <script>
   (function() {
-    // ===== ДАННЫЕ =====
     const STATS_BY_CLASS = {
       warrior: { str: 15, agl: 12, int: 10, vit: 13, wis: 5 },
       tank:    { str: 12, agl: 8,  int: 10, vit: 20, wis: 5 },
@@ -335,27 +306,23 @@
       female: 'assets/char_female.png'
     };
 
-    // ===== СОСТОЯНИЕ =====
     let currentGender = 'male';
     let currentClass = 'warrior';
 
-    // ===== DOM-элементы =====
     const avatar = document.getElementById('characterAvatar');
     const prevBtn = document.getElementById('prevGenderBtn');
     const nextBtn = document.getElementById('nextGenderBtn');
-
     const classBtns = document.querySelectorAll('.class-btn');
-
     const statStr = document.getElementById('statStr');
     const statAgl = document.getElementById('statAgl');
     const statInt = document.getElementById('statInt');
     const statVit = document.getElementById('statVit');
     const statWis = document.getElementById('statWis');
-
     const nameInput = document.getElementById('heroNameInput');
     const createBtn = document.getElementById('createHeroBtn');
 
-    // ===== ОБНОВЛЕНИЕ СТАТОВ =====
+    const SERVER_URL = 'https://shanty-haven-silo.ngrok-free.dev';
+
     function updateStats(className) {
       const s = STATS_BY_CLASS[className];
       if (!s) return;
@@ -366,7 +333,6 @@
       statWis.textContent = s.wis;
     }
 
-    // ===== СМЕНА ПОЛА =====
     function setGender(gender) {
       if (gender !== 'male' && gender !== 'female') return;
       currentGender = gender;
@@ -382,7 +348,6 @@
       setGender(genders[idx]);
     }
 
-    // ===== ВЫБОР КЛАССА =====
     function selectClass(className) {
       currentClass = className;
       classBtns.forEach(btn => {
@@ -391,7 +356,6 @@
       updateStats(className);
     }
 
-    // ===== ИНИЦИАЛИЗАЦИЯ =====
     function init() {
       prevBtn.addEventListener('click', (e) => { e.preventDefault(); switchGender(-1); });
       prevBtn.addEventListener('touchstart', (e) => { e.preventDefault(); switchGender(-1); }, { passive: false });
@@ -421,6 +385,11 @@
           return;
         }
 
+        let tgId = 777;
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user) {
+          tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        }
+
         const stats = {
           str: parseInt(statStr.textContent, 10),
           agl: parseInt(statAgl.textContent, 10),
@@ -428,11 +397,6 @@
           vit: parseInt(statVit.textContent, 10),
           wis: parseInt(statWis.textContent, 10)
         };
-
-        let tgId = 777;
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user) {
-          tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
-        }
 
         const payload = {
           tg_id: tgId,
@@ -443,7 +407,25 @@
         };
 
         console.log('📦 Отправка в БД:', payload);
-        alert(`✅ Герой "${name}" (${currentClass}) создан!\nСтаты: ${stats.str}/${stats.agl}/${stats.int}/${stats.vit}/${stats.wis}`);
+
+        fetch(`${SERVER_URL}/api/create-character`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('✅ Персонаж создан! Добро пожаловать в игру!');
+            window.location.href = 'lobby.html';
+          } else {
+            alert('Ошибка: ' + (data.message || 'Неизвестная ошибка'));
+          }
+        })
+        .catch(err => {
+          console.error('Ошибка:', err);
+          alert('Не удалось подключиться к серверу!');
+        });
       });
     }
 
@@ -452,7 +434,6 @@
     } else {
       init();
     }
-
   })();
 </script>
 </body>
