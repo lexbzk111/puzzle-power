@@ -105,14 +105,14 @@
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ХП — теперь ЗЕЛЕНАЯ */
+        /* ХП — ЗЕЛЕНАЯ */
         .bar-hp { border-color: rgba(34, 197, 94, 0.3); }
         .bar-hp .status-bar-fill {
             background: linear-gradient(to right, #15803d, #22c55e);
             box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
         }
 
-        /* Энергия — теперь СИНЯЯ */
+        /* Энергия — СИНЯЯ */
         .bar-energy { border-color: rgba(59, 130, 246, 0.3); }
         .bar-energy .status-bar-fill {
             background: linear-gradient(to right, #1d4ed8, #3b82f6);
@@ -277,7 +277,7 @@
 
     <div class="game-container">
         
-        <!-- НОВЫЙ ДВУХУРОВЕНЬ ПАНЕЛИ: СТАТЫ + ТРИ ВАЛЮТЫ -->
+        <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
         <div class="top-bar">
             <!-- Верхняя строка: Профиль и локация -->
             <div class="top-main-row">
@@ -356,7 +356,8 @@
     </div>
 
     <script>
-        const SERVER_URL = 'https://ngrok-free.dev';
+        // ===== КОНСТАНТЫ =====
+        const SERVER_URL = 'https://shanty-haven-silo.ngrok-free.dev';
         let currentLang = 'ru'; 
 
         const LANGUAGES = {
@@ -378,7 +379,19 @@
             }
         };
 
-        // ФУНКЦИЯ ОБНОВЛЕНИЯ ХП, ЭНЕРГИИ И УРОВНЯ
+        // ===== ИНИЦИАЛИЗАЦИЯ TELEGRAM =====
+        let tg = null;
+        if (window.Telegram && window.Telegram.WebApp) {
+            tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
+            const tgLang = tg.initDataUnsafe?.user?.language_code;
+            if (tgLang && LANGUAGES[tgLang]) {
+                currentLang = tgLang;
+            }
+        }
+
+        // ===== ФУНКЦИИ ОБНОВЛЕНИЯ UI =====
         function updatePlayerStatsUI(currentHp, maxHp, currentEnergy, maxEnergy, level) {
             document.getElementById('player-level').innerText = level;
 
@@ -392,7 +405,6 @@
             document.getElementById('energy-text').innerText = `${currentEnergy} / ${maxEnergy}`;
         }
 
-        // ФУНКЦИЯ ОБНОВЛЕНИЯ ИГРОВЫХ ВАЛЮТ
         function updatePlayerResourcesUI(gold, diamonds, swords) {
             document.getElementById('res-gold-val').innerText = gold.toLocaleString();
             document.getElementById('res-diam-val').innerText = diamonds.toLocaleString();
@@ -414,30 +426,65 @@
             applyLocalization();
         }
 
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
-            const tgLang = window.Telegram.WebApp.initDataUnsafe?.user?.language_code;
-            if (tgLang && LANGUAGES[tgLang]) {
-                currentLang = tgLang;
-            }
-        }
-
         function openLocation(locationId) {
-            if (window.Telegram?.WebApp?.HapticFeedback) {
-                window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
             }
             const t = LANGUAGES[currentLang];
             let locName = t[locationId === 'pvp_arena' ? 'castle' : (locationId === 'square' ? 'square' : locationId)];
             alert(t.entered + locName);
         }
 
+        // ===== ЗАГРУЗКА ДАННЫХ ИГРОКА =====
+        function loadPlayerData() {
+            // Получаем tg_id
+            let tgId = 777;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                tgId = tg.initDataUnsafe.user.id;
+            }
+
+            console.log("Загрузка данных игрока для TG_ID:", tgId);
+
+            // Запрашиваем данные игрока с сервера
+            fetch(`${SERVER_URL}/api/get-player-data`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tg_id: tgId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.player) {
+                    const player = data.player;
+                    // Обновляем UI
+                    updatePlayerStatsUI(
+                        player.hp || 1000,
+                        player.max_hp || 1000,
+                        player.energy || 60,
+                        player.max_energy || 60,
+                        player.level || 1
+                    );
+                    updatePlayerResourcesUI(
+                        player.gold || 500,
+                        player.diamonds || 10,
+                        player.swords || 0
+                    );
+                } else {
+                    console.warn("Не удалось загрузить данные игрока, используем значения по умолчанию");
+                }
+            })
+            .catch(err => {
+                console.error("Ошибка загрузки данных игрока:", err);
+                // Используем значения по умолчанию
+                updatePlayerStatsUI(1000, 1000, 60, 60, 1);
+                updatePlayerResourcesUI(500, 10, 0);
+            });
+        }
+
+        // ===== СТАРТ =====
         window.onload = function() {
             applyLocalization();
-            
-            // Тестовое заполнение шкал и кошельков (в будущем прилетит из FastAPI)
-            updatePlayerStatsUI(1000, 1000, 60, 60, 1); // Полное Здоровье и Энергия, 1 уровень
-            updatePlayerResourcesUI(500, 10, 0); // Стартовый капитал: 500 золота, 10 алмазов, 0 мечей
+            // Загружаем данные игрока с сервера
+            loadPlayerData();
         };
     </script>
 </body>
