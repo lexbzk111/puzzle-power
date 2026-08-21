@@ -35,36 +35,32 @@
             justify-content: space-between;
         }
 
-        /* ВЕРХНЯЯ ПАНЕЛЬ ИГРОКА (Прозрачная) */
+        /* ===== ВЕРХНЯЯ ПАНЕЛЬ: ВСЕ В ОДНУ СТРОКУ ===== */
         .top-bar {
             width: 100%;
-            padding: 15px 15px 10px 15px;
+            padding: 12px 15px;
             background: transparent;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            flex-direction: row; /* Строго в строку */
+            flex-wrap: nowrap;   /* Запрещаем перенос элементов на новую строку */
+            justify-content: space-between; /* Левый край -> Правый край */
+            align-items: flex-start;
+            gap: 15px; /* Отступ между левой частью и валютами */
             z-index: 10;
         }
 
-        /* Ряд: Уровень, ХП, Энергия, Опыт */
-        .top-main-row {
-            display: flex;
-            justify-content: flex-start; /* Всё в левый край */
-            align-items: center;
-            width: 100%;
-        }
-
-        .player-profile {
+        /* ===== ЛЕВАЯ ЧАСТЬ (Уровень + 3 полоски) ===== */
+        .left-stats {
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-shrink: 0; /* Запрещаем сжиматься */
         }
 
-        /* Кружок уровня персонажа */
+        /* Уменьшенный кружок уровня */
         .level-circle {
-            position: relative;
-            width: 44px;
-            height: 44px;
+            width: 38px;
+            height: 38px;
             background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
             border: 2px solid #00d2ff;
             border-radius: 50%;
@@ -78,33 +74,33 @@
         .level-value {
             color: #00d2ff;
             font-weight: 900;
-            font-size: 16px;
+            font-size: 14px;
             text-shadow: 0 0 8px rgba(0, 210, 255, 0.8);
         }
 
-        /* ===== ОБЩИЙ БЛОК ПОЛОСОК (ХП, ЭНЕРГИЯ, XP) ===== */
+        /* Общий блок полосок (ХП, Энергия, XP) */
         .stats-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(5px);
-            padding: 5px 12px;
-            border-radius: 10px;
+            padding: 5px 10px;
+            border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            width: 170px;
+            width: 155px;
         }
 
         .stat-row {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .stat-icon {
-            font-size: 11px;
-            width: 14px;
+            font-size: 10px;
+            width: 12px;
             text-align: center;
             text-shadow: 0 0 5px rgba(255,255,255,0.3);
             color: #f8fafc;
@@ -113,10 +109,10 @@
         .status-bar-wrapper {
             position: relative;
             flex-grow: 1;
-            height: 10px;
+            height: 8px;
             background: rgba(0, 0, 0, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+            border-radius: 4px;
             overflow: hidden;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.9);
         }
@@ -125,7 +121,7 @@
             height: 100%;
             width: 100%;
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 5px;
+            border-radius: 4px;
         }
 
         /* ХП — КРАСНЫЙ */
@@ -140,7 +136,7 @@
             box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
         }
 
-        /* Опыт (XP) — ФИОЛЕТОВЫЙ/ЗОЛОТОЙ */
+        /* Опыт (XP) — ФИОЛЕТОВЫЙ */
         .bar-xp .status-bar-fill {
             background: linear-gradient(90deg, #7c3aed, #a855f7, #fbbf24);
             box-shadow: 0 0 6px rgba(168, 85, 247, 0.4);
@@ -156,31 +152,33 @@
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-size: 7px;
+            font-size: 6px;
             font-weight: 900;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 0 0 4px #000;
             letter-spacing: 0.5px;
         }
 
-        /* Вторая строка: Золото, Алмазы, Мечи */
-        .top-resources-row {
+        /* ===== ПРАВАЯ ЧАСТЬ (Валюты в одну линию) ===== */
+        .right-resources {
             display: flex;
+            flex-direction: row; /* Строго в одну линию по горизонтали */
             gap: 8px;
             align-items: center;
-            padding-left: 2px;
+            flex-shrink: 0; /* Запрещаем сжиматься */
+            padding-top: 4px; /* Легкое выравнивание по высоте */
         }
 
         .resource-box {
             background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
-            padding: 4px 8px;
+            padding: 5px 10px;
             display: flex;
             align-items: center;
             gap: 5px;
-            min-width: 65px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            height: 28px;
         }
 
         .resource-icon {
@@ -199,7 +197,7 @@
         .res-diamonds .resource-value { color: #22d3ee; }
         .res-swords .resource-value { color: #f87171; }
 
-        /* ===== ИГРОВАЯ ЗОНА (ТОЧКИ НА КАРТЕ ВМЕСТО НАЗВАНИЙ) ===== */
+        /* ===== ИГРОВАЯ ЗОНА (Сияющие точки на карте) ===== */
         .world-content {
             position: absolute;
             top: 0;
@@ -207,7 +205,7 @@
             width: 100%;
             height: 100%;
             z-index: 5;
-            pointer-events: none; /* Чтобы клики шли к зданиям */
+            pointer-events: none;
         }
 
         .building-zone {
@@ -217,12 +215,10 @@
             justify-content: center;
             cursor: pointer;
             pointer-events: auto;
-            /* Делаем область клика большой */
             width: 60px;
             height: 60px;
         }
 
-        /* Красивая сияющая точка вместо названия */
         .building-dot {
             width: 16px;
             height: 16px;
@@ -240,11 +236,10 @@
             box-shadow: 0 0 30px #00d2ff, 0 0 10px #00d2ff;
         }
 
-        /* Позиции зданий (РАСПРЕДЕЛЕНЫ ПО ДИАГОНАЛИ, ЧТОБЫ НЕ СЛИПАЛИСЬ) */
-        .zone-tavern { top: 48%; left: 16%; }   /* Слева пониже */
-        .zone-forge { top: 30%; right: 14%; }   /* Справа повыше */
-        .zone-arena { top: 70%; left: 35%; }    /* Слева внизу */
-        .zone-castle { top: 18%; left: 42%; }   /* По центру, но выше всех */
+        .zone-tavern { top: 48%; left: 16%; }
+        .zone-forge { top: 30%; right: 14%; }
+        .zone-arena { top: 70%; left: 35%; }
+        .zone-castle { top: 18%; left: 42%; }
 
     </style>
 </head>
@@ -252,53 +247,44 @@
 
     <div class="game-container">
         
-        <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+        <!-- ВЕРХНЯЯ ПАНЕЛЬ: ОДНА СТРОКА -->
         <div class="top-bar">
-            <!-- Верхняя строка: Лвл, ХП, Энергия, Опыт -->
-            <div class="top-main-row">
-                <div class="player-profile">
-                    
-                    <!-- Кружок уровня -->
-                    <div class="level-circle">
-                        <span id="player-level" class="level-value">1</span>
+            
+            <!-- ЛЕВАЯ ЧАСТЬ -->
+            <div class="left-stats">
+                <!-- Кружок уровня -->
+                <div class="level-circle">
+                    <span id="player-level" class="level-value">1</span>
+                </div>
+
+                <!-- Три полоски в ряд -->
+                <div class="stats-wrapper">
+                    <div class="stat-row">
+                        <span class="stat-icon">❤️</span>
+                        <div class="status-bar-wrapper bar-hp">
+                            <div id="hp-fill" class="status-bar-fill" style="width: 100%;"></div>
+                            <div id="hp-text" class="bar-text">1000 / 1000</div>
+                        </div>
                     </div>
-
-                    <!-- ПОЛОСКИ (ХП, ЭНЕРГИЯ, XP) -->
-                    <div class="stats-wrapper">
-                        
-                        <!-- ХП -->
-                        <div class="stat-row">
-                            <span class="stat-icon">❤️</span>
-                            <div class="status-bar-wrapper bar-hp">
-                                <div id="hp-fill" class="status-bar-fill" style="width: 100%;"></div>
-                                <div id="hp-text" class="bar-text">1000 / 1000</div>
-                            </div>
+                    <div class="stat-row">
+                        <span class="stat-icon">⚡</span>
+                        <div class="status-bar-wrapper bar-energy">
+                            <div id="energy-fill" class="status-bar-fill" style="width: 100%;"></div>
+                            <div id="energy-text" class="bar-text">60 / 60</div>
                         </div>
-
-                        <!-- ЭНЕРГИЯ -->
-                        <div class="stat-row">
-                            <span class="stat-icon">⚡</span>
-                            <div class="status-bar-wrapper bar-energy">
-                                <div id="energy-fill" class="status-bar-fill" style="width: 100%;"></div>
-                                <div id="energy-text" class="bar-text">60 / 60</div>
-                            </div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-icon">✦</span>
+                        <div class="status-bar-wrapper bar-xp">
+                            <div id="xp-fill" class="status-bar-fill" style="width: 45%;"></div>
+                            <div id="xp-text" class="bar-text">450 / 1000</div>
                         </div>
-
-                        <!-- ОПЫТ (XP) - НОВАЯ ПОЛОСКА -->
-                        <div class="stat-row">
-                            <span class="stat-icon">✦</span>
-                            <div class="status-bar-wrapper bar-xp">
-                                <div id="xp-fill" class="status-bar-fill" style="width: 45%;"></div>
-                                <div id="xp-text" class="bar-text">450 / 1000</div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
 
-            <!-- Нижняя строка: Золото, Алмазы, Мечи -->
-            <div class="top-resources-row">
+            <!-- ПРАВАЯ ЧАСТЬ: ВАЛЮТЫ В ОДНУ СТРОКУ -->
+            <div class="right-resources">
                 <div class="resource-box res-gold">
                     <span class="resource-icon">💰</span>
                     <span id="res-gold-val" class="resource-value">1,250</span>
@@ -312,6 +298,7 @@
                     <span id="res-swords-val" class="resource-value">45</span>
                 </div>
             </div>
+
         </div>
 
         <!-- СЛОЙ ИНТЕРАКТИВНЫХ ТОЧЕК НА КАРТЕ -->
@@ -319,15 +306,12 @@
             <div class="building-zone zone-tavern" onclick="openLocation('tavern')">
                 <div class="building-dot"></div>
             </div>
-
             <div class="building-zone zone-forge" onclick="openLocation('forge')">
                 <div class="building-dot"></div>
             </div>
-
             <div class="building-zone zone-arena" onclick="openLocation('square')">
                 <div class="building-dot"></div>
             </div>
-
             <div class="building-zone zone-castle" onclick="openLocation('pvp_arena')">
                 <div class="building-dot"></div>
             </div>
@@ -425,8 +409,8 @@
                         player.energy || 60,
                         player.max_energy || 60,
                         player.level || 1,
-                        player.xp || 450,     /* Добавили XP */
-                        player.max_xp || 1000 /* Добавили MAX XP */
+                        player.xp || 450,
+                        player.max_xp || 1000
                     );
                     updatePlayerResourcesUI(
                         player.gold || 500,
