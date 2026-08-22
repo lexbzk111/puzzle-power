@@ -5,84 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Puzzle & Power</title>
     <script src="https://telegram.org"></script>
+    <script src="config.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #ffffff;
-            font-family: 'Georgia', serif;
-        }
-        .background {
-            width: 100%;
-            height: 100%;
-            background: url('welcome_light.png') no-repeat center center;
-            background-size: cover;
-            position: relative;
-        }
-        .login-btn {
-            position: absolute;
-            bottom: 3.5%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 75%;
-            height: 60px;
-            cursor: pointer;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #163654;
-            font-size: 20px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.1s;
-        }
-        .login-btn:active {
-            transform: translateX(-50%) scale(0.96);
-        }
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            gap: 20px;
-            z-index: 10;
-        }
-        .loading-overlay.active {
-            display: flex;
-        }
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #eaf2fc;
-            border-top: 4px solid #6a9ec4;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .loading-text {
-            color: #1a4b6d;
-            font-size: 16px;
-            font-weight: bold;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #ffffff; font-family: 'Georgia', serif; }
+        .background { width: 100%; height: 100%; background: url('welcome_light.png') no-repeat center center; background-size: cover; position: relative; }
+        .login-btn { position: absolute; bottom: 3.5%; left: 50%; transform: translateX(-50%); width: 75%; height: 60px; cursor: pointer; background: transparent; border: none; outline: none; color: #163654; font-size: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; justify-content: center; transition: 0.1s; }
+        .login-btn:active { transform: translateX(-50%) scale(0.96); }
+        .loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.85); display: none; justify-content: center; align-items: center; flex-direction: column; gap: 20px; z-index: 10; }
+        .loading-overlay.active { display: flex; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #eaf2fc; border-top: 4px solid #6a9ec4; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { color: #1a4b6d; font-size: 16px; font-weight: bold; }
+        .error-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; color: #fff; justify-content: center; align-items: center; flex-direction: column; text-align: center; z-index: 20; font-family: sans-serif; padding: 20px; }
+        .error-screen.active { display: flex; }
     </style>
 </head>
 <body>
@@ -92,17 +28,17 @@
             <div class="spinner"></div>
             <div class="loading-text">Проверка данных...</div>
         </div>
+        <div class="error-screen" id="errorScreen">
+            <div style="font-size: 60px; margin-bottom: 20px;">📡</div>
+            <h2 style="color: #ff4d4d; margin-bottom: 10px;">Нет соединения с сервером</h2>
+            <p style="opacity: 0.8;">Проверьте интернет или попробуйте зайти позже.</p>
+        </div>
     </div>
     
     <script>
-        const SERVER_URL = 'https://shanty-haven-silo.ngrok-free.dev';
-
+        const SERVER_URL = window.SERVER_URL; 
         let tg = null;
-        if (window.Telegram && window.Telegram.WebApp) {
-            tg = window.Telegram.WebApp;
-            tg.ready();
-            tg.expand();
-        }
+        if (window.Telegram && window.Telegram.WebApp) { tg = window.Telegram.WebApp; tg.ready(); tg.expand(); }
 
         function showLoading(show) {
             const overlay = document.getElementById('loadingOverlay');
@@ -111,18 +47,11 @@
         }
 
         function enterGame() {
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-            
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
             showLoading(true);
             
             let tgId = 777;
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                tgId = tg.initDataUnsafe.user.id;
-            }
-
-            console.log("Запрос авторизации для TG_ID:", tgId);
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) tgId = tg.initDataUnsafe.user.id;
 
             fetch(`${SERVER_URL}/api/login`, {
                 method: 'POST',
@@ -145,8 +74,7 @@
             .catch(err => {
                 showLoading(false);
                 console.error("Сервер не отвечает:", err);
-                alert("Не удалось подключиться к серверу. Переход в режим создания персонажа.");
-                window.location.href = "select.html";
+                document.getElementById('errorScreen').classList.add('active');
             });
         }
     </script>
