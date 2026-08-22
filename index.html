@@ -30,8 +30,8 @@
         </div>
         <div class="error-screen" id="errorScreen">
             <div style="font-size: 60px; margin-bottom: 20px;">📡</div>
-            <h2 style="color: #ff4d4d; margin-bottom: 10px;">Нет соединения с сервером</h2>
-            <p style="opacity: 0.8;">Проверьте интернет или попробуйте зайти позже.</p>
+            <h2 style="color: #ff4d4d; margin-bottom: 10px;">Ошибка авторизации</h2>
+            <p style="opacity: 0.8;">Не удалось получить данные Telegram. Откройте игру внутри Telegram.</p>
         </div>
     </div>
     
@@ -50,8 +50,15 @@
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
             showLoading(true);
             
-            let tgId = 777;
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) tgId = tg.initDataUnsafe.user.id;
+            // СТРОГО: Убираем 777. Если нет данных, показываем ошибку!
+            let tgId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                tgId = tg.initDataUnsafe.user.id;
+            } else {
+                showLoading(false);
+                document.getElementById('errorScreen').classList.add('active');
+                return;
+            }
 
             fetch(`${SERVER_URL}/api/login`, {
                 method: 'POST',
