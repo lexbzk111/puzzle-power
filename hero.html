@@ -22,20 +22,24 @@
         .title { font-size: 20px; font-weight: 900; color: #fff; }
         .stats-btn { font-size: 14px; background: #1e293b; border: 1px solid #00d2ff; color: #00d2ff; padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-        /* Кукла занимает больше места, слоты компактные */
+        /* Кукла слева, слоты справа */
         .main-area { display: flex; height: 48%; padding: 0 10px; gap: 5px; }
         .doll-area { flex: 0 0 58%; display: flex; justify-content: center; align-items: center; }
         .doll-img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Сетка слотов: Уменьшенная высота, плотные зазоры */
-        .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); gap: 4px; align-content: center; }
+        /* Сетка слотов: ОЧЕНЬ ПЛОТНАЯ (зазор 2px), квадраты как в инвентаре */
+        .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2px; align-content: center; }
         .slot {
-            width: 100%; height: 100%; max-height: 28px; min-height: 24px;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1; /* Делает слот идеальным квадратом */
+            max-width: 36px;      /* Ограничиваем размер, чтобы не растягивались */
             background: rgba(0,0,0,0.5); border: 1px solid #334155; border-radius: 4px;
             display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer;
+            margin: 0 auto;       /* Центрируем квадрат в ячейке сетки */
         }
         .slot:hover { border-color: #00d2ff; }
-        .slot img { width: 65%; height: 65%; object-fit: contain; }
+        .slot img { width: 75%; height: 75%; object-fit: contain; }
         .slot-label { position: absolute; bottom: 0px; font-size: 5px; color: #94a3b8; }
 
         /* Позиции слотов (по сетке) */
@@ -61,8 +65,8 @@
 
         /* Инвентарь - 3 ряда по 5 ячеек */
         .inv-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
-        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
-        .inv-slot { background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 6px; aspect-ratio: 1; max-height: 38px; }
+        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; } /* Тоже плотный зазор */
+        .inv-slot { background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; aspect-ratio: 1; max-height: 38px; }
         .inv-slot img { width: 80%; height: 80%; object-fit: contain; }
 
         .inv-pagination { display: flex; justify-content: center; gap: 8px; margin-top: 6px; }
