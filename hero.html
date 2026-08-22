@@ -22,30 +22,38 @@
         .title { font-size: 20px; font-weight: 900; color: #fff; }
         .stats-btn { font-size: 14px; background: #1e293b; border: 1px solid #00d2ff; color: #00d2ff; padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-        /* Кукла и слоты */
-        .main-area { display: flex; height: 45%; padding: 0 15px; gap: 10px; }
+        /* Кольцевая схема слотов (3 колонки) */
+        .main-area { display: flex; justify-content: center; align-items: center; flex-grow: 1; padding: 10px; position: relative; }
         
-        .doll-area { flex: 1; display: flex; justify-content: center; align-items: center; }
-        .doll-img { max-width: 90%; max-height: 100%; object-fit: contain; }
+        .equip-grid { display: grid; grid-template-columns: 60px 80px 60px; grid-template-rows: 60px 60px 60px 60px 60px; gap: 10px; align-items: center; justify-items: center; }
+        
+        /* Позиционируем куклу по центру, поверх сетки */
+        .doll-area { grid-column: 2; grid-row: 2 / 5; display: flex; justify-content: center; align-items: center; z-index: 5; }
+        .doll-img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 0 10px rgba(0,0,0,0.8)); }
 
-        .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; align-content: center; }
+        /* Слоты */
         .slot {
-            background: rgba(0,0,0,0.5); border: 2px solid #334155; border-radius: 8px;
-            aspect-ratio: 1; display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer;
+            width: 60px; height: 60px;
+            background: rgba(0,0,0,0.5); border: 2px solid #334155; border-radius: 10px;
+            display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer;
         }
         .slot:hover { border-color: #00d2ff; }
         .slot img { width: 80%; height: 80%; object-fit: contain; }
-        .slot-label { position: absolute; bottom: 2px; font-size: 7px; color: #94a3b8; }
+        .slot-label { position: absolute; bottom: 2px; font-size: 8px; color: #94a3b8; }
 
-        /* Статы и Инвентарь */
-        .bottom-area { flex: 1; padding: 0 15px 15px; display: flex; flex-direction: column; gap: 10px; }
+        /* Маленькие слоты для колец и амулета */
+        .slot.small { width: 40px; height: 40px; border-radius: 50%; }
+        .slot.small img { width: 70%; height: 70%; }
+
+        /* Итоговые эффекты */
+        .bottom-area { padding: 0 15px 15px; display: flex; flex-direction: column; gap: 10px; }
         
-        .stats-panel { background: #1e293b; border-radius: 12px; padding: 10px; }
-        .stats-title { font-size: 12px; color: #00d2ff; text-transform: uppercase; margin-bottom: 8px; font-weight: bold; }
-        .stat-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .stat-name { color: #94a3b8; font-size: 13px; }
-        .stat-val { color: #fff; font-weight: 900; font-size: 13px; }
-        .plus-btn { background: #00d2ff; color: #000; border: none; border-radius: 4px; width: 18px; height: 18px; font-weight: 900; cursor: pointer; margin-left: 5px; }
+        .derived-stats { background: #1e293b; border-radius: 12px; padding: 12px; border: 1px solid #334155; }
+        .ds-title { font-size: 12px; color: #00d2ff; text-transform: uppercase; margin-bottom: 8px; font-weight: bold; }
+        .ds-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .ds-row { display: flex; flex-direction: column; align-items: center; }
+        .ds-name { color: #94a3b8; font-size: 10px; margin-bottom: 2px; }
+        .ds-val { color: #facc15; font-weight: 900; font-size: 16px; }
 
         /* Инвентарь */
         .inv-title { font-size: 12px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
@@ -56,6 +64,18 @@
         .inv-pagination { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
         .page-btn { background: #1e293b; border: 1px solid #334155; color: #fff; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .page-btn.active { background: #00d2ff; color: #000; border-color: #00d2ff; }
+
+        /* Модальное окно */
+        .stats-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: none; justify-content: center; align-items: center; }
+        .stats-overlay.active { display: flex; }
+        .stats-modal { background: #1e293b; border: 1px solid #00d2ff; border-radius: 16px; width: 90%; max-width: 350px; padding: 20px; }
+        .stats-modal h2 { color: #00d2ff; font-size: 18px; margin-bottom: 15px; text-align: center; }
+        .base-stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .bs-name { color: #fff; font-size: 15px; font-weight: bold; }
+        .bs-val { display: flex; align-items: center; gap: 10px; }
+        .bs-number { font-size: 18px; font-weight: 900; color: #facc15; }
+        .plus-btn { background: #00d2ff; color: #000; border: none; border-radius: 6px; width: 25px; height: 25px; font-size: 18px; font-weight: 900; cursor: pointer; }
+        .close-btn { background: #ef4444; color: #fff; border: none; border-radius: 8px; width: 100%; padding: 10px; margin-top: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -66,41 +86,70 @@
             <button class="stats-btn" onclick="toggleStats()">Статы</button>
         </div>
 
-        <!-- Кукла + 9 Слотов -->
+        <!-- Кольцевая схема слотов -->
         <div class="main-area">
-            <div class="doll-area">
-                <img class="doll-img" src="assets/char_male.png" alt="Герой">
-            </div>
-            <div class="slots-area">
-                <div class="slot"><img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span></div>
-                <div class="slot"><img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span></div>
-                <div class="slot"><img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span></div>
-                <div class="slot"><img src="assets/items/boots.png" alt=""><span class="slot-label">Обувь</span></div>
-                <div class="slot"><img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span></div>
-                <div class="slot"><img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span></div>
-                <div class="slot"><img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span></div>
-                <div class="slot"><img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span></div>
-                <div class="slot"><img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span></div>
+            <div class="equip-grid">
+                <!-- Верхний ряд: Шлем -->
+                <div class="slot" style="grid-column: 2; grid-row: 1;">
+                    <img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span>
+                </div>
+                
+                <!-- Левая колонка (сверху вниз): Кольцо 1, Меч, Перчатки -->
+                <div class="slot small" style="grid-column: 1; grid-row: 2;">
+                    <img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span>
+                </div>
+                <div class="slot" style="grid-column: 1; grid-row: 3;">
+                    <img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span>
+                </div>
+                <div class="slot" style="grid-column: 1; grid-row: 4;">
+                    <img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span>
+                </div>
+
+                <!-- Центральная колонка (сверху вниз): Амулет, Кукла, Броня, Штаны -->
+                <div class="slot small" style="grid-column: 2; grid-row: 2;">
+                    <img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span>
+                </div>
+                <div class="doll-area" style="grid-column: 2; grid-row: 3 / 5;">
+                    <img class="doll-img" src="assets/char_male.png" alt="Герой">
+                </div>
+                <div class="slot" style="grid-column: 2; grid-row: 5;">
+                    <img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span>
+                </div>
+
+                <!-- Правая колонка (сверху вниз): Кольцо 2, Щит, Обувь -->
+                <div class="slot small" style="grid-column: 3; grid-row: 2;">
+                    <img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span>
+                </div>
+                <div class="slot" style="grid-column: 3; grid-row: 3;">
+                    <img src="assets/items/shield.png" alt=""><span class="slot-label">Щит</span>
+                </div>
+                <div class="slot" style="grid-column: 3; grid-row: 4;">
+                    <img src="assets/items/boots.png" alt=""><span class="slot-label">Обувь</span>
+                </div>
+                
+                <!-- Дополнительный слот для штанов внизу по центру (если не поместился в основную схему, добавим справа) -->
+                <div class="slot" style="grid-column: 3; grid-row: 5;">
+                    <img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span>
+                </div>
             </div>
         </div>
 
-        <!-- Статы и Инвентарь -->
+        <!-- Итоговые эффекты и Инвентарь -->
         <div class="bottom-area">
-            <div class="stats-panel">
-                <div class="stats-title">Характеристики</div>
-                <div id="stat-block">
-                    <div class="stat-row"><span class="stat-name">💪 Сила</span><span class="stat-val" id="stat-str">8</span></div>
-                    <div class="stat-row"><span class="stat-name">🏃 Ловкость</span><span class="stat-val" id="stat-agl">4</span></div>
-                    <div class="stat-row"><span class="stat-name">❤️ Выносливость</span><span class="stat-val" id="stat-vit">6</span></div>
-                    <div class="stat-row"><span class="stat-name">🔮 Интеллект</span><span class="stat-val" id="stat-int">2</span></div>
-                    <div class="stat-row"><span class="stat-name">✨ Интуиция</span><span class="stat-val" id="stat-intuition">5</span></div>
+            <div class="derived-stats">
+                <div class="ds-title">Итоговые Эффекты</div>
+                <div class="ds-grid">
+                    <div class="ds-row"><span class="ds-name">⚔️ Урон</span><span class="ds-val" id="ds-dmg">150</span></div>
+                    <div class="ds-row"><span class="ds-name">🛡️ Защита</span><span class="ds-val" id="ds-def">35%</span></div>
+                    <div class="ds-row"><span class="ds-name">❤️ ХП</span><span class="ds-val" id="ds-hp">1000</span></div>
+                    <div class="ds-row"><span class="ds-name">💥 Крит</span><span class="ds-val" id="ds-crit">8%</span></div>
+                    <div class="ds-row"><span class="ds-name">🪞 Блок</span><span class="ds-val" id="ds-block">5%</span></div>
+                    <div class="ds-row"><span class="ds-name">🧊 Резист</span><span class="ds-val" id="ds-res">10%</span></div>
                 </div>
             </div>
 
             <div class="inv-title">Инвентарь (Страница <span id="current-page">1</span> из 5)</div>
-            <div class="inv-grid" id="inv-grid">
-                <!-- 20 ячеек будет сгенерировано JS -->
-            </div>
+            <div class="inv-grid" id="inv-grid"></div>
 
             <div class="inv-pagination">
                 <button class="page-btn" onclick="changePage(1)">1</button>
@@ -110,21 +159,53 @@
                 <button class="page-btn" onclick="changePage(5)">5</button>
             </div>
         </div>
+
+        <!-- Модальное окно Статов -->
+        <div class="stats-overlay" id="stats-overlay">
+            <div class="stats-modal">
+                <h2>Базовые Характеристики</h2>
+                
+                <div class="base-stat-row">
+                    <span class="bs-name">💪 Сила</span>
+                    <div class="bs-val"><span class="bs-number" id="stat-str">8</span><button class="plus-btn" onclick="addPoint('str')">+</button></div>
+                </div>
+                <div class="base-stat-row">
+                    <span class="bs-name">🏃 Ловкость</span>
+                    <div class="bs-val"><span class="bs-number" id="stat-agl">4</span><button class="plus-btn" onclick="addPoint('agl')">+</button></div>
+                </div>
+                <div class="base-stat-row">
+                    <span class="bs-name">❤️ Выносливость</span>
+                    <div class="bs-val"><span class="bs-number" id="stat-vit">6</span><button class="plus-btn" onclick="addPoint('vit')">+</button></div>
+                </div>
+                <div class="base-stat-row">
+                    <span class="bs-name">🔮 Интеллект</span>
+                    <div class="bs-val"><span class="bs-number" id="stat-int">2</span><button class="plus-btn" onclick="addPoint('int')">+</button></div>
+                </div>
+                <div class="base-stat-row">
+                    <span class="bs-name">✨ Интуиция</span>
+                    <div class="bs-val"><span class="bs-number" id="stat-intuition">5</span><button class="plus-btn" onclick="addPoint('intuition')">+</button></div>
+                </div>
+                
+                <button class="close-btn" onclick="toggleStats()">Закрыть</button>
+            </div>
+        </div>
     </div>
 
     <script>
         let currentPage = 1;
 
-        function loadHeroData() {
-            // Здесь потом подключим базу с сервера, пока показываем дефолтные цифры
-            document.getElementById('stat-str').innerText = 8;
-            document.getElementById('stat-agl').innerText = 4;
-            document.getElementById('stat-vit').innerText = 6;
-            document.getElementById('stat-int').innerText = 2;
-            document.getElementById('stat-intuition').innerText = 5;
+        function toggleStats() {
+            document.getElementById('stats-overlay').classList.toggle('active');
         }
 
-        // Рисуем сетку инвентаря
+        // Временная функция для теста: при клике на + добавляет 1 к цифре
+        function addPoint(statType) {
+            const el = event.target.parentElement.querySelector('.bs-number');
+            let val = parseInt(el.innerText);
+            el.innerText = val + 1;
+            // Здесь потом будет запрос на сервер
+        }
+
         function renderInventory() {
             const grid = document.getElementById('inv-grid');
             grid.innerHTML = '';
@@ -138,17 +219,14 @@
         function changePage(page) {
             currentPage = page;
             document.getElementById('current-page').innerText = page;
-            // Подсветка активной кнопки
             const buttons = document.querySelectorAll('.page-btn');
             buttons.forEach((btn, index) => {
                 btn.classList.remove('active');
                 if (index + 1 === page) btn.classList.add('active');
             });
-            // Здесь позже будем грузить предметы для конкретной страницы
         }
 
         window.onload = function() {
-            loadHeroData();
             renderInventory();
             changePage(1);
         };
