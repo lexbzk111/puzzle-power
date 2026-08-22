@@ -15,24 +15,25 @@
             overflow: hidden; 
             background-color: #000; 
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            /* Убрали flex и центрирование, чтобы ничего не сжималось по вертикали */
-            display: block; 
         }
 
-        /* Контейнер игры: 100% высоты экрана, центрируется по горизонтали */
+        /* Игра фиксируется РОВНО в видимом окне Telegram */
         .game-container { 
-            position: relative; 
+            position: fixed; 
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 100%; 
             max-width: 480px; 
-            height: 100vh;
-            height: 100dvh; /* Динамическая высота для мобильных и десктопа */
-            margin: 0 auto; /* Центрируем на ПК */
+            height: 100%;
             background-image: url('assets/city/bg_lobby.png'); 
             background-size: cover; 
             background-position: center; 
             display: flex; 
             flex-direction: column; 
             justify-content: space-between; 
+            z-index: 10;
         }
 
         .top-bar { width: 100%; padding: 10px 15px; background: transparent; display: flex; justify-content: space-between; align-items: flex-start; z-index: 10; }
