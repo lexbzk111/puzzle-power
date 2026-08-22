@@ -3,440 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Puzzle & Power - Город</title>
+    <title>Выбор класса</title>
     <script src="https://telegram.org"></script>
+    <script src="config.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        /* Главный контейнер города */
-        .game-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background-image: url('assets/city/bg_lobby.png');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        /* ВЕРХНЯЯ ПАНЕЛЬ (Прозрачная, Flex строка) */
-        .top-bar {
-            width: 100%;
-            padding: 10px 15px;
-            background: transparent;
-            display: flex;
-            justify-content: space-between; /* Распределяем ЛЕВО и ПРАВО */
-            align-items: flex-start; /* Выравнивание по верху */
-            z-index: 10;
-        }
-
-        /* ===== ЛЕВАЯ ЧАСТЬ (Уровень + 3 полоски в одну линию) ===== */
-        .left-stats {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Уменьшенный кружок уровня */
-        .level-circle {
-            width: 36px;
-            height: 36px;
-            background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
-            border: 2px solid #00d2ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
-            flex-shrink: 0;
-        }
-
-        .level-value {
-            color: #00d2ff;
-            font-weight: 900;
-            font-size: 14px;
-            text-shadow: 0 0 8px rgba(0, 210, 255, 0.8);
-        }
-
-        /* Общий блок полосок (ХП, Энергия, XP) */
-        .stats-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(5px);
-            padding: 4px 8px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            width: 155px;
-        }
-
-        .stat-row {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .stat-icon {
-            font-size: 10px;
-            width: 12px;
-            text-align: center;
-            text-shadow: 0 0 5px rgba(255,255,255,0.3);
-            color: #f8fafc;
-        }
-
-        .status-bar-wrapper {
-            position: relative;
-            flex-grow: 1;
-            height: 8px; /* Чуть тоньше полоски */
-            background: rgba(0, 0, 0, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.9);
-        }
-
-        .status-bar-fill {
-            height: 100%;
-            width: 100%;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 4px;
-        }
-
-        /* ХП — КРАСНЫЙ */
-        .bar-hp .status-bar-fill {
-            background: linear-gradient(90deg, #b91c1c, #ef4444, #fca5a5);
-            box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
-        }
-
-        /* Энергия — СИНИЙ */
-        .bar-energy .status-bar-fill {
-            background: linear-gradient(90deg, #1d4ed8, #3b82f6, #93c5fd);
-            box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Опыт (XP) — ФИОЛЕТОВЫЙ */
-        .bar-xp .status-bar-fill {
-            background: linear-gradient(90deg, #7c3aed, #a855f7, #fbbf24);
-            box-shadow: 0 0 6px rgba(168, 85, 247, 0.4);
-        }
-
-        .bar-text {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 6px; /* Очень мелкий шрифт для чисел */
-            font-weight: 900;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 0 0 4px #000;
-            letter-spacing: 0.5px;
-        }
-
-        /* ===== ПРАВАЯ ЧАСТЬ (Валюты в одну линию) ===== */
-        .right-resources {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-
-        .resource-box {
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            padding: 3px 8px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            height: 26px; /* Чтобы все три плашки были одной высоты */
-        }
-
-        .resource-icon {
-            font-size: 12px;
-            filter: drop-shadow(0 0 4px rgba(0,0,0,0.5));
-        }
-
-        .resource-value {
-            color: #fff;
-            font-size: 11px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px #000;
-        }
-
-        .res-gold .resource-value { color: #facc15; }
-        .res-diamonds .resource-value { color: #22d3ee; }
-        .res-swords .resource-value { color: #f87171; }
-
-        /* ===== ИГРОВАЯ ЗОНА (Сияющие точки на карте) ===== */
-        .world-content {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        .building-zone {
-            position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            pointer-events: auto;
-            width: 60px;
-            height: 60px;
-        }
-
-        .building-dot {
-            width: 16px;
-            height: 16px;
-            background: #00d2ff;
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.8), 0 0 5px rgba(0,0,0,0.8);
-            border: 2px solid #fff;
-            transition: all 0.2s ease;
-        }
-
-        .building-zone:hover .building-dot,
-        .building-zone:active .building-dot {
-            transform: scale(1.5);
-            background: #fff;
-            box-shadow: 0 0 30px #00d2ff, 0 0 10px #00d2ff;
-        }
-
-        /* Позиции зданий */
-        .zone-tavern { top: 48%; left: 16%; }
-        .zone-forge { top: 30%; right: 14%; }
-        .zone-arena { top: 70%; left: 35%; }
-        .zone-castle { top: 18%; left: 42%; }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; font-family: 'Segoe UI', sans-serif; color: #fff; }
+        .select-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 20px; background: radial-gradient(circle at top, #1e293b 0%, #0f172a 70%); }
+        .game-title { font-size: 28px; font-weight: 900; color: #00d2ff; margin-bottom: 30px; text-shadow: 0 0 20px rgba(0, 210, 255, 0.4); }
+        .sub-title { font-size: 14px; color: #94a3b8; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .class-card { background: #1e293b; border: 2px solid #334155; border-radius: 12px; width: 100%; max-width: 320px; padding: 15px; margin-bottom: 15px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .class-card:hover { border-color: #00d2ff; background: #263449; transform: translateY(-2px); box-shadow: 0 0 20px rgba(0, 210, 255, 0.3); }
+        .class-icon { font-size: 40px; width: 50px; text-align: center; }
+        .class-title { font-size: 18px; font-weight: bold; }
+        .class-desc { font-size: 12px; opacity: 0.6; margin-top: 4px; }
+        .error-box { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(255, 77, 77, 0.9); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; z-index: 100; width: 90%; text-align: center; }
     </style>
 </head>
 <body>
+    <div class="select-container">
+        <div class="game-title">Puzzle & Power</div>
+        <div class="sub-title">Выберите свой класс</div>
 
-    <div class="game-container">
-        
-        <!-- ВЕРХНЯЯ ПАНЕЛЬ: ЛЕВО (Статы) и ПРАВО (Валюты) -->
-        <div class="top-bar">
-            
-            <!-- ЛЕВАЯ ЧАСТЬ: Уровень + Полоски -->
-            <div class="left-stats">
-                
-                <!-- Кружок уровня -->
-                <div class="level-circle">
-                    <span id="player-level" class="level-value">1</span>
-                </div>
-
-                <!-- Три полоски в ряд -->
-                <div class="stats-wrapper">
-                    
-                    <!-- ХП -->
-                    <div class="stat-row">
-                        <span class="stat-icon">❤️</span>
-                        <div class="status-bar-wrapper bar-hp">
-                            <div id="hp-fill" class="status-bar-fill" style="width: 100%;"></div>
-                            <div id="hp-text" class="bar-text">1000 / 1000</div>
-                        </div>
-                    </div>
-
-                    <!-- ЭНЕРГИЯ -->
-                    <div class="stat-row">
-                        <span class="stat-icon">⚡</span>
-                        <div class="status-bar-wrapper bar-energy">
-                            <div id="energy-fill" class="status-bar-fill" style="width: 100%;"></div>
-                            <div id="energy-text" class="bar-text">60 / 60</div>
-                        </div>
-                    </div>
-
-                    <!-- ОПЫТ (XP) -->
-                    <div class="stat-row">
-                        <span class="stat-icon">✦</span>
-                        <div class="status-bar-wrapper bar-xp">
-                            <div id="xp-fill" class="status-bar-fill" style="width: 45%;"></div>
-                            <div id="xp-text" class="bar-text">450 / 1000</div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- ПРАВАЯ ЧАСТЬ: Валюты в одну линию -->
-            <div class="right-resources">
-                <div class="resource-box res-gold">
-                    <span class="resource-icon">💰</span>
-                    <span id="res-gold-val" class="resource-value">1,250</span>
-                </div>
-                <div class="resource-box res-diamonds">
-                    <span class="resource-icon">💎</span>
-                    <span id="res-diam-val" class="resource-value">150</span>
-                </div>
-                <div class="resource-box res-swords">
-                    <span class="resource-icon">⚔️</span>
-                    <span id="res-swords-val" class="resource-value">45</span>
-                </div>
-            </div>
-
+        <div class="class-card" onclick="createCharacter('Warrior')">
+            <div class="class-icon">⚔️</div>
+            <div><div class="class-title">Воин</div><div class="class-desc">Сила и мощь. Пробивает броню.</div></div>
         </div>
 
-        <!-- СЛОЙ ИНТЕРАКТИВНЫХ ТОЧЕК НА КАРТЕ -->
-        <div class="world-content">
-            <div class="building-zone zone-tavern" onclick="openLocation('tavern')">
-                <div class="building-dot"></div>
-            </div>
-
-            <div class="building-zone zone-forge" onclick="openLocation('forge')">
-                <div class="building-dot"></div>
-            </div>
-
-            <div class="building-zone zone-arena" onclick="openLocation('square')">
-                <div class="building-dot"></div>
-            </div>
-
-            <div class="building-zone zone-castle" onclick="openLocation('pvp_arena')">
-                <div class="building-dot"></div>
-            </div>
+        <div class="class-card" onclick="createCharacter('Mage')">
+            <div class="class-icon">🔮</div>
+            <div><div class="class-title">Маг</div><div class="class-desc">Интеллект и магия. Бьет по площади.</div></div>
         </div>
 
+        <div class="class-card" onclick="createCharacter('Tank')">
+            <div class="class-icon">🛡️</div>
+            <div><div class="class-title">Танк</div><div class="class-desc">Выносливость. Держит удар на себе.</div></div>
+        </div>
+
+        <div class="class-card" onclick="createCharacter('Archer')">
+            <div class="class-icon">🏹</div>
+            <div><div class="class-title">Лучник</div><div class="class-desc">Ловкость и крит. Бьет точно в цель.</div></div>
+        </div>
     </div>
 
+    <div id="error-box" class="error-box">Ошибка соединения с сервером! Персонаж не создан.</div>
+
     <script>
-        // ===== КОНСТАНТЫ =====
-        const SERVER_URL = 'https://shanty-haven-silo.ngrok-free.dev';
-        let currentLang = 'en'; 
-
-        const LANGUAGES = {
-            ru: {
-                tavern: "Таверна",
-                forge: "Кузница",
-                square: "Рыночная площадь",
-                castle: "Арена PvP",
-                entered: "Вы вошли в локацию: "
-            },
-            en: {
-                tavern: "Tavern",
-                forge: "Forge",
-                square: "Square",
-                castle: "PvP Arena",
-                entered: "You entered location: "
-            }
-        };
-
-        // ===== ИНИЦИАЛИЗАЦИЯ TELEGRAM =====
+        const SERVER_URL = window.SERVER_URL;
         let tg = null;
-        if (window.Telegram && window.Telegram.WebApp) {
-            tg = window.Telegram.WebApp;
-            tg.ready();
-            tg.expand();
-            const tgLang = tg.initDataUnsafe?.user?.language_code;
-            if (tgLang && LANGUAGES[tgLang]) {
-                currentLang = tgLang;
-            }
+        if (window.Telegram && window.Telegram.WebApp) { tg = window.Telegram.WebApp; tg.ready(); tg.expand(); }
+
+        function showError() {
+            const box = document.getElementById('error-box');
+            box.style.display = 'block';
+            setTimeout(() => { box.style.display = 'none'; }, 4000);
         }
 
-        // ===== ФУНКЦИИ ОБНОВЛЕНИЯ UI =====
-        function updatePlayerStatsUI(currentHp, maxHp, currentEnergy, maxEnergy, level, currentXp, maxXp) {
-            document.getElementById('player-level').innerText = level;
-
-            const hpPercent = Math.max(0, Math.min(100, (currentHp / maxHp) * 100));
-            const energyPercent = Math.max(0, Math.min(100, (currentEnergy / maxEnergy) * 100));
-            const xpPercent = Math.max(0, Math.min(100, (currentXp / maxXp) * 100));
-
-            document.getElementById('hp-fill').style.width = `${hpPercent}%`;
-            document.getElementById('energy-fill').style.width = `${energyPercent}%`;
-            document.getElementById('xp-fill').style.width = `${xpPercent}%`;
-
-            document.getElementById('hp-text').innerText = `${currentHp} / ${maxHp}`;
-            document.getElementById('energy-text').innerText = `${currentEnergy} / ${maxEnergy}`;
-            document.getElementById('xp-text').innerText = `${currentXp} / ${maxXp}`;
-        }
-
-        function updatePlayerResourcesUI(gold, diamonds, swords) {
-            document.getElementById('res-gold-val').innerText = gold.toLocaleString();
-            document.getElementById('res-diam-val').innerText = diamonds.toLocaleString();
-            document.getElementById('res-swords-val').innerText = swords.toLocaleString();
-        }
-
-        function openLocation(locationId) {
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-            const t = LANGUAGES[currentLang];
-            let locName = t[locationId === 'pvp_arena' ? 'castle' : (locationId === 'square' ? 'square' : locationId)];
-            alert(t.entered + locName);
-        }
-
-        // ===== ЗАГРУЗКА ДАННЫХ ИГРОКА =====
-        function loadPlayerData() {
+        function createCharacter(className) {
             let tgId = 777;
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                tgId = tg.initDataUnsafe.user.id;
-            }
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) tgId = tg.initDataUnsafe.user.id;
 
-            console.log("Загрузка данных игрока для TG_ID:", tgId);
+            const stats = { str: 15, agl: 12, int: 10, vit: 13, intuition: 5 };
 
-            fetch(`${SERVER_URL}/api/get-player-data`, {
+            fetch(`${SERVER_URL}/api/create-character`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tg_id: tgId })
+                body: JSON.stringify({
+                    tg_id: tgId,
+                    name: 'Герой',
+                    gender: 'male',
+                    class_name: className,
+                    stats: stats
+                })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success && data.player) {
-                    const player = data.player;
-                    updatePlayerStatsUI(
-                        player.hp || 1000,
-                        player.max_hp || 1000,
-                        player.energy || 60,
-                        player.max_energy || 60,
-                        player.level || 1,
-                        player.xp || 450,
-                        player.max_xp || 1000
-                    );
-                    updatePlayerResourcesUI(
-                        player.gold || 500,
-                        player.diamonds || 10,
-                        player.swords || 0
-                    );
+                if (data.success) {
+                    window.location.href = 'lobby.html';
                 } else {
-                    console.warn("Не удалось загрузить данные игрока, используем значения по умолчанию");
+                    showError();
                 }
             })
             .catch(err => {
-                console.error("Ошибка загрузки данных игрока:", err);
-                updatePlayerStatsUI(1000, 1000, 60, 60, 1, 450, 1000);
-                updatePlayerResourcesUI(500, 10, 0);
+                console.error("Ошибка сети:", err);
+                showError();
             });
         }
-
-        // ===== СТАРТ =====
-        window.onload = function() {
-            loadPlayerData();
-        };
     </script>
 </body>
 </html>
