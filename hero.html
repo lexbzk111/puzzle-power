@@ -24,37 +24,22 @@
 
         /* Кукла слева, слоты справа */
         .main-area { display: flex; height: 48%; padding: 0 10px; gap: 5px; }
-        .doll-area { flex: 0 0 58%; display: flex; justify-content: center; align-items: center; }
+        .doll-area { flex: 0 0 45%; display: flex; justify-content: center; align-items: center; }
         .doll-img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Сетка слотов: ОЧЕНЬ ПЛОТНАЯ (зазор 2px), квадраты как в инвентаре */
-        .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2px; align-content: center; }
+        /* Слоты: Плотная сетка 3x4 (все квадраты ровные, без дыр) */
+        .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); gap: 3px; align-content: center; }
         .slot {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 1 / 1; /* Делает слот идеальным квадратом */
-            max-width: 36px;      /* Ограничиваем размер, чтобы не растягивались */
+            width: 100%; height: 100%;
+            aspect-ratio: 1 / 1; /* Идеальный квадрат */
             background: rgba(0,0,0,0.5); border: 1px solid #334155; border-radius: 4px;
             display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer;
-            margin: 0 auto;       /* Центрируем квадрат в ячейке сетки */
         }
         .slot:hover { border-color: #00d2ff; }
         .slot img { width: 75%; height: 75%; object-fit: contain; }
         .slot-label { position: absolute; bottom: 0px; font-size: 5px; color: #94a3b8; }
 
-        /* Позиции слотов (по сетке) */
-        .slot-helmet { grid-column: 2; grid-row: 1; }
-        .slot-ring1 { grid-column: 1; grid-row: 2; }
-        .slot-amulet { grid-column: 2; grid-row: 2; }
-        .slot-ring2 { grid-column: 3; grid-row: 2; }
-        .slot-weapon { grid-column: 1; grid-row: 3; }
-        .slot-armor { grid-column: 2; grid-row: 3; }
-        .slot-shield { grid-column: 3; grid-row: 3; }
-        .slot-gloves { grid-column: 1; grid-row: 4; }
-        .slot-pants { grid-column: 2; grid-row: 4; }
-        .slot-boots { grid-column: 3; grid-row: 4; }
-
-        /* Итоговые эффекты */
+        /* Инвентарь: Плотная сетка 5x3 */
         .bottom-area { flex: 1; padding: 0 15px 10px; display: flex; flex-direction: column; gap: 8px; }
         .derived-stats { background: #1e293b; border-radius: 10px; padding: 8px 10px; border: 1px solid #334155; }
         .ds-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; margin-bottom: 5px; font-weight: bold; }
@@ -63,10 +48,9 @@
         .ds-name { color: #94a3b8; font-size: 9px; }
         .ds-val { color: #facc15; font-weight: 900; font-size: 14px; }
 
-        /* Инвентарь - 3 ряда по 5 ячеек */
         .inv-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
-        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; } /* Тоже плотный зазор */
-        .inv-slot { background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; aspect-ratio: 1; max-height: 38px; }
+        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; }
+        .inv-slot { background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; aspect-ratio: 1 / 1; }
         .inv-slot img { width: 80%; height: 80%; object-fit: contain; }
 
         .inv-pagination { display: flex; justify-content: center; gap: 8px; margin-top: 6px; }
@@ -94,22 +78,31 @@
             <button class="stats-btn" onclick="toggleStats()">Статы</button>
         </div>
 
-        <!-- Кукла слева + сетка слотов справа -->
+        <!-- Кукла слева + Плотная сетка слотов справа -->
         <div class="main-area">
             <div class="doll-area">
                 <img class="doll-img" src="assets/char_male.png" alt="Герой">
             </div>
             <div class="slots-area">
-                <div class="slot slot-helmet"><img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span></div>
-                <div class="slot slot-ring1"><img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span></div>
-                <div class="slot slot-amulet"><img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span></div>
-                <div class="slot slot-ring2"><img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span></div>
-                <div class="slot slot-weapon"><img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span></div>
-                <div class="slot slot-armor"><img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span></div>
-                <div class="slot slot-shield"><img src="assets/items/shield.png" alt=""><span class="slot-label">Щит</span></div>
-                <div class="slot slot-gloves"><img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span></div>
-                <div class="slot slot-pants"><img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span></div>
-                <div class="slot slot-boots"><img src="assets/items/boots.png" alt=""><span class="slot-label">Обувь</span></div>
+                <!-- Ряд 1 -->
+                <div class="slot"><img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span></div>
+                <div class="slot"><img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span></div>
+                <div class="slot"><img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span></div>
+                
+                <!-- Ряд 2 -->
+                <div class="slot"><img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span></div>
+                <div class="slot"><img src="assets/items/shield.png" alt=""><span class="slot-label">Щит</span></div>
+                <div class="slot"><img src="assets/items/boots.png" alt=""><span class="slot-label">Обувь</span></div>
+                
+                <!-- Ряд 3 -->
+                <div class="slot"><img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span></div>
+                <div class="slot"><img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span></div>
+                <div class="slot"><img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span></div>
+                
+                <!-- Ряд 4 (Последние 2 остаются пустыми для ровности) -->
+                <div class="slot"><img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
             </div>
         </div>
 
