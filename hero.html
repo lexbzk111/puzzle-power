@@ -16,18 +16,15 @@
             display: flex; flex-direction: column;
         }
 
-        /* Шапка */
         .header { display: flex; align-items: center; justify-content: space-between; padding: 8px 15px; }
         .back-btn { font-size: 24px; color: #00d2ff; cursor: pointer; background: none; border: none; }
         .title { font-size: 20px; font-weight: 900; color: #fff; }
         .stats-btn { font-size: 14px; background: #1e293b; border: 1px solid #00d2ff; color: #00d2ff; padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-        /* Кукла слева, слоты справа */
         .main-area { display: flex; height: 44%; padding: 0 10px; gap: 5px; }
         .doll-area { flex: 0 0 45%; display: flex; justify-content: center; align-items: center; }
         .doll-img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Слоты: Точное позиционирование по сетке (42px), зазор 4px */
         .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(4, 42px); justify-content: center; align-content: center; gap: 4px; }
         .slot {
             width: 42px; height: 42px;
@@ -38,22 +35,17 @@
         .slot img { width: 75%; height: 75%; object-fit: contain; }
         .slot-label { position: absolute; bottom: 0px; font-size: 5px; color: #94a3b8; }
 
-        /* Позиции слотов */
         .slot-helmet { grid-column: 2; grid-row: 1; }
-        
         .slot-ring1 { grid-column: 1; grid-row: 2; }
         .slot-amulet { grid-column: 2; grid-row: 2; }
         .slot-ring2 { grid-column: 3; grid-row: 2; }
-        
         .slot-weapon { grid-column: 1; grid-row: 3; }
         .slot-armor { grid-column: 2; grid-row: 3; }
         .slot-shield { grid-column: 3; grid-row: 3; }
-        
         .slot-gloves { grid-column: 1; grid-row: 4; }
         .slot-pants { grid-column: 2; grid-row: 4; }
         .slot-boots { grid-column: 3; grid-row: 4; }
 
-        /* Итоговые эффекты */
         .bottom-area { flex: 1; padding: 0 15px 10px; display: flex; flex-direction: column; gap: 8px; }
         .derived-stats { background: #1e293b; border-radius: 10px; padding: 8px 10px; border: 1px solid #334155; }
         .ds-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; margin-bottom: 5px; font-weight: bold; }
@@ -62,7 +54,7 @@
         .ds-name { color: #94a3b8; font-size: 9px; }
         .ds-val { color: #facc15; font-weight: 900; font-size: 14px; }
 
-        /* ИНВЕНТАРЬ: 7 КОЛОНОК, 4 РЯДА. Фикс. размер 34px, зазор 4px (как у колец) */
+        /* ИНВЕНТАРЬ: РОВНО 7 ВБОК, 4 ВНИЗ (28 ячеек), ЗАЗОР 4px */
         .inv-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
         .inv-grid { display: grid; grid-template-columns: repeat(7, 34px); grid-template-rows: repeat(4, 34px); gap: 4px; width: 100%; margin: 0 auto; justify-content: center; }
         .inv-slot { width: 34px; height: 34px; background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; }
@@ -81,7 +73,6 @@
             <button class="stats-btn" onclick="window.location.href='stats.html'">Статы</button>
         </div>
 
-        <!-- Кукла слева + сетка слотов справа -->
         <div class="main-area">
             <div class="doll-area">
                 <img class="doll-img" src="assets/char_male.png" alt="Герой">
@@ -91,17 +82,14 @@
                 <div></div>
                 <div class="slot slot-helmet"><img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span></div>
                 <div></div>
-
                 <!-- Ряд 2 -->
                 <div class="slot slot-ring1"><img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span></div>
                 <div class="slot slot-amulet"><img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span></div>
                 <div class="slot slot-ring2"><img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span></div>
-
                 <!-- Ряд 3 -->
                 <div class="slot slot-weapon"><img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span></div>
                 <div class="slot slot-armor"><img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span></div>
                 <div class="slot slot-shield"><img src="assets/items/shield.png" alt=""><span class="slot-label">Щит</span></div>
-
                 <!-- Ряд 4 -->
                 <div class="slot slot-gloves"><img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span></div>
                 <div class="slot slot-pants"><img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span></div>
@@ -109,7 +97,6 @@
             </div>
         </div>
 
-        <!-- Итоговые эффекты -->
         <div class="bottom-area">
             <div class="derived-stats">
                 <div class="ds-title">Итоговые Эффекты</div>
@@ -139,7 +126,6 @@
     <script>
         let currentPage = 1;
 
-        // Генерируем 28 ячеек (7 колонок x 4 ряда)
         function renderInventory() {
             const grid = document.getElementById('inv-grid');
             grid.innerHTML = '';
