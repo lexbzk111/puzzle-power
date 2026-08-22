@@ -62,27 +62,15 @@
         .ds-name { color: #94a3b8; font-size: 9px; }
         .ds-val { color: #facc15; font-weight: 900; font-size: 14px; }
 
-        /* Инвентарь: УВЕЛИЧЕННЫЙ 4 ряда по 5 ячеек (20 слотов) */
+        /* Инвентарь: ФИКСИРОВАННЫЙ РАЗМЕР И ИДЕАЛЬНОЕ ЦЕНТРИРОВАНИЕ */
         .inv-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
-        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(4, 1fr); gap: 3px; }
-        .inv-slot { background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; aspect-ratio: 1 / 1; max-height: 34px; }
+        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; width: 100%; margin: 0 auto; justify-items: center; }
+        .inv-slot { width: 100%; max-width: 34px; height: 34px; background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; }
         .inv-slot img { width: 80%; height: 80%; object-fit: contain; }
 
         .inv-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 3px; }
         .page-btn { background: #1e293b; border: 1px solid #334155; color: #fff; width: 22px; height: 22px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 11px; }
         .page-btn.active { background: #00d2ff; color: #000; border-color: #00d2ff; }
-
-        /* Модальное окно */
-        .stats-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: none; justify-content: center; align-items: center; }
-        .stats-overlay.active { display: flex; }
-        .stats-modal { background: #1e293b; border: 1px solid #00d2ff; border-radius: 16px; width: 90%; max-width: 350px; padding: 20px; }
-        .stats-modal h2 { color: #00d2ff; font-size: 18px; margin-bottom: 15px; text-align: center; }
-        .base-stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .bs-name { color: #fff; font-size: 15px; font-weight: bold; }
-        .bs-val { display: flex; align-items: center; gap: 10px; }
-        .bs-number { font-size: 18px; font-weight: 900; color: #facc15; }
-        .plus-btn { background: #00d2ff; color: #000; border: none; border-radius: 6px; width: 25px; height: 25px; font-size: 18px; font-weight: 900; cursor: pointer; }
-        .close-btn { background: #ef4444; color: #fff; border: none; border-radius: 8px; width: 100%; padding: 10px; margin-top: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -90,7 +78,8 @@
         <div class="header">
             <button class="back-btn" onclick="window.location.href='lobby.html'">◀</button>
             <span class="title">Герой</span>
-            <button class="stats-btn" onclick="toggleStats()">Статы</button>
+            <!-- Кнопка теперь просто открывает новый файл stats.html -->
+            <button class="stats-btn" onclick="window.location.href='stats.html'">Статы</button>
         </div>
 
         <!-- Кукла слева + сетка слотов справа -->
@@ -146,51 +135,12 @@
                 <button class="page-btn" onclick="changePage(5)">5</button>
             </div>
         </div>
-
-        <!-- Модальное окно Статов -->
-        <div class="stats-overlay" id="stats-overlay">
-            <div class="stats-modal">
-                <h2>Базовые Характеристики</h2>
-                <div class="base-stat-row">
-                    <span class="bs-name">💪 Сила</span>
-                    <div class="bs-val"><span class="bs-number" id="stat-str">8</span><button class="plus-btn" onclick="addPoint('str')">+</button></div>
-                </div>
-                <div class="base-stat-row">
-                    <span class="bs-name">🏃 Ловкость</span>
-                    <div class="bs-val"><span class="bs-number" id="stat-agl">4</span><button class="plus-btn" onclick="addPoint('agl')">+</button></div>
-                </div>
-                <div class="base-stat-row">
-                    <span class="bs-name">❤️ Выносливость</span>
-                    <div class="bs-val"><span class="bs-number" id="stat-vit">6</span><button class="plus-btn" onclick="addPoint('vit')">+</button></div>
-                </div>
-                <div class="base-stat-row">
-                    <span class="bs-name">🔮 Интеллект</span>
-                    <div class="bs-val"><span class="bs-number" id="stat-int">2</span><button class="plus-btn" onclick="addPoint('int')">+</button></div>
-                </div>
-                <div class="base-stat-row">
-                    <span class="bs-name">✨ Интуиция</span>
-                    <div class="bs-val"><span class="bs-number" id="stat-intuition">5</span><button class="plus-btn" onclick="addPoint('intuition')">+</button></div>
-                </div>
-                
-                <button class="close-btn" onclick="toggleStats()">Закрыть</button>
-            </div>
-        </div>
     </div>
 
     <script>
         let currentPage = 1;
 
-        function toggleStats() {
-            document.getElementById('stats-overlay').classList.toggle('active');
-        }
-
-        function addPoint(statType) {
-            const el = event.target.parentElement.querySelector('.bs-number');
-            let val = parseInt(el.innerText);
-            el.innerText = val + 1;
-        }
-
-        // Теперь генерируем 20 ячеек (4 ряда по 5)
+        // Генерируем 20 ячеек (4 ряда по 5)
         function renderInventory() {
             const grid = document.getElementById('inv-grid');
             grid.innerHTML = '';
