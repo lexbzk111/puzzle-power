@@ -40,25 +40,31 @@
             font-size: 24px;
             font-weight: 900;
             color: #0d47a1;
-            margin-bottom: 5px;
+            margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .sub-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #1565c0;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
+        /* Блок переключения пола с надписями МУЖ и ЖЕН */
         .gender-switch {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 15px;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .gender-label {
+            font-size: 16px;
+            font-weight: 900;
+            color: #90a4ae;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .gender-label.active {
+            color: #0d47a1;
+            text-shadow: 0 0 5px rgba(13, 71, 161, 0.3);
         }
 
         .arrow-btn {
@@ -70,9 +76,10 @@
             user-select: none;
         }
 
+        /* Увеличиваем размер персонажа */
         .character-preview {
-            width: 80px;
-            height: 120px;
+            width: 120px;
+            height: 180px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -84,11 +91,20 @@
             object-fit: contain;
         }
 
+        /* Надпись ВЫБОР КЛАССА теперь ниже персонажа */
+        .sub-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
         .class-buttons {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .class-btn {
@@ -177,16 +193,22 @@
 
     <div class="select-container">
         <div class="game-title">Puzzle & Power</div>
-        <div class="sub-title">Выбор Класса</div>
 
-        <!-- Переключение пола (пути исправлены на assets/) -->
+        <!-- Переключение пола: МУЖ ◀ [Картинка] ▶ ЖЕН -->
         <div class="gender-switch">
+            <span class="gender-label active" id="label-male" onclick="setGender('male')">МУЖ</span>
             <button class="arrow-btn" onclick="changeGender(-1)">◀</button>
+            
             <div class="character-preview">
                 <img id="char-img" src="assets/char_male.png" alt="Герой">
             </div>
+            
             <button class="arrow-btn" onclick="changeGender(1)">▶</button>
+            <span class="gender-label" id="label-female" onclick="setGender('female')">ЖЕН</span>
         </div>
+
+        <!-- Надпись под персонажем -->
+        <div class="sub-title">Выбор Класса</div>
 
         <!-- Выбор класса -->
         <div class="class-buttons">
@@ -233,15 +255,40 @@
         let selectedGender = 'male';
         let selectedClass = 'Warrior';
 
-        // Пути к картинкам исправлены на assets/
+        // Функция для обновления подсветки МУЖ/ЖЕН
+        function updateGenderUI() {
+            const maleLabel = document.getElementById('label-male');
+            const femaleLabel = document.getElementById('label-female');
+            
+            if (selectedGender === 'male') {
+                maleLabel.classList.add('active');
+                femaleLabel.classList.remove('active');
+            } else {
+                femaleLabel.classList.add('active');
+                maleLabel.classList.remove('active');
+            }
+        }
+
         function changeGender(direction) {
             if (direction === -1) {
-                selectedGender = 'female';
-                document.getElementById('char-img').src = 'assets/char_female.png';
-            } else {
                 selectedGender = 'male';
                 document.getElementById('char-img').src = 'assets/char_male.png';
+            } else {
+                selectedGender = 'female';
+                document.getElementById('char-img').src = 'assets/char_female.png';
             }
+            updateGenderUI();
+        }
+
+        // Прямой клик на надписи МУЖ или ЖЕН
+        function setGender(gender) {
+            selectedGender = gender;
+            if (gender === 'male') {
+                document.getElementById('char-img').src = 'assets/char_male.png';
+            } else {
+                document.getElementById('char-img').src = 'assets/char_female.png';
+            }
+            updateGenderUI();
         }
 
         function selectClass(className) {
