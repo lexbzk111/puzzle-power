@@ -218,27 +218,27 @@
             <button class="class-btn" onclick="selectClass('Archer')">Лучник</button>
         </div>
 
-        <!-- Статы -->
+        <!-- Статы (теперь динамические) -->
         <div class="stats-panel">
             <div class="stat-row">
                 <div class="stat-label">Сила</div>
-                <div class="stat-value">12</div>
+                <div class="stat-value" id="stat-str">8</div>
             </div>
             <div class="stat-row">
                 <div class="stat-label">Ловкость</div>
-                <div class="stat-value">10</div>
+                <div class="stat-value" id="stat-agl">4</div>
             </div>
             <div class="stat-row">
                 <div class="stat-label">Выносливость</div>
-                <div class="stat-value">10</div>
+                <div class="stat-value" id="stat-vit">6</div>
             </div>
             <div class="stat-row">
                 <div class="stat-label">Интеллект</div>
-                <div class="stat-value">8</div>
+                <div class="stat-value" id="stat-int">2</div>
             </div>
             <div class="stat-row">
                 <div class="stat-label">Интуиция</div>
-                <div class="stat-value">8</div>
+                <div class="stat-value" id="stat-intuition">5</div>
             </div>
         </div>
 
@@ -254,6 +254,14 @@
 
         let selectedGender = 'male';
         let selectedClass = 'Warrior';
+
+        // ДАННЫЕ СТАТОВ ДЛЯ КАЖДОГО КЛАССА
+        const classStats = {
+            Warrior: { str: 8, agl: 4, vit: 6, int: 2, intuition: 5 },
+            Tank:    { str: 4, agl: 2, vit: 10, int: 2, intuition: 5 },
+            Mage:    { str: 2, agl: 4, vit: 6, int: 8, intuition: 5 },
+            Archer:  { str: 2, agl: 10, vit: 4, int: 2, intuition: 8 }
+        };
 
         // Функция для обновления подсветки МУЖ/ЖЕН
         function updateGenderUI() {
@@ -291,11 +299,20 @@
             updateGenderUI();
         }
 
+        // Функция выбора класса и обновления статов
         function selectClass(className) {
             selectedClass = className;
             const buttons = document.querySelectorAll('.class-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
+
+            // Обновляем значения статов на экране
+            const stats = classStats[className];
+            document.getElementById('stat-str').innerText = stats.str;
+            document.getElementById('stat-agl').innerText = stats.agl;
+            document.getElementById('stat-vit').innerText = stats.vit;
+            document.getElementById('stat-int').innerText = stats.int;
+            document.getElementById('stat-intuition').innerText = stats.intuition;
         }
 
         function showError() {
@@ -313,7 +330,8 @@
                 return;
             }
 
-            const stats = { str: 12, agl: 10, vit: 10, int: 8, intuition: 8 };
+            // Получаем статы для выбранного класса
+            const stats = classStats[selectedClass];
 
             fetch(`${SERVER_URL}/api/create-character`, {
                 method: 'POST',
