@@ -8,36 +8,58 @@
     <script src="config.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        .game-container { position: relative; width: 100%; height: 100%; background-image: url('assets/city/bg_lobby.png'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        /* ЦЕНТРИРУЕМ ИГРУ НА ПК */
+        body, html { 
+            width: 100%; height: 100%; overflow: hidden; background-color: #000; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* ОГРАНИЧИВАЕМ ШИРИНУ ДО МОБИЛЬНОЙ (480px) */
+        .game-container { 
+            position: relative; width: 100%; max-width: 480px; height: 100%; 
+            background-image: url('assets/city/bg_lobby.png'); background-size: cover; background-position: center; 
+            display: flex; flex-direction: column; justify-content: space-between; 
+        }
+
         .top-bar { width: 100%; padding: 10px 15px; background: transparent; display: flex; justify-content: space-between; align-items: flex-start; z-index: 10; }
+        
         .left-stats { display: flex; align-items: center; gap: 8px; }
         .level-circle { width: 36px; height: 36px; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); border: 2px solid #00d2ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0, 210, 255, 0.4); flex-shrink: 0; }
         .level-value { color: #00d2ff; font-weight: 900; font-size: 14px; text-shadow: 0 0 8px rgba(0, 210, 255, 0.8); }
+        
         .stats-wrapper { display: flex; flex-direction: column; gap: 3px; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(5px); padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.6); width: 155px; }
+        
         .stat-row { display: flex; align-items: center; gap: 4px; }
         .stat-icon { font-size: 10px; width: 12px; text-align: center; color: #f8fafc; }
         .status-bar-wrapper { position: relative; flex-grow: 1; height: 8px; background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.9); }
         .status-bar-fill { height: 100%; width: 100%; border-radius: 4px; }
+        
         .bar-hp .status-bar-fill { background: linear-gradient(90deg, #b91c1c, #ef4444, #fca5a5); }
         .bar-energy .status-bar-fill { background: linear-gradient(90deg, #1d4ed8, #3b82f6, #93c5fd); }
         .bar-xp .status-bar-fill { background: linear-gradient(90deg, #7c3aed, #a855f7, #fbbf24); }
+        
         .bar-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 6px; font-weight: 900; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 0 0 4px #000; letter-spacing: 0.5px; }
+        
         .right-resources { display: flex; gap: 4px; align-items: center; justify-content: flex-end; flex-shrink: 1; min-width: 0; }
         .resource-box { background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; padding: 2px 5px; display: flex; align-items: center; gap: 3px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); height: 24px; flex-shrink: 1; min-width: 0; overflow: hidden; }
         .resource-icon { font-size: 11px; }
         .resource-value { color: #fff; font-size: 10px; font-weight: bold; text-shadow: 1px 1px 2px #000; white-space: nowrap; }
+        
         .res-gold .resource-value { color: #facc15; }
         .res-diamonds .resource-value { color: #22d3ee; }
         .res-swords .resource-value { color: #f87171; }
+        
         .world-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
         .building-zone { position: absolute; display: flex; align-items: center; justify-content: center; cursor: pointer; pointer-events: auto; width: 60px; height: 60px; }
         .building-dot { width: 16px; height: 16px; background: #00d2ff; border-radius: 50%; box-shadow: 0 0 20px rgba(0, 210, 255, 0.8), 0 0 5px rgba(0,0,0,0.8); border: 2px solid #fff; transition: all 0.2s ease; }
         .building-zone:hover .building-dot, .building-zone:active .building-dot { transform: scale(1.5); background: #fff; }
+        
         .zone-tavern { top: 48%; left: 16%; }
         .zone-forge { top: 30%; right: 14%; }
         .zone-arena { top: 70%; left: 35%; }
         .zone-castle { top: 18%; left: 42%; }
+        
         .error-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; color: #fff; justify-content: center; align-items: center; flex-direction: column; text-align: center; z-index: 20; font-family: sans-serif; padding: 20px; }
         .error-screen.active { display: flex; }
     </style>
@@ -98,16 +120,10 @@
             alert("Вы вошли в локацию: " + locationId);
         }
 
-        // ЭТА ЛОГИКА ИСПРАВЛЕНА, ЧТОБЫ ОШИБКА НЕ ВЫЛЕЗАЛА
         function loadPlayerData() {
             let tgId = null;
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                tgId = tg.initDataUnsafe.user.id;
-            } else {
-                // Если Telegram не передал данные (обновление страницы) - перекидываем на главную
-                window.location.href = 'index.html';
-                return;
-            }
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { tgId = tg.initDataUnsafe.user.id; }
+            else { window.location.href = 'index.html'; return; }
 
             fetch(`${SERVER_URL}/api/login`, {
                 method: 'POST',
@@ -116,12 +132,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Если перса нет - кидаем на создание
-                if (data.success && !data.has_character) {
-                    window.location.href = 'select.html';
-                    return;
-                }
-                // Если перс есть - грузим город
+                if (data.success && !data.has_character) { window.location.href = 'select.html'; return; }
                 if (data.success && data.has_character) {
                     updatePlayerStatsUI(1000, 1000, 60, 60, data.user.level || 1, 450, 1000);
                     updatePlayerResourcesUI(500, 10, 0);
@@ -130,7 +141,6 @@
             })
             .catch(err => {
                 console.error("Сервер не отвечает:", err);
-                // Если сервер лежит - показываем экран ошибки
                 document.getElementById('errorScreen').classList.add('active');
             });
         }
