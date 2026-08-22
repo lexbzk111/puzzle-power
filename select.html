@@ -7,23 +7,17 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="config.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #e3f2fd;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        
+        body, html { 
+            width: 100%; 
+            min-height: 100vh; /* Вместо height:100% для скролла на ПК */
+            overflow-y: auto; /* Разрешаем прокрутку, если не влезает */
+            background-color: #e3f2fd; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; /* Меняем на flex-start, чтобы блок не обрезался сверху */
         }
 
         .select-container {
@@ -32,161 +26,36 @@
             background: linear-gradient(to bottom, #ffffff, #d9ecff);
             border-radius: 20px;
             padding: 20px;
+            margin: 15px auto; /* Отступ сверху и снизу */
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
 
-        .game-title {
-            font-size: 24px;
-            font-weight: 900;
-            color: #0d47a1;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .game-title { font-size: 24px; font-weight: 900; color: #0d47a1; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Блок переключения пола с надписями МУЖ и ЖЕН */
-        .gender-switch {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        .gender-switch { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .gender-label { font-size: 16px; font-weight: 900; color: #90a4ae; cursor: pointer; transition: color 0.2s; }
+        .gender-label.active { color: #0d47a1; text-shadow: 0 0 5px rgba(13, 71, 161, 0.3); }
+        .arrow-btn { font-size: 30px; color: #0d47a1; cursor: pointer; background: none; border: none; user-select: none; }
+        
+        .character-preview { width: 120px; height: 180px; display: flex; justify-content: center; align-items: center; }
+        .character-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        .gender-label {
-            font-size: 16px;
-            font-weight: 900;
-            color: #90a4ae;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
+        .sub-title { font-size: 14px; font-weight: bold; color: #1565c0; margin-bottom: 20px; text-transform: uppercase; }
 
-        .gender-label.active {
-            color: #0d47a1;
-            text-shadow: 0 0 5px rgba(13, 71, 161, 0.3);
-        }
+        .class-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+        .class-btn { background: #42a5f5; color: #fff; border: none; border-radius: 8px; padding: 12px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s; }
+        .class-btn.active, .class-btn:hover { background: #1565c0; transform: translateY(-2px); }
 
-        .arrow-btn {
-            font-size: 30px;
-            color: #0d47a1;
-            cursor: pointer;
-            background: none;
-            border: none;
-            user-select: none;
-        }
+        .stats-panel { margin-bottom: 20px; }
+        .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .stat-label { font-weight: bold; color: #1565c0; }
+        .stat-value { background: #1565c0; color: #fff; width: 40px; height: 25px; border-radius: 5px; display: flex; justify-content: center; align-items: center; font-weight: bold; }
 
-        /* Увеличиваем размер персонажа */
-        .character-preview {
-            width: 120px;
-            height: 180px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        .create-btn { width: 100%; background: #ffb300; color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-transform: uppercase; transition: 0.2s; }
+        .create-btn:active { transform: scale(0.95); }
 
-        .character-preview img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        /* Надпись ВЫБОР КЛАССА теперь ниже персонажа */
-        .sub-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #1565c0;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        .class-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .class-btn {
-            background: #42a5f5;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: 0.2s;
-        }
-
-        .class-btn.active, .class-btn:hover {
-            background: #1565c0;
-            transform: translateY(-2px);
-        }
-
-        .stats-panel {
-            margin-bottom: 20px;
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-weight: bold;
-            color: #1565c0;
-        }
-
-        .stat-value {
-            background: #1565c0;
-            color: #fff;
-            width: 40px;
-            height: 25px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-        }
-
-        .create-btn {
-            width: 100%;
-            background: #ffb300;
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 20px;
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            text-transform: uppercase;
-            transition: 0.2s;
-        }
-
-        .create-btn:active {
-            transform: scale(0.95);
-        }
-
-        .error-box {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(211, 47, 47, 0.9);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 13px;
-            z-index: 100;
-            width: 90%;
-            text-align: center;
-        }
+        .error-box { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(211, 47, 47, 0.9); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; z-index: 100; width: 90%; text-align: center; }
     </style>
 </head>
 <body>
@@ -194,23 +63,18 @@
     <div class="select-container">
         <div class="game-title">Puzzle & Power</div>
 
-        <!-- Переключение пола: МУЖ ◀ [Картинка] ▶ ЖЕН -->
         <div class="gender-switch">
             <span class="gender-label active" id="label-male" onclick="setGender('male')">МУЖ</span>
             <button class="arrow-btn" onclick="changeGender(-1)">◀</button>
-            
             <div class="character-preview">
                 <img id="char-img" src="assets/char_male.png" alt="Герой">
             </div>
-            
             <button class="arrow-btn" onclick="changeGender(1)">▶</button>
             <span class="gender-label" id="label-female" onclick="setGender('female')">ЖЕН</span>
         </div>
 
-        <!-- Надпись под персонажем -->
         <div class="sub-title">Выбор Класса</div>
 
-        <!-- Выбор класса -->
         <div class="class-buttons">
             <button class="class-btn active" onclick="selectClass('Warrior')">Воин</button>
             <button class="class-btn" onclick="selectClass('Tank')">Танк</button>
@@ -218,28 +82,12 @@
             <button class="class-btn" onclick="selectClass('Archer')">Лучник</button>
         </div>
 
-        <!-- Статы (теперь динамические) -->
         <div class="stats-panel">
-            <div class="stat-row">
-                <div class="stat-label">Сила</div>
-                <div class="stat-value" id="stat-str">8</div>
-            </div>
-            <div class="stat-row">
-                <div class="stat-label">Ловкость</div>
-                <div class="stat-value" id="stat-agl">4</div>
-            </div>
-            <div class="stat-row">
-                <div class="stat-label">Выносливость</div>
-                <div class="stat-value" id="stat-vit">6</div>
-            </div>
-            <div class="stat-row">
-                <div class="stat-label">Интеллект</div>
-                <div class="stat-value" id="stat-int">2</div>
-            </div>
-            <div class="stat-row">
-                <div class="stat-label">Интуиция</div>
-                <div class="stat-value" id="stat-intuition">5</div>
-            </div>
+            <div class="stat-row"><div class="stat-label">Сила</div><div class="stat-value" id="stat-str">8</div></div>
+            <div class="stat-row"><div class="stat-label">Ловкость</div><div class="stat-value" id="stat-agl">4</div></div>
+            <div class="stat-row"><div class="stat-label">Выносливость</div><div class="stat-value" id="stat-vit">6</div></div>
+            <div class="stat-row"><div class="stat-label">Интеллект</div><div class="stat-value" id="stat-int">2</div></div>
+            <div class="stat-row"><div class="stat-label">Интуиция</div><div class="stat-value" id="stat-intuition">5</div></div>
         </div>
 
         <button class="create-btn" onclick="createCharacter()">Создать</button>
@@ -255,7 +103,6 @@
         let selectedGender = 'male';
         let selectedClass = 'Warrior';
 
-        // ДАННЫЕ СТАТОВ ДЛЯ КАЖДОГО КЛАССА
         const classStats = {
             Warrior: { str: 8, agl: 4, vit: 6, int: 2, intuition: 5 },
             Tank:    { str: 4, agl: 2, vit: 10, int: 2, intuition: 5 },
@@ -263,50 +110,32 @@
             Archer:  { str: 2, agl: 10, vit: 4, int: 2, intuition: 8 }
         };
 
-        // Функция для обновления подсветки МУЖ/ЖЕН
         function updateGenderUI() {
             const maleLabel = document.getElementById('label-male');
             const femaleLabel = document.getElementById('label-female');
-            
-            if (selectedGender === 'male') {
-                maleLabel.classList.add('active');
-                femaleLabel.classList.remove('active');
-            } else {
-                femaleLabel.classList.add('active');
-                maleLabel.classList.remove('active');
-            }
+            if (selectedGender === 'male') { maleLabel.classList.add('active'); femaleLabel.classList.remove('active'); }
+            else { femaleLabel.classList.add('active'); maleLabel.classList.remove('active'); }
         }
 
         function changeGender(direction) {
-            if (direction === -1) {
-                selectedGender = 'male';
-                document.getElementById('char-img').src = 'assets/char_male.png';
-            } else {
-                selectedGender = 'female';
-                document.getElementById('char-img').src = 'assets/char_female.png';
-            }
+            if (direction === -1) { selectedGender = 'male'; document.getElementById('char-img').src = 'assets/char_male.png'; }
+            else { selectedGender = 'female'; document.getElementById('char-img').src = 'assets/char_female.png'; }
             updateGenderUI();
         }
 
-        // Прямой клик на надписи МУЖ или ЖЕН
         function setGender(gender) {
             selectedGender = gender;
-            if (gender === 'male') {
-                document.getElementById('char-img').src = 'assets/char_male.png';
-            } else {
-                document.getElementById('char-img').src = 'assets/char_female.png';
-            }
+            if (gender === 'male') { document.getElementById('char-img').src = 'assets/char_male.png'; }
+            else { document.getElementById('char-img').src = 'assets/char_female.png'; }
             updateGenderUI();
         }
 
-        // Функция выбора класса и обновления статов
         function selectClass(className) {
             selectedClass = className;
             const buttons = document.querySelectorAll('.class-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
-            // Обновляем значения статов на экране
             const stats = classStats[className];
             document.getElementById('stat-str').innerText = stats.str;
             document.getElementById('stat-agl').innerText = stats.agl;
@@ -323,14 +152,9 @@
 
         function createCharacter() {
             let tgId = null;
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                tgId = tg.initDataUnsafe.user.id;
-            } else {
-                window.location.href = 'index.html';
-                return;
-            }
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { tgId = tg.initDataUnsafe.user.id; }
+            else { window.location.href = 'index.html'; return; }
 
-            // Получаем статы для выбранного класса
             const stats = classStats[selectedClass];
 
             fetch(`${SERVER_URL}/api/create-character`, {
@@ -346,11 +170,8 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    window.location.href = 'lobby.html';
-                } else {
-                    showError();
-                }
+                if (data.success) { window.location.href = 'lobby.html'; }
+                else { showError(); }
             })
             .catch(err => {
                 console.error("Ошибка сети:", err);
