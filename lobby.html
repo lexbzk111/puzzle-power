@@ -3,163 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Puzzle & Power - Город</title>
+    <title>Герой - Puzzle & Power</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="config.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; font-family: 'Segoe UI', sans-serif; color: #fff; }
         
-        body, html { 
-            width: 100%; 
-            height: 100%; 
-            overflow: hidden; 
-            background-color: #000; 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        .hero-container {
+            position: relative; width: 100%; max-width: 480px; height: 100dvh; height: 100vh; margin: 0 auto;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            display: flex; flex-direction: column;
         }
 
-        /* Игра фиксируется РОВНО в видимом окне Telegram */
-        .game-container { 
-            position: fixed; 
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%; 
-            max-width: 480px; 
-            height: 100%;
-            background-image: url('assets/city/bg_lobby.png'); 
-            background-size: cover; 
-            background-position: center; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            z-index: 10;
-        }
+        /* Шапка */
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 8px 15px; }
+        .back-btn { font-size: 24px; color: #00d2ff; cursor: pointer; background: none; border: none; }
+        .title { font-size: 20px; font-weight: 900; color: #fff; }
+        .stats-btn { font-size: 14px; background: #1e293b; border: 1px solid #00d2ff; color: #00d2ff; padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-        .top-bar { width: 100%; padding: 10px 15px; background: transparent; display: flex; justify-content: space-between; align-items: flex-start; z-index: 10; }
+        /* Кукла слева, слоты справа */
+        .main-area { display: flex; height: 44%; padding: 0 10px; gap: 5px; }
+        .doll-area { flex: 0 0 45%; display: flex; justify-content: center; align-items: center; }
+        .doll-img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        /* Слоты: Точное позиционирование по сетке (42px) */
+        .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(4, 42px); justify-content: center; align-content: center; gap: 4px; }
+        .slot {
+            width: 42px; height: 42px;
+            background: rgba(0,0,0,0.5); border: 1px solid #334155; border-radius: 5px;
+            display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer;
+        }
+        .slot:hover { border-color: #00d2ff; }
+        .slot img { width: 75%; height: 75%; object-fit: contain; }
+        .slot-label { position: absolute; bottom: 0px; font-size: 5px; color: #94a3b8; }
+
+        /* Позиции слотов */
+        .slot-helmet { grid-column: 2; grid-row: 1; }
         
-        .left-stats { display: flex; align-items: center; gap: 8px; }
-        .level-circle { width: 36px; height: 36px; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); border: 2px solid #00d2ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0, 210, 255, 0.4); flex-shrink: 0; }
-        .level-value { color: #00d2ff; font-weight: 900; font-size: 14px; text-shadow: 0 0 8px rgba(0, 210, 255, 0.8); }
+        .slot-ring1 { grid-column: 1; grid-row: 2; }
+        .slot-amulet { grid-column: 2; grid-row: 2; }
+        .slot-ring2 { grid-column: 3; grid-row: 2; }
         
-        .stats-wrapper { display: flex; flex-direction: column; gap: 3px; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(5px); padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.6); width: 155px; }
+        .slot-weapon { grid-column: 1; grid-row: 3; }
+        .slot-armor { grid-column: 2; grid-row: 3; }
+        .slot-shield { grid-column: 3; grid-row: 3; }
         
-        .stat-row { display: flex; align-items: center; gap: 4px; }
-        .stat-icon { font-size: 10px; width: 12px; text-align: center; color: #f8fafc; }
-        .status-bar-wrapper { position: relative; flex-grow: 1; height: 8px; background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.9); }
-        .status-bar-fill { height: 100%; width: 100%; border-radius: 4px; }
-        
-        .bar-hp .status-bar-fill { background: linear-gradient(90deg, #b91c1c, #ef4444, #fca5a5); }
-        .bar-energy .status-bar-fill { background: linear-gradient(90deg, #1d4ed8, #3b82f6, #93c5fd); }
-        .bar-xp .status-bar-fill { background: linear-gradient(90deg, #7c3aed, #a855f7, #fbbf24); }
-        
-        .bar-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 6px; font-weight: 900; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 0 0 4px #000; letter-spacing: 0.5px; }
-        
-        .right-resources { display: flex; gap: 4px; align-items: center; justify-content: flex-end; flex-shrink: 1; min-width: 0; }
-        .resource-box { background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; padding: 2px 5px; display: flex; align-items: center; gap: 3px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); height: 24px; flex-shrink: 1; min-width: 0; overflow: hidden; }
-        .resource-icon { font-size: 11px; }
-        .resource-value { color: #fff; font-size: 10px; font-weight: bold; text-shadow: 1px 1px 2px #000; white-space: nowrap; }
-        
-        .res-gold .resource-value { color: #facc15; }
-        .res-diamonds .resource-value { color: #22d3ee; }
-        .res-swords .resource-value { color: #f87171; }
-        
-        .world-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
-        .building-zone { position: absolute; display: flex; align-items: center; justify-content: center; cursor: pointer; pointer-events: auto; width: 60px; height: 60px; }
-        .building-dot { width: 16px; height: 16px; background: #00d2ff; border-radius: 50%; box-shadow: 0 0 20px rgba(0, 210, 255, 0.8), 0 0 5px rgba(0,0,0,0.8); border: 2px solid #fff; transition: all 0.2s ease; }
-        .building-zone:hover .building-dot, .building-zone:active .building-dot { transform: scale(1.5); background: #fff; }
-        
-        .zone-tavern { top: 48%; left: 16%; }
-        .zone-forge { top: 30%; right: 14%; }
-        .zone-arena { top: 70%; left: 35%; }
-        .zone-castle { top: 18%; left: 42%; }
-        
-        .error-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; color: #fff; justify-content: center; align-items: center; flex-direction: column; text-align: center; z-index: 20; font-family: sans-serif; padding: 20px; }
-        .error-screen.active { display: flex; }
+        .slot-gloves { grid-column: 1; grid-row: 4; }
+        .slot-pants { grid-column: 2; grid-row: 4; }
+        .slot-boots { grid-column: 3; grid-row: 4; }
+
+        /* Итоговые эффекты */
+        .bottom-area { flex: 1; padding: 0 15px 10px; display: flex; flex-direction: column; gap: 8px; }
+        .derived-stats { background: #1e293b; border-radius: 10px; padding: 8px 10px; border: 1px solid #334155; }
+        .ds-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; margin-bottom: 5px; font-weight: bold; }
+        .ds-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .ds-row { display: flex; flex-direction: column; align-items: center; }
+        .ds-name { color: #94a3b8; font-size: 9px; }
+        .ds-val { color: #facc15; font-weight: 900; font-size: 14px; }
+
+        /* ИНВЕНТАРЬ: 6 КОЛОНОК, 5 РЯДОВ (30 ячеек), 40px, 4px */
+        .inv-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
+        .inv-grid { display: grid; grid-template-columns: repeat(6, 40px); grid-template-rows: repeat(5, 40px); gap: 4px; width: 100%; margin: 0 auto; justify-content: center; }
+        .inv-slot { width: 40px; height: 40px; background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; }
+        .inv-slot img { width: 80%; height: 80%; object-fit: contain; }
+
+        .inv-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 3px; }
+        .page-btn { background: #1e293b; border: 1px solid #334155; color: #fff; width: 22px; height: 22px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 11px; }
+        .page-btn.active { background: #00d2ff; color: #000; border-color: #00d2ff; }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="top-bar">
-            <div class="left-stats">
-                <div class="level-circle" style="cursor:pointer;" onclick="window.location.href='hero.html'"><span id="player-level" class="level-value">1</span></div>
-                <div class="stats-wrapper">
-                    <div class="stat-row"><span class="stat-icon">❤️</span><div class="status-bar-wrapper bar-hp"><div id="hp-fill" class="status-bar-fill" style="width: 100%;"></div><div id="hp-text" class="bar-text">1000 / 1000</div></div></div>
-                    <div class="stat-row"><span class="stat-icon">⚡</span><div class="status-bar-wrapper bar-energy"><div id="energy-fill" class="status-bar-fill" style="width: 100%;"></div><div id="energy-text" class="bar-text">60 / 60</div></div></div>
-                    <div class="stat-row"><span class="stat-icon">✦</span><div class="status-bar-wrapper bar-xp"><div id="xp-fill" class="status-bar-fill" style="width: 45%;"></div><div id="xp-text" class="bar-text">450 / 1000</div></div></div>
+    <div class="hero-container">
+        <div class="header">
+            <button class="back-btn" onclick="window.location.href='lobby.html'">◀</button>
+            <span class="title">Герой</span>
+            <button class="stats-btn" onclick="window.location.href='stats.html'">Статы</button>
+        </div>
+
+        <!-- Кукла слева + сетка слотов справа -->
+        <div class="main-area">
+            <div class="doll-area">
+                <img class="doll-img" src="assets/char_male.png" alt="Герой">
+            </div>
+            <div class="slots-area">
+                <!-- Ряд 1 -->
+                <div></div>
+                <div class="slot slot-helmet"><img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span></div>
+                <div></div>
+
+                <!-- Ряд 2 -->
+                <div class="slot slot-ring1"><img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span></div>
+                <div class="slot slot-amulet"><img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span></div>
+                <div class="slot slot-ring2"><img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span></div>
+
+                <!-- Ряд 3 -->
+                <div class="slot slot-weapon"><img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span></div>
+                <div class="slot slot-armor"><img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span></div>
+                <div class="slot slot-shield"><img src="assets/items/shield.png" alt=""><span class="slot-label">Щит</span></div>
+
+                <!-- Ряд 4 -->
+                <div class="slot slot-gloves"><img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span></div>
+                <div class="slot slot-pants"><img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span></div>
+                <div class="slot slot-boots"><img src="assets/items/boots.png" alt=""><span class="slot-label">Обувь</span></div>
+            </div>
+        </div>
+
+        <!-- Итоговые эффекты -->
+        <div class="bottom-area">
+            <div class="derived-stats">
+                <div class="ds-title">Итоговые Эффекты</div>
+                <div class="ds-grid">
+                    <div class="ds-row"><span class="ds-name">⚔️ Урон</span><span class="ds-val" id="ds-dmg">150</span></div>
+                    <div class="ds-row"><span class="ds-name">🛡️ Защита</span><span class="ds-val" id="ds-def">35%</span></div>
+                    <div class="ds-row"><span class="ds-name">❤️ ХП</span><span class="ds-val" id="ds-hp">1000</span></div>
+                    <div class="ds-row"><span class="ds-name">💥 Крит</span><span class="ds-val" id="ds-crit">8%</span></div>
+                    <div class="ds-row"><span class="ds-name">🪞 Блок</span><span class="ds-val" id="ds-block">5%</span></div>
+                    <div class="ds-row"><span class="ds-name">🧊 Резист</span><span class="ds-val" id="ds-res">10%</span></div>
                 </div>
             </div>
-            <div class="right-resources">
-                <div class="resource-box res-gold"><span class="resource-icon">💰</span><span id="res-gold-val" class="resource-value">1,250</span></div>
-                <div class="resource-box res-diamonds"><span class="resource-icon">💎</span><span id="res-diam-val" class="resource-value">150</span></div>
-                <div class="resource-box res-swords"><span class="resource-icon">⚔️</span><span id="res-swords-val" class="resource-value">45</span></div>
+
+            <div class="inv-title">Инвентарь (Страница <span id="current-page">1</span> из 5)</div>
+            <div class="inv-grid" id="inv-grid"></div>
+
+            <div class="inv-pagination">
+                <button class="page-btn" onclick="changePage(1)">1</button>
+                <button class="page-btn" onclick="changePage(2)">2</button>
+                <button class="page-btn" onclick="changePage(3)">3</button>
+                <button class="page-btn" onclick="changePage(4)">4</button>
+                <button class="page-btn" onclick="changePage(5)">5</button>
             </div>
-        </div>
-        <div class="world-content">
-            <div class="building-zone zone-tavern" onclick="openLocation('tavern')"><div class="building-dot"></div></div>
-            <div class="building-zone zone-forge" onclick="openLocation('forge')"><div class="building-dot"></div></div>
-            <div class="building-zone zone-arena" onclick="openLocation('square')"><div class="building-dot"></div></div>
-            <div class="building-zone zone-castle" onclick="openLocation('pvp_arena')"><div class="building-dot"></div></div>
-        </div>
-        <div class="error-screen" id="errorScreen">
-            <div style="font-size: 60px; margin-bottom: 20px;">📡</div>
-            <h2 style="color: #ff4d4d; margin-bottom: 10px;">Нет соединения с сервером</h2>
-            <p style="opacity: 0.8;">Проверьте интернет или попробуйте зайти позже.</p>
         </div>
     </div>
 
     <script>
-        const SERVER_URL = window.SERVER_URL;
-        let tg = null;
-        if (window.Telegram && window.Telegram.WebApp) { tg = window.Telegram.WebApp; tg.ready(); tg.expand(); }
+        let currentPage = 1;
 
-        function updatePlayerStatsUI(currentHp, maxHp, currentEnergy, maxEnergy, level, currentXp, maxXp) {
-            document.getElementById('player-level').innerText = level;
-            document.getElementById('hp-fill').style.width = `${Math.max(0, Math.min(100, (currentHp / maxHp) * 100))}%`;
-            document.getElementById('energy-fill').style.width = `${Math.max(0, Math.min(100, (currentEnergy / maxEnergy) * 100))}%`;
-            document.getElementById('xp-fill').style.width = `${Math.max(0, Math.min(100, (currentXp / maxXp) * 100))}%`;
-            document.getElementById('hp-text').innerText = `${currentHp} / ${maxHp}`;
-            document.getElementById('energy-text').innerText = `${currentEnergy} / ${maxEnergy}`;
-            document.getElementById('xp-text').innerText = `${currentXp} / ${maxXp}`;
+        // Генерируем 30 ячеек (6 колонок x 5 рядов)
+        function renderInventory() {
+            const grid = document.getElementById('inv-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 30; i++) {
+                const slot = document.createElement('div');
+                slot.classList.add('inv-slot');
+                grid.appendChild(slot);
+            }
         }
 
-        function updatePlayerResourcesUI(gold, diamonds, swords) {
-            document.getElementById('res-gold-val').innerText = gold.toLocaleString();
-            document.getElementById('res-diam-val').innerText = diamonds.toLocaleString();
-            document.getElementById('res-swords-val').innerText = swords.toLocaleString();
-        }
-
-        function openLocation(locationId) {
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-            alert("Вы вошли в локацию: " + locationId);
-        }
-
-        function loadPlayerData() {
-            let tgId = null;
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { tgId = tg.initDataUnsafe.user.id; }
-            else { window.location.href = 'index.html'; return; }
-
-            fetch(`${SERVER_URL}/api/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tg_id: tgId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && !data.has_character) { window.location.href = 'select.html'; return; }
-                if (data.success && data.has_character) {
-                    updatePlayerStatsUI(1000, 1000, 60, 60, data.user.level || 1, 450, 1000);
-                    updatePlayerResourcesUI(500, 10, 0);
-                    return;
-                }
-            })
-            .catch(err => {
-                console.error("Сервер не отвечает:", err);
-                document.getElementById('errorScreen').classList.add('active');
+        function changePage(page) {
+            currentPage = page;
+            document.getElementById('current-page').innerText = page;
+            const buttons = document.querySelectorAll('.page-btn');
+            buttons.forEach((btn, index) => {
+                btn.classList.remove('active');
+                if (index + 1 === page) btn.classList.add('active');
             });
         }
 
-        window.onload = loadPlayerData;
+        window.onload = function() {
+            renderInventory();
+            changePage(1);
+        };
     </script>
 </body>
 </html>
