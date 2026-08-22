@@ -27,7 +27,7 @@
         .doll-area { flex: 0 0 45%; display: flex; justify-content: center; align-items: center; }
         .doll-img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Слоты: Точное позиционирование по сетке (42px) */
+        /* Слоты: Точное позиционирование по сетке (42px), зазор 4px */
         .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(4, 42px); justify-content: center; align-content: center; gap: 4px; }
         .slot {
             width: 42px; height: 42px;
@@ -62,10 +62,10 @@
         .ds-name { color: #94a3b8; font-size: 9px; }
         .ds-val { color: #facc15; font-weight: 900; font-size: 14px; }
 
-        /* ИНВЕНТАРЬ: 7 КОЛОНОК, 4 РЯДА (28 ячеек) */
+        /* ИНВЕНТАРЬ: 7 КОЛОНОК, 4 РЯДА. Фикс. размер 34px, зазор 4px (как у колец) */
         .inv-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
-        .inv-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(4, 1fr); gap: 4px; width: 100%; margin: 0 auto; justify-items: center; }
-        .inv-slot { width: 100%; max-width: 34px; height: 34px; background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; }
+        .inv-grid { display: grid; grid-template-columns: repeat(7, 34px); grid-template-rows: repeat(4, 34px); gap: 4px; width: 100%; margin: 0 auto; justify-content: center; }
+        .inv-slot { width: 34px; height: 34px; background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; }
         .inv-slot img { width: 80%; height: 80%; object-fit: contain; }
 
         .inv-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 3px; }
