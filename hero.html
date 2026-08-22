@@ -38,7 +38,7 @@
         .slot img { width: 75%; height: 75%; object-fit: contain; }
         .slot-label { position: absolute; bottom: 0px; font-size: 5px; color: #94a3b8; }
 
-        /* Позиции слотов (Амулет и Кольцо 1 поменяны местами) */
+        /* Позиции слотов */
         .slot-helmet { grid-column: 2; grid-row: 1; }
         
         .slot-ring1 { grid-column: 1; grid-row: 2; }
@@ -62,10 +62,10 @@
         .ds-name { color: #94a3b8; font-size: 9px; }
         .ds-val { color: #facc15; font-weight: 900; font-size: 14px; }
 
-        /* Инвентарь: КРУПНЕЕ (40px) и ПЛОТНЕЕ (6 рядов = 30 ячеек) */
+        /* ИНВЕНТАРЬ: 7 КОЛОНОК, 4 РЯДА, МАЛЕНЬКИЕ ЯЧЕЙКИ (30px) */
         .inv-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
-        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(6, 1fr); gap: 4px; width: 100%; margin: 0 auto; justify-items: center; }
-        .inv-slot { width: 100%; max-width: 40px; height: 40px; background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; }
+        .inv-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2px; width: 100%; margin: 0 auto; justify-items: center; }
+        .inv-slot { width: 100%; max-width: 30px; height: 30px; background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 3px; }
         .inv-slot img { width: 80%; height: 80%; object-fit: contain; }
 
         .inv-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 3px; }
@@ -87,22 +87,22 @@
                 <img class="doll-img" src="assets/char_male.png" alt="Герой">
             </div>
             <div class="slots-area">
-                <!-- Ряд 1 (Пусто, Шлем, Пусто) -->
+                <!-- Ряд 1 -->
                 <div></div>
                 <div class="slot slot-helmet"><img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span></div>
                 <div></div>
 
-                <!-- Ряд 2 (Кольцо 1, Амулет, Кольцо 2) -->
+                <!-- Ряд 2 -->
                 <div class="slot slot-ring1"><img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span></div>
                 <div class="slot slot-amulet"><img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span></div>
                 <div class="slot slot-ring2"><img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span></div>
 
-                <!-- Ряд 3 (Оружие, Броня, Щит) -->
+                <!-- Ряд 3 -->
                 <div class="slot slot-weapon"><img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span></div>
                 <div class="slot slot-armor"><img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span></div>
                 <div class="slot slot-shield"><img src="assets/items/shield.png" alt=""><span class="slot-label">Щит</span></div>
 
-                <!-- Ряд 4 (Перчатки, Штаны, Обувь) -->
+                <!-- Ряд 4 -->
                 <div class="slot slot-gloves"><img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span></div>
                 <div class="slot slot-pants"><img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span></div>
                 <div class="slot slot-boots"><img src="assets/items/boots.png" alt=""><span class="slot-label">Обувь</span></div>
@@ -139,11 +139,11 @@
     <script>
         let currentPage = 1;
 
-        // Генерируем 30 ячеек (6 рядов по 5)
+        // Генерируем 28 ячеек (7 колонок x 4 ряда)
         function renderInventory() {
             const grid = document.getElementById('inv-grid');
             grid.innerHTML = '';
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 28; i++) {
                 const slot = document.createElement('div');
                 slot.classList.add('inv-slot');
                 grid.appendChild(slot);
