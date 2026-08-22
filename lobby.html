@@ -9,17 +9,30 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
         
-        /* ЦЕНТРИРУЕМ ИГРУ НА ПК */
         body, html { 
-            width: 100%; height: 100%; overflow: hidden; background-color: #000; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            display: flex; justify-content: center; align-items: center;
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            background-color: #000; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* Убрали flex и центрирование, чтобы ничего не сжималось по вертикали */
+            display: block; 
         }
 
-        /* ОГРАНИЧИВАЕМ ШИРИНУ ДО МОБИЛЬНОЙ (480px) */
+        /* Контейнер игры: 100% высоты экрана, центрируется по горизонтали */
         .game-container { 
-            position: relative; width: 100%; max-width: 480px; height: 100%; 
-            background-image: url('assets/city/bg_lobby.png'); background-size: cover; background-position: center; 
-            display: flex; flex-direction: column; justify-content: space-between; 
+            position: relative; 
+            width: 100%; 
+            max-width: 480px; 
+            height: 100vh;
+            height: 100dvh; /* Динамическая высота для мобильных и десктопа */
+            margin: 0 auto; /* Центрируем на ПК */
+            background-image: url('assets/city/bg_lobby.png'); 
+            background-size: cover; 
+            background-position: center; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
         }
 
         .top-bar { width: 100%; padding: 10px 15px; background: transparent; display: flex; justify-content: space-between; align-items: flex-start; z-index: 10; }
