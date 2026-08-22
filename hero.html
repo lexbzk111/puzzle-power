@@ -17,45 +17,56 @@
         }
 
         /* Шапка */
-        .header { display: flex; align-items: center; justify-content: space-between; padding: 15px; }
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; }
         .back-btn { font-size: 24px; color: #00d2ff; cursor: pointer; background: none; border: none; }
         .title { font-size: 20px; font-weight: 900; color: #fff; }
         .stats-btn { font-size: 14px; background: #1e293b; border: 1px solid #00d2ff; color: #00d2ff; padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-        /* КУКЛА СЛЕВА, СЛОТЫ СПРАВА (Возвращаем старую структуру) */
-        .main-area { display: flex; height: 45%; padding: 0 15px; gap: 10px; }
-        
-        .doll-area { flex: 1; display: flex; justify-content: center; align-items: center; }
-        .doll-img { max-width: 90%; max-height: 100%; object-fit: contain; }
+        /* Кукла слева, слоты справа - компактная сетка */
+        .main-area { display: flex; height: 42%; padding: 0 10px; gap: 5px; }
+        .doll-area { flex: 0 0 38%; display: flex; justify-content: center; align-items: center; }
+        .doll-img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Слоты справа: Сетка 3 колонки для 10 слотов */
-        .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-content: center; }
+        /* Сетка слотов: 3 колонки, 4 ряда */
+        .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); gap: 6px; align-content: center; }
         .slot {
+            width: 100%; height: 100%; max-height: 52px;
             background: rgba(0,0,0,0.5); border: 2px solid #334155; border-radius: 8px;
-            aspect-ratio: 1; display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer;
         }
         .slot:hover { border-color: #00d2ff; }
-        .slot img { width: 80%; height: 80%; object-fit: contain; }
-        .slot-label { position: absolute; bottom: 2px; font-size: 7px; color: #94a3b8; }
+        .slot img { width: 75%; height: 75%; object-fit: contain; }
+        .slot-label { position: absolute; bottom: 1px; font-size: 6px; color: #94a3b8; }
 
-        /* Итоговые эффекты и Инвентарь */
-        .bottom-area { flex: 1; padding: 0 15px 15px; display: flex; flex-direction: column; gap: 10px; }
-        
-        .derived-stats { background: #1e293b; border-radius: 12px; padding: 12px; border: 1px solid #334155; }
-        .ds-title { font-size: 12px; color: #00d2ff; text-transform: uppercase; margin-bottom: 8px; font-weight: bold; }
-        .ds-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        /* Позиции слотов (по сетке) */
+        .slot-helmet { grid-column: 2; grid-row: 1; }
+        .slot-ring1 { grid-column: 1; grid-row: 2; }
+        .slot-amulet { grid-column: 2; grid-row: 2; }
+        .slot-ring2 { grid-column: 3; grid-row: 2; }
+        .slot-weapon { grid-column: 1; grid-row: 3; }
+        .slot-armor { grid-column: 2; grid-row: 3; }
+        .slot-shield { grid-column: 3; grid-row: 3; }
+        .slot-gloves { grid-column: 1; grid-row: 4; }
+        .slot-pants { grid-column: 2; grid-row: 4; }
+        .slot-boots { grid-column: 3; grid-row: 4; }
+
+        /* Итоговые эффекты - компактно */
+        .bottom-area { flex: 1; padding: 0 15px 10px; display: flex; flex-direction: column; gap: 8px; }
+        .derived-stats { background: #1e293b; border-radius: 10px; padding: 8px 10px; border: 1px solid #334155; }
+        .ds-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; margin-bottom: 5px; font-weight: bold; }
+        .ds-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .ds-row { display: flex; flex-direction: column; align-items: center; }
-        .ds-name { color: #94a3b8; font-size: 10px; margin-bottom: 2px; }
-        .ds-val { color: #facc15; font-weight: 900; font-size: 16px; }
+        .ds-name { color: #94a3b8; font-size: 9px; }
+        .ds-val { color: #facc15; font-weight: 900; font-size: 14px; }
 
-        /* Инвентарь */
-        .inv-title { font-size: 12px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
-        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
-        .inv-slot { background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 6px; aspect-ratio: 1; }
+        /* Инвентарь - 3 ряда по 5 ячеек */
+        .inv-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
+        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+        .inv-slot { background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 6px; aspect-ratio: 1; max-height: 40px; }
         .inv-slot img { width: 80%; height: 80%; object-fit: contain; }
 
-        .inv-pagination { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
-        .page-btn { background: #1e293b; border: 1px solid #334155; color: #fff; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .inv-pagination { display: flex; justify-content: center; gap: 8px; margin-top: 6px; }
+        .page-btn { background: #1e293b; border: 1px solid #334155; color: #fff; width: 26px; height: 26px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; }
         .page-btn.active { background: #00d2ff; color: #000; border-color: #00d2ff; }
 
         /* Модальное окно */
@@ -79,26 +90,26 @@
             <button class="stats-btn" onclick="toggleStats()">Статы</button>
         </div>
 
-        <!-- Герой слева, слоты справа (10 штук) -->
+        <!-- Кукла слева + сетка слотов справа -->
         <div class="main-area">
             <div class="doll-area">
                 <img class="doll-img" src="assets/char_male.png" alt="Герой">
             </div>
             <div class="slots-area">
-                <div class="slot"><img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span></div>
-                <div class="slot"><img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span></div>
-                <div class="slot"><img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span></div>
-                <div class="slot"><img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span></div>
-                <div class="slot"><img src="assets/items/shield.png" alt=""><span class="slot-label">Щит</span></div>
-                <div class="slot"><img src="assets/items/boots.png" alt=""><span class="slot-label">Обувь</span></div>
-                <div class="slot"><img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span></div>
-                <div class="slot"><img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span></div>
-                <div class="slot"><img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span></div>
-                <div class="slot"><img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span></div>
+                <div class="slot slot-helmet"><img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span></div>
+                <div class="slot slot-ring1"><img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span></div>
+                <div class="slot slot-amulet"><img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span></div>
+                <div class="slot slot-ring2"><img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span></div>
+                <div class="slot slot-weapon"><img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span></div>
+                <div class="slot slot-armor"><img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span></div>
+                <div class="slot slot-shield"><img src="assets/items/shield.png" alt=""><span class="slot-label">Щит</span></div>
+                <div class="slot slot-gloves"><img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span></div>
+                <div class="slot slot-pants"><img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span></div>
+                <div class="slot slot-boots"><img src="assets/items/boots.png" alt=""><span class="slot-label">Обувь</span></div>
             </div>
         </div>
 
-        <!-- Итоговые эффекты и Инвентарь -->
+        <!-- Итоговые эффекты -->
         <div class="bottom-area">
             <div class="derived-stats">
                 <div class="ds-title">Итоговые Эффекты</div>
@@ -128,7 +139,6 @@
         <div class="stats-overlay" id="stats-overlay">
             <div class="stats-modal">
                 <h2>Базовые Характеристики</h2>
-                
                 <div class="base-stat-row">
                     <span class="bs-name">💪 Сила</span>
                     <div class="bs-val"><span class="bs-number" id="stat-str">8</span><button class="plus-btn" onclick="addPoint('str')">+</button></div>
@@ -162,18 +172,16 @@
             document.getElementById('stats-overlay').classList.toggle('active');
         }
 
-        // Временная функция для теста: при клике на + добавляет 1 к цифре
         function addPoint(statType) {
             const el = event.target.parentElement.querySelector('.bs-number');
             let val = parseInt(el.innerText);
             el.innerText = val + 1;
-            // Здесь потом будет запрос на сервер
         }
 
         function renderInventory() {
             const grid = document.getElementById('inv-grid');
             grid.innerHTML = '';
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 15; i++) {
                 const slot = document.createElement('div');
                 slot.classList.add('inv-slot');
                 grid.appendChild(slot);
