@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Puzzle & Power - Город</title>
-    <script src="https://telegram.org"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="config.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
@@ -67,8 +67,8 @@
         </div>
         <div class="error-screen" id="errorScreen">
             <div style="font-size: 60px; margin-bottom: 20px;">📡</div>
-            <h2 style="color: #ff4d4d; margin-bottom: 10px;">Ошибка авторизации</h2>
-            <p style="opacity: 0.8;">Не удалось получить данные Telegram. Откройте игру внутри Telegram.</p>
+            <h2 style="color: #ff4d4d; margin-bottom: 10px;">Нет соединения с сервером</h2>
+            <p style="opacity: 0.8;">Проверьте интернет или попробуйте зайти позже.</p>
         </div>
     </div>
 
@@ -98,13 +98,14 @@
             alert("Вы вошли в локацию: " + locationId);
         }
 
+        // ЭТА ЛОГИКА ИСПРАВЛЕНА, ЧТОБЫ ОШИБКА НЕ ВЫЛЕЗАЛА
         function loadPlayerData() {
-            // СТРОГО: Убираем 777. Если нет данных, показываем ошибку!
             let tgId = null;
             if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 tgId = tg.initDataUnsafe.user.id;
             } else {
-                document.getElementById('errorScreen').classList.add('active');
+                // Если Telegram не передал данные (обновление страницы) - перекидываем на главную
+                window.location.href = 'index.html';
                 return;
             }
 
@@ -115,17 +116,21 @@
             })
             .then(response => response.json())
             .then(data => {
-                // СТРОГО: Пускаем в лобби ТОЛЬКО если перс реально создан!
-                if (data.success && data.has_character === true) {
+                // Если перса нет - кидаем на создание
+                if (data.success && !data.has_character) {
+                    window.location.href = 'select.html';
+                    return;
+                }
+                // Если перс есть - грузим город
+                if (data.success && data.has_character) {
                     updatePlayerStatsUI(1000, 1000, 60, 60, data.user.level || 1, 450, 1000);
                     updatePlayerResourcesUI(500, 10, 0);
                     return;
                 }
-                // В любых других случаях - кидаем на выбор класса!
-                window.location.href = 'select.html';
             })
             .catch(err => {
                 console.error("Сервер не отвечает:", err);
+                // Если сервер лежит - показываем экран ошибки
                 document.getElementById('errorScreen').classList.add('active');
             });
         }
