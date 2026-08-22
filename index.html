@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Puzzle & Power</title>
-    <script src="https://telegram.org"></script>
+    <!-- ВАЖНО! Правильная ссылка на скрипт -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="config.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,14 +32,27 @@
         <div class="error-screen" id="errorScreen">
             <div style="font-size: 60px; margin-bottom: 20px;">📡</div>
             <h2 style="color: #ff4d4d; margin-bottom: 10px;">Ошибка авторизации</h2>
-            <p style="opacity: 0.8;">Не удалось получить данные Telegram. Откройте игру внутри Telegram.</p>
+            <p style="opacity: 0.8;">Не удалось получить данные Telegram. Откройте игру через кнопку в меню бота (не через ссылку в браузере).</p>
         </div>
     </div>
     
     <script>
         const SERVER_URL = window.SERVER_URL; 
         let tg = null;
-        if (window.Telegram && window.Telegram.WebApp) { tg = window.Telegram.WebApp; tg.ready(); tg.expand(); }
+
+        if (window.Telegram && window.Telegram.WebApp) { 
+            tg = window.Telegram.WebApp; 
+            tg.ready(); 
+            tg.expand(); 
+        }
+
+        // ОТЛАДКА: Проверяем, что вообще пришло от Telegram
+        console.log("Объект Telegram WebApp:", tg);
+        if (tg) {
+            console.log("Raw InitData:", tg.initData);
+            console.log("Unsafe Data:", tg.initDataUnsafe);
+            console.log("Пользователь:", tg.initDataUnsafe.user);
+        }
 
         function showLoading(show) {
             const overlay = document.getElementById('loadingOverlay');
@@ -50,7 +64,6 @@
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
             showLoading(true);
             
-            // СТРОГО: Убираем 777. Если нет данных, показываем ошибку!
             let tgId = null;
             if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 tgId = tg.initDataUnsafe.user.id;
