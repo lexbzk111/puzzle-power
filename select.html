@@ -4,46 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Выбор класса</title>
-    <script src="https://telegram.org"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="config.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; font-family: 'Segoe UI', sans-serif; color: #fff; }
         .select-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 20px; background: radial-gradient(circle at top, #1e293b 0%, #0f172a 70%); }
-        .game-title { font-size: 28px; font-weight: 900; color: #00d2ff; margin-bottom: 30px; text-shadow: 0 0 20px rgba(0, 210, 255, 0.4); }
-        .sub-title { font-size: 14px; color: #94a3b8; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        .class-card { background: #1e293b; border: 2px solid #334155; border-radius: 12px; width: 100%; max-width: 320px; padding: 15px; margin-bottom: 15px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .class-card:hover { border-color: #00d2ff; background: #263449; transform: translateY(-2px); box-shadow: 0 0 20px rgba(0, 210, 255, 0.3); }
-        .class-icon { font-size: 40px; width: 50px; text-align: center; }
-        .class-title { font-size: 18px; font-weight: bold; }
-        .class-desc { font-size: 12px; opacity: 0.6; margin-top: 4px; }
+        .game-title { font-size: 28px; font-weight: 900; color: #00d2ff; margin-bottom: 20px; text-shadow: 0 0 20px rgba(0, 210, 255, 0.4); }
+        
+        /* Блок переключения пола */
+        .gender-switch { display: flex; gap: 10px; margin-bottom: 20px; background: #1e293b; padding: 10px; border-radius: 10px; border: 1px solid #334155; }
+        .gender-btn { width: 60px; height: 60px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; overflow: hidden; background: #0f172a; }
+        .gender-btn img { width: 100%; height: 100%; object-fit: cover; }
+        .gender-btn.active { border-color: #00d2ff; box-shadow: 0 0 15px rgba(0, 210, 255, 0.4); }
+        
+        /* Блок выбора класса */
+        .class-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .class-card { background: #1e293b; border: 2px solid #334155; border-radius: 12px; width: 45%; max-width: 150px; padding: 15px; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .class-card:hover { border-color: #00d2ff; background: #263449; transform: translateY(-2px); }
+        .class-icon { font-size: 30px; margin-bottom: 10px; }
+        .class-title { font-size: 16px; font-weight: bold; }
+        
+        /* Кнопка создания */
+        .create-btn { width: 100%; max-width: 320px; background: #00d2ff; color: #000; font-weight: bold; border: none; border-radius: 10px; padding: 15px; margin-top: 20px; cursor: pointer; font-size: 18px; transition: 0.2s; }
+        .create-btn:active { transform: scale(0.95); }
+        
         .error-box { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(255, 77, 77, 0.9); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; z-index: 100; width: 90%; text-align: center; }
     </style>
 </head>
 <body>
     <div class="select-container">
-        <div class="game-title">Puzzle & Power</div>
-        <div class="sub-title">Выберите свой класс</div>
-
-        <div class="class-card" onclick="createCharacter('Warrior')">
-            <div class="class-icon">⚔️</div>
-            <div><div class="class-title">Воин</div><div class="class-desc">Сила и мощь. Пробивает броню.</div></div>
+        <div class="game-title">Создание героя</div>
+        
+        <!-- Выбор пола -->
+        <div class="gender-switch">
+            <div class="gender-btn active" id="gender-male" onclick="setGender('male')">
+                <img src="char_male.png" alt="Мужчина">
+            </div>
+            <div class="gender-btn" id="gender-female" onclick="setGender('female')">
+                <img src="char_female.png" alt="Женщина">
+            </div>
         </div>
 
-        <div class="class-card" onclick="createCharacter('Mage')">
-            <div class="class-icon">🔮</div>
-            <div><div class="class-title">Маг</div><div class="class-desc">Интеллект и магия. Бьет по площади.</div></div>
+        <!-- Выбор класса -->
+        <div class="class-list">
+            <div class="class-card" onclick="setClass('Warrior')">
+                <div class="class-icon">⚔️</div>
+                <div class="class-title">Воин</div>
+            </div>
+            <div class="class-card" onclick="setClass('Mage')">
+                <div class="class-icon">🔮</div>
+                <div class="class-title">Маг</div>
+            </div>
+            <div class="class-card" onclick="setClass('Tank')">
+                <div class="class-icon">🛡️</div>
+                <div class="class-title">Танк</div>
+            </div>
+            <div class="class-card" onclick="setClass('Archer')">
+                <div class="class-icon">🏹</div>
+                <div class="class-title">Лучник</div>
+            </div>
         </div>
 
-        <div class="class-card" onclick="createCharacter('Tank')">
-            <div class="class-icon">🛡️</div>
-            <div><div class="class-title">Танк</div><div class="class-desc">Выносливость. Держит удар на себе.</div></div>
-        </div>
-
-        <div class="class-card" onclick="createCharacter('Archer')">
-            <div class="class-icon">🏹</div>
-            <div><div class="class-title">Лучник</div><div class="class-desc">Ловкость и крит. Бьет точно в цель.</div></div>
-        </div>
+        <button class="create-btn" onclick="createCharacter()">Создать героя</button>
     </div>
 
     <div id="error-box" class="error-box">Ошибка соединения с сервером! Персонаж не создан.</div>
@@ -53,15 +76,34 @@
         let tg = null;
         if (window.Telegram && window.Telegram.WebApp) { tg = window.Telegram.WebApp; tg.ready(); tg.expand(); }
 
+        let selectedGender = 'male';
+        let selectedClass = 'Warrior';
+
+        function setGender(gender) {
+            selectedGender = gender;
+            document.getElementById('gender-male').classList.toggle('active', gender === 'male');
+            document.getElementById('gender-female').classList.toggle('active', gender === 'female');
+        }
+
+        function setClass(className) {
+            selectedClass = className;
+        }
+
         function showError() {
             const box = document.getElementById('error-box');
             box.style.display = 'block';
             setTimeout(() => { box.style.display = 'none'; }, 4000);
         }
 
-        function createCharacter(className) {
-            let tgId = 777;
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) tgId = tg.initDataUnsafe.user.id;
+        function createCharacter() {
+            let tgId = null;
+            // Если данные Telegram не подгрузились, перекидываем на главную, чтобы обновить сессию
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                tgId = tg.initDataUnsafe.user.id;
+            } else {
+                window.location.href = 'index.html';
+                return;
+            }
 
             const stats = { str: 15, agl: 12, int: 10, vit: 13, intuition: 5 };
 
@@ -71,8 +113,8 @@
                 body: JSON.stringify({
                     tg_id: tgId,
                     name: 'Герой',
-                    gender: 'male',
-                    class_name: className,
+                    gender: selectedGender,
+                    class_name: selectedClass,
                     stats: stats
                 })
             })
