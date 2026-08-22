@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Герой - Puzzle & Power</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="config.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; font-family: 'Segoe UI', sans-serif; color: #fff; }
+        
+        .hero-container {
+            position: relative; width: 100%; max-width: 480px; height: 100dvh; height: 100vh; margin: 0 auto;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            display: flex; flex-direction: column;
+        }
+
+        /* Шапка */
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 15px; }
+        .back-btn { font-size: 24px; color: #00d2ff; cursor: pointer; background: none; border: none; }
+        .title { font-size: 20px; font-weight: 900; color: #fff; }
+        .stats-btn { font-size: 14px; background: #1e293b; border: 1px solid #00d2ff; color: #00d2ff; padding: 5px 10px; border-radius: 8px; cursor: pointer; }
+
+        /* Кукла и слоты */
+        .main-area { display: flex; height: 45%; padding: 0 15px; gap: 10px; }
+        
+        .doll-area { flex: 1; display: flex; justify-content: center; align-items: center; }
+        .doll-img { max-width: 90%; max-height: 100%; object-fit: contain; }
+
+        .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; align-content: center; }
+        .slot {
+            background: rgba(0,0,0,0.5); border: 2px solid #334155; border-radius: 8px;
+            aspect-ratio: 1; display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer;
+        }
+        .slot:hover { border-color: #00d2ff; }
+        .slot img { width: 80%; height: 80%; object-fit: contain; }
+        .slot-label { position: absolute; bottom: 2px; font-size: 7px; color: #94a3b8; }
+
+        /* Статы и Инвентарь */
+        .bottom-area { flex: 1; padding: 0 15px 15px; display: flex; flex-direction: column; gap: 10px; }
+        
+        .stats-panel { background: #1e293b; border-radius: 12px; padding: 10px; }
+        .stats-title { font-size: 12px; color: #00d2ff; text-transform: uppercase; margin-bottom: 8px; font-weight: bold; }
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .stat-name { color: #94a3b8; font-size: 13px; }
+        .stat-val { color: #fff; font-weight: 900; font-size: 13px; }
+        .plus-btn { background: #00d2ff; color: #000; border: none; border-radius: 4px; width: 18px; height: 18px; font-weight: 900; cursor: pointer; margin-left: 5px; }
+
+        /* Инвентарь */
+        .inv-title { font-size: 12px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
+        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+        .inv-slot { background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 6px; aspect-ratio: 1; }
+        .inv-slot img { width: 80%; height: 80%; object-fit: contain; }
+
+        .inv-pagination { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+        .page-btn { background: #1e293b; border: 1px solid #334155; color: #fff; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .page-btn.active { background: #00d2ff; color: #000; border-color: #00d2ff; }
+    </style>
+</head>
+<body>
+    <div class="hero-container">
+        <div class="header">
+            <button class="back-btn" onclick="window.location.href='lobby.html'">◀</button>
+            <span class="title">Герой</span>
+            <button class="stats-btn" onclick="toggleStats()">Статы</button>
+        </div>
+
+        <!-- Кукла + 9 Слотов -->
+        <div class="main-area">
+            <div class="doll-area">
+                <img class="doll-img" src="assets/char_male.png" alt="Герой">
+            </div>
+            <div class="slots-area">
+                <div class="slot"><img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span></div>
+                <div class="slot"><img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span></div>
+                <div class="slot"><img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span></div>
+                <div class="slot"><img src="assets/items/boots.png" alt=""><span class="slot-label">Обувь</span></div>
+                <div class="slot"><img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span></div>
+                <div class="slot"><img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span></div>
+                <div class="slot"><img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span></div>
+                <div class="slot"><img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span></div>
+                <div class="slot"><img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span></div>
+            </div>
+        </div>
+
+        <!-- Статы и Инвентарь -->
+        <div class="bottom-area">
+            <div class="stats-panel">
+                <div class="stats-title">Характеристики</div>
+                <div id="stat-block">
+                    <div class="stat-row"><span class="stat-name">💪 Сила</span><span class="stat-val" id="stat-str">8</span></div>
+                    <div class="stat-row"><span class="stat-name">🏃 Ловкость</span><span class="stat-val" id="stat-agl">4</span></div>
+                    <div class="stat-row"><span class="stat-name">❤️ Выносливость</span><span class="stat-val" id="stat-vit">6</span></div>
+                    <div class="stat-row"><span class="stat-name">🔮 Интеллект</span><span class="stat-val" id="stat-int">2</span></div>
+                    <div class="stat-row"><span class="stat-name">✨ Интуиция</span><span class="stat-val" id="stat-intuition">5</span></div>
+                </div>
+            </div>
+
+            <div class="inv-title">Инвентарь (Страница <span id="current-page">1</span> из 5)</div>
+            <div class="inv-grid" id="inv-grid">
+                <!-- 20 ячеек будет сгенерировано JS -->
+            </div>
+
+            <div class="inv-pagination">
+                <button class="page-btn" onclick="changePage(1)">1</button>
+                <button class="page-btn" onclick="changePage(2)">2</button>
+                <button class="page-btn" onclick="changePage(3)">3</button>
+                <button class="page-btn" onclick="changePage(4)">4</button>
+                <button class="page-btn" onclick="changePage(5)">5</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+
+        function loadHeroData() {
+            // Здесь потом подключим базу с сервера, пока показываем дефолтные цифры
+            document.getElementById('stat-str').innerText = 8;
+            document.getElementById('stat-agl').innerText = 4;
+            document.getElementById('stat-vit').innerText = 6;
+            document.getElementById('stat-int').innerText = 2;
+            document.getElementById('stat-intuition').innerText = 5;
+        }
+
+        // Рисуем сетку инвентаря
+        function renderInventory() {
+            const grid = document.getElementById('inv-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 20; i++) {
+                const slot = document.createElement('div');
+                slot.classList.add('inv-slot');
+                grid.appendChild(slot);
+            }
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            document.getElementById('current-page').innerText = page;
+            // Подсветка активной кнопки
+            const buttons = document.querySelectorAll('.page-btn');
+            buttons.forEach((btn, index) => {
+                btn.classList.remove('active');
+                if (index + 1 === page) btn.classList.add('active');
+            });
+            // Здесь позже будем грузить предметы для конкретной страницы
+        }
+
+        window.onload = function() {
+            loadHeroData();
+            renderInventory();
+            changePage(1);
+        };
+    </script>
+</body>
+</html>
