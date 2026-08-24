@@ -30,26 +30,25 @@
         .scroll-content { flex: 1; overflow-y: auto; padding: 0 15px 80px; }
         .scroll-content::-webkit-scrollbar { display: none; }
 
-        .section-title { font-size: 13px; color: #e2e8f0; text-transform: uppercase; margin-bottom: 8px; font-weight: 800; display: flex; align-items: center; gap: 8px; letter-spacing: 1px; }
+        .section-title { font-size: 13px; color: #e2e8f0; text-transform: uppercase; margin-bottom: 8px; font-weight: 800; display: flex; align-items: center; gap: 8px; letter-spacing: 1px; margin-top: 20px; }
         .section-title::before { content: ''; display: block; width: 4px; height: 14px; background: #00d2ff; border-radius: 2px; }
 
         .stats-card, .skills-card { background: #1e293b; border-radius: 12px; padding: 10px; margin-bottom: 15px; border: 1px solid #334155; }
-        
-        /* Ровные строки для статов и скиллов */
         .stat-row, .skill-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 5px; }
         .stat-row:last-child, .skill-row:last-child { margin-bottom: 0; }
         .stat-name, .skill-name { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; }
         
-        /* Маленький аккуратный значок "?" */
-        .info-icon { display: inline-flex; justify-content: center; align-items: center; width: 15px; height: 15px; background: #334155; color: #00d2ff; border-radius: 50%; font-size: 10px; font-weight: 900; cursor: pointer; }
+        .info-icon { display: inline-flex; justify-content: center; align-items: center; width: 15px; height: 15px; background: #334155; color: #00d2ff; border-radius: 50%; font-size: 10px; font-weight: 900; cursor: pointer; margin-left: 4px; }
         .info-icon:hover { background: #00d2ff; color: #000; }
 
         .stat-value, .skill-lvl-val { font-size: 18px; font-weight: 900; color: #facc15; }
-        
         .stat-right { display: flex; align-items: center; gap: 10px; }
         .plus-btn { background: #00d2ff; color: #000; border: none; border-radius: 6px; width: 26px; height: 26px; font-size: 18px; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; opacity: 0.3; pointer-events: none; transition: all 0.2s; }
         .plus-btn.active { opacity: 1; pointer-events: auto; box-shadow: 0 0 10px rgba(0, 210, 255, 0.4); }
         .plus-btn:active { transform: scale(0.9); }
+
+        /* Иконки скиллов */
+        .skill-icon { width: 30px; height: 30px; background: #0f172a; border: 1px solid #334155; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; }
 
         .ds-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
         .ds-item .ds-name { color: #94a3b8; font-size: 11px; }
@@ -179,27 +178,33 @@
             'skill5': 'Ультимейт. Мощная атака при сборе фиолетовых кристаллов.'
         };
 
-        // 1. Загрузка героя СНАЧАЛА из localStorage (мгновенно), ПОТОМ из базы
+        let committedStats = [8, 4, 6, 2, 5];
+        let draftStats = [...committedStats];
+        let draftPoints = 5;
+        let draftSkillPoints = 1;
+        let draftSkills = [1, 1, 1, 1, 1];
+
         function loadHeroData() {
-            // Мгновенно подставляем то, что сохранили при создании
+            // Мгновенно берем класс и пол из LocalStorage, чтобы показать картинку
             const className = localStorage.getItem('class_name') || 'Warrior';
             const gender = localStorage.getItem('gender') || 'male';
-            const playerName = localStorage.getItem('player_name') || '...';
-
             const classMap = { Warrior: 'war', Mage: 'mag', Tank: 'tank', Archer: 'luk' };
             const suffix = gender === 'male' ? '' : 'girl';
             
             document.getElementById('profile-class').innerText = className === 'Warrior' ? 'Воин' : className === 'Mage' ? 'Маг' : className === 'Tank' ? 'Танк' : 'Лучник';
-            document.getElementById('profile-name').innerText = playerName;
             document.getElementById('profile-img').src = `assets/character/${classMap[className]}${suffix}.png`;
 
-            // Затем обновляем из базы (если она ответит)
+            // Всегда сначала ставим Имя из LocalStorage (для мгновенной скорости)
+            document.getElementById('profile-name').innerText = localStorage.getItem('player_name') || '...';
+
+            // Получаем ID Telegram
             let tgId = null;
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.user) {
                 tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
             }
-            if (!tgId) return;
+            if (!tgId) { updateUI(); return; }
 
+            // Загружаем с сервера (там имя и статы)
             fetch(`${SERVER_URL}/api/get-hero`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -208,8 +213,15 @@
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
+                    // Если сервер ответил - перезаписываем имя и уровень
                     document.getElementById('profile-name').innerText = data.user.name;
                     document.getElementById('profile-level').innerText = data.user.level;
+                    
+                    // Загружаем сохраненные статы
+                    const s = data.user.base_stats;
+                    committedStats = [s.str, s.agl, s.vit, s.int, s.intuition];
+                    draftStats = [...committedStats];
+                    updateUI();
                 }
             })
             .catch(err => console.error("Ошибка базы:", err));
@@ -221,16 +233,6 @@
             document.getElementById('info-overlay').classList.add('active');
         }
         function closeInfo() { document.getElementById('info-overlay').classList.remove('active'); }
-
-        let committedStats = [8, 4, 6, 2, 5];
-        let committedPoints = 5;
-        let committedSkillPoints = 1;
-        let committedSkills = [1, 1, 1, 1, 1];
-
-        let draftStats = [...committedStats];
-        let draftPoints = committedPoints;
-        let draftSkills = [...committedSkills];
-        let draftSkillPoints = committedSkillPoints;
 
         function calculateDerivedStats(stats) {
             let dmg = 150 + (stats[0] - 8) * 2;
@@ -267,8 +269,7 @@
             }
 
             calculateDerivedStats(draftStats);
-
-            const hasChanges = JSON.stringify(draftStats) !== JSON.stringify(committedStats) || draftPoints !== committedPoints || JSON.stringify(draftSkills) !== JSON.stringify(committedSkills) || draftSkillPoints !== committedSkillPoints;
+            const hasChanges = JSON.stringify(draftStats) !== JSON.stringify(committedStats) || draftPoints !== 0 || draftSkillPoints !== 0;
             document.getElementById('save-bar').classList.toggle('active', hasChanges);
         }
 
@@ -288,21 +289,52 @@
 
         function resetDraft() {
             draftStats = [...committedStats];
-            draftPoints = committedPoints;
-            draftSkills = [...committedSkills];
-            draftSkillPoints = committedSkillPoints;
+            draftPoints = 5;
+            draftSkillPoints = 1;
+            draftSkills = [1, 1, 1, 1, 1];
             updateUI();
         }
 
         function saveStats() {
-            committedStats = [...draftStats];
-            committedPoints = draftPoints;
-            committedSkills = [...draftSkills];
-            committedSkillPoints = draftSkillPoints;
-            updateUI();
-            const saveBtn = document.querySelector('.save-btn');
-            saveBtn.innerText = "Сохранено!";
-            setTimeout(() => { saveBtn.innerText = "Сохранить"; }, 1500);
+            let tgId = null;
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.user) {
+                tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
+            }
+            if (!tgId) return;
+
+            const payload = {
+                tg_id: tgId,
+                stats: {
+                    str: draftStats[0],
+                    agl: draftStats[1],
+                    vit: draftStats[2],
+                    int: draftStats[3],
+                    intuition: draftStats[4]
+                }
+            };
+
+            fetch(`${SERVER_URL}/api/update-stats`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    committedStats = [...draftStats];
+                    draftPoints = 0;
+                    const saveBtn = document.querySelector('.save-btn');
+                    saveBtn.innerText = "Сохранено!";
+                    setTimeout(() => { saveBtn.innerText = "Сохранить"; }, 1500);
+                    updateUI();
+                } else {
+                    alert('Ошибка сохранения: ' + data.message);
+                }
+            })
+            .catch(err => {
+                console.error("Ошибка сети:", err);
+                alert("Не удалось сохранить статы. Проверьте подключение.");
+            });
         }
 
         window.onload = function() {
