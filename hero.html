@@ -10,28 +10,19 @@
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; font-family: 'Segoe UI', sans-serif; color: #fff; }
 
-        .hero-container {
-            position: relative; width: 100%; max-width: 480px; height: 100dvh; height: 100vh; margin: 0 auto;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            display: flex; flex-direction: column;
-        }
+        .hero-container { position: fixed; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); display: flex; flex-direction: column; }
 
         .header { display: flex; align-items: center; justify-content: space-between; padding: 8px 15px; }
-        .back-btn { font-size: 24px; color: #00d2ff; cursor: pointer; background: none; border: none; }
-        .title { font-size: 20px; font-weight: 900; color: #fff; }
+        .back-btn { font-size: 24px; color: #00d2ff; cursor: pointer; background: none; border: none; width: 30px; }
+        .title { flex-grow: 1; text-align: center; font-size: 20px; font-weight: 900; color: #fff; }
         .stats-btn { font-size: 14px; background: #1e293b; border: 1px solid #00d2ff; color: #00d2ff; padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-        /* Кукла слева, слоты справа (компактно) */
         .main-area { display: flex; height: 40%; padding: 0 10px; gap: 5px; }
         .doll-area { flex: 0 0 40%; display: flex; justify-content: center; align-items: center; }
         .doll-img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .slots-area { flex: 1; display: grid; grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(4, 42px); justify-content: center; align-content: center; gap: 4px; }
-        .slot {
-            width: 42px; height: 42px;
-            background: rgba(0,0,0,0.5); border: 1px solid #334155; border-radius: 5px;
-            display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer;
-        }
+        .slot { width: 42px; height: 42px; background: rgba(0,0,0,0.5); border: 1px solid #334155; border-radius: 5px; display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer; }
         .slot:hover { border-color: #00d2ff; }
         .slot img { width: 75%; height: 75%; object-fit: contain; }
         .slot-label { position: absolute; bottom: 0px; font-size: 5px; color: #94a3b8; }
@@ -47,7 +38,6 @@
         .slot-pants { grid-column: 2; grid-row: 4; }
         .slot-boots { grid-column: 3; grid-row: 4; }
 
-        /* Итоговые эффекты и инвентарь */
         .bottom-area { flex: 1; padding: 0 15px 5px; display: flex; flex-direction: column; gap: 6px; }
         .derived-stats { background: #1e293b; border-radius: 8px; padding: 6px 10px; border: 1px solid #334155; }
         .ds-title { font-size: 10px; color: #00d2ff; text-transform: uppercase; margin-bottom: 3px; font-weight: bold; }
@@ -56,7 +46,6 @@
         .ds-name { color: #94a3b8; font-size: 8px; }
         .ds-val { color: #facc15; font-weight: 900; font-size: 13px; }
 
-        /* Инвентарь: адаптивная ширина (7 колонок), 4 ряда, зазор 4px */
         .inv-title { font-size: 10px; color: #00d2ff; text-transform: uppercase; font-weight: bold; margin-bottom: 2px; }
         .inv-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(4, 1fr); gap: 4px; width: 100%; margin: 0 auto; }
         .inv-slot { width: 100%; aspect-ratio: 1 / 1; background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; }
@@ -77,21 +66,19 @@
 
         <div class="main-area">
             <div class="doll-area">
-                <img class="doll-img" id="doll-img" src="assets/character/war.png" alt="Герой">
+                <!-- СТАРТОВАЯ ЗАГЛУШКА, пока не придет ответ с сервера -->
+                <img class="doll-img" id="doll-img" src="" alt="Герой">
             </div>
             <div class="slots-area">
                 <div></div>
                 <div class="slot slot-helmet"><img src="assets/items/helmet.png" alt=""><span class="slot-label">Шлем</span></div>
                 <div></div>
-
                 <div class="slot slot-ring1"><img src="assets/items/ring1.png" alt=""><span class="slot-label">Кольцо 1</span></div>
                 <div class="slot slot-amulet"><img src="assets/items/amulet.png" alt=""><span class="slot-label">Амулет</span></div>
                 <div class="slot slot-ring2"><img src="assets/items/ring2.png" alt=""><span class="slot-label">Кольцо 2</span></div>
-
                 <div class="slot slot-weapon"><img src="assets/items/weapon.png" alt=""><span class="slot-label">Оружие</span></div>
                 <div class="slot slot-armor"><img src="assets/items/armor.png" alt=""><span class="slot-label">Броня</span></div>
                 <div class="slot slot-shield"><img src="assets/items/shield.png" alt=""><span class="slot-label">Щит</span></div>
-
                 <div class="slot slot-gloves"><img src="assets/items/gloves.png" alt=""><span class="slot-label">Перчатки</span></div>
                 <div class="slot slot-pants"><img src="assets/items/pants.png" alt=""><span class="slot-label">Штаны</span></div>
                 <div class="slot slot-boots"><img src="assets/items/boots.png" alt=""><span class="slot-label">Обувь</span></div>
@@ -102,12 +89,12 @@
             <div class="derived-stats">
                 <div class="ds-title">Итоговые Эффекты</div>
                 <div class="ds-grid">
-                    <div class="ds-row"><span class="ds-name">⚔️ Урон</span><span class="ds-val" id="ds-dmg">150</span></div>
-                    <div class="ds-row"><span class="ds-name">🛡️ Защита</span><span class="ds-val" id="ds-def">35%</span></div>
-                    <div class="ds-row"><span class="ds-name">❤️ ХП</span><span class="ds-val" id="ds-hp">1000</span></div>
-                    <div class="ds-row"><span class="ds-name">💥 Крит</span><span class="ds-val" id="ds-crit">8%</span></div>
-                    <div class="ds-row"><span class="ds-name">🪞 Блок</span><span class="ds-val" id="ds-block">5%</span></div>
-                    <div class="ds-row"><span class="ds-name">🧊 Резист</span><span class="ds-val" id="ds-res">10%</span></div>
+                    <div class="ds-row"><span class="ds-name">⚔️ Урон</span><span class="ds-val" id="ds-dmg">0</span></div>
+                    <div class="ds-row"><span class="ds-name">🛡️ Защита</span><span class="ds-val" id="ds-def">0</span></div>
+                    <div class="ds-row"><span class="ds-name">❤️ ХП</span><span class="ds-val" id="ds-hp">0</span></div>
+                    <div class="ds-row"><span class="ds-name">💥 Крит</span><span class="ds-val" id="ds-crit">0</span></div>
+                    <div class="ds-row"><span class="ds-name">🪞 Блок</span><span class="ds-val" id="ds-block">0</span></div>
+                    <div class="ds-row"><span class="ds-name">🧊 Резист</span><span class="ds-val" id="ds-res">0</span></div>
                 </div>
             </div>
 
@@ -127,7 +114,6 @@
     <script>
         let currentPage = 1;
 
-        // Генерируем 28 ячеек (7 колонок x 4 ряда)
         function renderInventory() {
             const grid = document.getElementById('inv-grid');
             grid.innerHTML = '';
@@ -148,26 +134,48 @@
             });
         }
 
-        // Функция для получения правильной картинки героя из localStorage
-        function getCharacterImage() {
-            let className = localStorage.getItem('class_name') || 'Warrior';
-            let gender = localStorage.getItem('gender') || 'male';
-            const genderSuffix = gender === 'male' ? '' : 'girl';
-            const classMap = {
-                Warrior: 'war',
-                Mage: 'mag',
-                Tank: 'tank',
-                Archer: 'luk'
-            };
-            return `assets/character/${classMap[className]}${genderSuffix}.png`;
+        // ФУНКЦИЯ ЗАГРУЗКИ ТОЛЬКО С СЕРВЕРА (БЕЗ localStorage!)
+        function loadHeroFromServer() {
+            let tgId = null;
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.user) {
+                tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
+            }
+            if (!tgId) { window.location.href = 'index.html'; return; }
+
+            fetch(`${SERVER_URL}/api/get-hero`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tg_id: tgId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const classMap = { Warrior: 'war', Mage: 'mag', Tank: 'tank', Archer: 'luk' };
+                    const genderSuffix = (data.user.gender === 'female') ? 'girl' : '';
+                    
+                    // Ставим правильную куклу из базы!
+                    const imgPath = `assets/character/${classMap[data.user.class]}${genderSuffix}.png`;
+                    document.getElementById('doll-img').src = imgPath;
+
+                    // Обновляем цифры
+                    const fs = data.final_stats;
+                    document.getElementById('ds-dmg').innerText = fs.damage;
+                    document.getElementById('ds-def').innerText = fs.defense + "%";
+                    document.getElementById('ds-hp').innerText = fs.hp;
+                    document.getElementById('ds-crit').innerText = fs.crit + "%";
+                    document.getElementById('ds-block').innerText = "0%"; // Пока нет вещей
+                    document.getElementById('ds-res').innerText = "0%"; // Пока нет вещей
+                }
+            })
+            .catch(err => {
+                console.error("Ошибка загрузки героя:", err);
+            });
         }
 
         window.onload = function() {
             renderInventory();
             changePage(1);
-            // Устанавливаем картинку героя
-            const dollImg = document.getElementById('doll-img');
-            if (dollImg) dollImg.src = getCharacterImage();
+            loadHeroFromServer();
         };
     </script>
 </body>
