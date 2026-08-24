@@ -175,6 +175,10 @@
                 return;
             }
 
+            // Сохраняем выбранный класс и пол, чтобы hero.html знал, какую картинку показать
+            localStorage.setItem('class_name', selectedClass);
+            localStorage.setItem('gender', selectedGender);
+
             const stats = classStats[selectedClass];
 
             fetch(`${SERVER_URL}/api/create-character`, {
