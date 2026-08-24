@@ -59,7 +59,7 @@
             <span class="gender-label active" id="label-male" onclick="setGender('male')">МУЖ</span>
             <button class="arrow-btn" onclick="changeGender(-1)">◀</button>
             <div class="character-preview">
-                <img id="char-img" src="assets/char_male.png" alt="Герой">
+                <img id="char-img" src="assets/character/war.png" alt="Герой">
             </div>
             <button class="arrow-btn" onclick="changeGender(1)">▶</button>
             <span class="gender-label" id="label-female" onclick="setGender('female')">ЖЕН</span>
@@ -105,6 +105,23 @@
             Archer:  { str: 2, agl: 10, vit: 4, int: 2, intuition: 8 }
         };
 
+        // Функция для получения пути к картинке по текущему классу и полу
+        function getCharacterImage() {
+            const genderSuffix = selectedGender === 'male' ? '' : 'girl';
+            const classMap = {
+                Warrior: 'war',
+                Mage: 'mag',
+                Tank: 'tank',
+                Archer: 'luk'
+            };
+            return `assets/character/${classMap[selectedClass]}${genderSuffix}.png`;
+        }
+
+        // Обновляем картинку героя
+        function updateCharacterImage() {
+            document.getElementById('char-img').src = getCharacterImage();
+        }
+
         function updateGenderUI() {
             const maleLabel = document.getElementById('label-male');
             const femaleLabel = document.getElementById('label-female');
@@ -113,15 +130,15 @@
         }
 
         function changeGender(direction) {
-            if (direction === -1) { selectedGender = 'male'; document.getElementById('char-img').src = 'assets/char_male.png'; }
-            else { selectedGender = 'female'; document.getElementById('char-img').src = 'assets/char_female.png'; }
+            if (direction === -1) { selectedGender = 'male'; }
+            else { selectedGender = 'female'; }
+            updateCharacterImage(); // Обновляем картинку при смене пола
             updateGenderUI();
         }
 
         function setGender(gender) {
             selectedGender = gender;
-            if (gender === 'male') { document.getElementById('char-img').src = 'assets/char_male.png'; }
-            else { document.getElementById('char-img').src = 'assets/char_female.png'; }
+            updateCharacterImage(); // Обновляем картинку при клике на пол
             updateGenderUI();
         }
 
@@ -137,6 +154,8 @@
             document.getElementById('stat-vit').innerText = stats.vit;
             document.getElementById('stat-int').innerText = stats.int;
             document.getElementById('stat-intuition').innerText = stats.intuition;
+
+            updateCharacterImage(); // Обновляем картинку при выборе класса
         }
 
         function showError() {
@@ -179,6 +198,11 @@
                 showError();
             });
         }
+
+        // Инициализация: ставим правильную картинку при загрузке (Воин, Муж)
+        window.onload = function() {
+            updateCharacterImage();
+        };
     </script>
 </body>
 </html>
