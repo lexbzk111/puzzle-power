@@ -76,9 +76,9 @@
         </div>
 
         <div class="profile-card">
-            <img class="profile-img" id="profile-img" src="assets/character/war.png" alt="Герой">
+            <img class="profile-img" id="profile-img" src="" alt="Герой">
             <div class="profile-info">
-                <div class="profile-row"><span class="label">Класс:</span> <span class="value" id="profile-class">Воин</span></div>
+                <div class="profile-row"><span class="label">Класс:</span> <span class="value" id="profile-class">...</span></div>
                 <div class="profile-row"><span class="label">Имя:</span> <span class="value" id="profile-name">...</span></div>
                 <div class="profile-row"><span class="label">Уровень:</span> <span class="value" id="profile-level">1</span></div>
             </div>
@@ -117,12 +117,12 @@
             <div class="section-title">Итоговые Эффекты</div>
             <div class="derived-stats">
                 <div class="ds-grid">
-                    <div class="ds-item"><div class="ds-name">Урон</div><div class="ds-val" id="ds-dmg">150</div></div>
-                    <div class="ds-item"><div class="ds-name">Защита</div><div class="ds-val" id="ds-def">35%</div></div>
-                    <div class="ds-item"><div class="ds-name">ХП</div><div class="ds-val" id="ds-hp">1000</div></div>
-                    <div class="ds-item"><div class="ds-name">Крит</div><div class="ds-val" id="ds-crit">8%</div></div>
-                    <div class="ds-item"><div class="ds-name">Блок</div><div class="ds-val" id="ds-block">5%</div></div>
-                    <div class="ds-item"><div class="ds-name">Резист</div><div class="ds-val" id="ds-res">10%</div></div>
+                    <div class="ds-item"><div class="ds-name">Урон</div><div class="ds-val" id="ds-dmg">0</div></div>
+                    <div class="ds-item"><div class="ds-name">Защита</div><div class="ds-val" id="ds-def">0%</div></div>
+                    <div class="ds-item"><div class="ds-name">ХП</div><div class="ds-val" id="ds-hp">0</div></div>
+                    <div class="ds-item"><div class="ds-name">Крит</div><div class="ds-val" id="ds-crit">0%</div></div>
+                    <div class="ds-item"><div class="ds-name">Блок</div><div class="ds-val" id="ds-block">0%</div></div>
+                    <div class="ds-item"><div class="ds-name">Резист</div><div class="ds-val" id="ds-res">0%</div></div>
                 </div>
             </div>
 
@@ -209,35 +209,25 @@
             'skill5': 'Ультимейт. Мощная атака при сборе фиолетовых кристаллов.'
         };
 
-        // Коммиченные данные (то, что сохранено в базе)
+        // Данные, загруженные с сервера (коммиченные)
         let committedStats = [8, 4, 6, 2, 5];
         let committedPoints = 0;
         let committedSkills = [1, 1, 1, 1, 1];
         let committedSkillPoints = 1;
 
-        // Черновик (для изменений)
+        // Черновик для изменения
         let draftStats = [...committedStats];
         let draftPoints = 0;
         let draftSkills = [...committedSkills];
         let draftSkillPoints = 1;
 
-        function loadHeroData() {
-            // Быстрая подстановка из localStorage
-            const className = localStorage.getItem('class_name') || 'Warrior';
-            const gender = localStorage.getItem('gender') || 'male';
-            const classMap = { Warrior: 'war', Mage: 'mag', Tank: 'tank', Archer: 'luk' };
-            const suffix = gender === 'male' ? '' : 'girl';
-
-            document.getElementById('profile-class').innerText = className === 'Warrior' ? 'Воин' : className === 'Mage' ? 'Маг' : className === 'Tank' ? 'Танк' : 'Лучник';
-            document.getElementById('profile-img').src = `assets/character/${classMap[className]}${suffix}.png`;
-            document.getElementById('profile-name').innerText = localStorage.getItem('player_name') || '...';
-
-            // Загружаем из базы
+        // ЧИТАЕМ ТОЛЬКО С СЕРВЕРА, БЕЗ localStorage
+        function loadHeroFromServer() {
             let tgId = null;
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.user) {
                 tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
             }
-            if (!tgId) { updateUI(); return; }
+            if (!tgId) { window.location.href = 'index.html'; return; }
 
             fetch(`${SERVER_URL}/api/get-hero`, {
                 method: 'POST',
@@ -247,20 +237,24 @@
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
+                    const classMap = { Warrior: 'war', Mage: 'mag', Tank: 'tank', Archer: 'luk' };
+                    const genderSuffix = (data.user.gender === 'female') ? 'girl' : '';
+                    
+                    document.getElementById('profile-img').src = `assets/character/${classMap[data.user.class]}${genderSuffix}.png`;
+                    document.getElementById('profile-class').innerText = data.user.class === 'Warrior' ? 'Воин' : data.user.class === 'Mage' ? 'Маг' : data.user.class === 'Tank' ? 'Танк' : 'Лучник';
                     document.getElementById('profile-name').innerText = data.user.name;
                     document.getElementById('profile-level').innerText = data.user.level;
 
                     const s = data.user.base_stats;
                     committedStats = [s.str, s.agl, s.vit, s.int, s.intuition];
                     draftStats = [...committedStats];
-
-                    // Исправляем undefined/null на 5
+                    
                     let points = s.unspent_points;
                     if (points === undefined || points === null) points = 5;
                     committedPoints = points;
                     draftPoints = points;
 
-                    // Скиллы пока не приходят с сервера, оставляем дефолт
+                    // Скиллы пока не с сервера
                     committedSkills = [1, 1, 1, 1, 1];
                     committedSkillPoints = 1;
                     draftSkills = [...committedSkills];
@@ -269,7 +263,7 @@
                     updateUI();
                 }
             })
-            .catch(err => console.error("Ошибка базы:", err));
+            .catch(err => console.error("Ошибка загрузки героя:", err));
         }
 
         function openInfo(key) {
@@ -315,13 +309,7 @@
 
             calculateDerivedStats(draftStats);
 
-            // Теперь проверяем и статы, и очки, и скиллы!
-            const hasChanges = 
-                JSON.stringify(draftStats) !== JSON.stringify(committedStats) || 
-                draftPoints !== committedPoints ||
-                JSON.stringify(draftSkills) !== JSON.stringify(committedSkills) ||
-                draftSkillPoints !== committedSkillPoints;
-
+            const hasChanges = JSON.stringify(draftStats) !== JSON.stringify(committedStats) || draftPoints !== committedPoints;
             document.getElementById('save-bar').classList.toggle('active', hasChanges);
         }
 
@@ -374,12 +362,11 @@
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    // Сохраняем как закоммиченные
                     committedStats = [...draftStats];
                     committedPoints = draftPoints;
                     committedSkills = [...draftSkills];
                     committedSkillPoints = draftSkillPoints;
-
+                    
                     const saveBtn = document.querySelector('.save-btn');
                     saveBtn.innerText = "Сохранено!";
                     setTimeout(() => { saveBtn.innerText = "Сохранить"; }, 1500);
@@ -395,7 +382,7 @@
         }
 
         window.onload = function() {
-            loadHeroData();
+            loadHeroFromServer();
             updateUI();
         };
     </script>
