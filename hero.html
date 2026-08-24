@@ -77,7 +77,7 @@
 
         <div class="main-area">
             <div class="doll-area">
-                <img class="doll-img" src="assets/char_male.png" alt="Герой">
+                <img class="doll-img" id="doll-img" src="assets/character/war.png" alt="Герой">
             </div>
             <div class="slots-area">
                 <div></div>
@@ -148,9 +148,26 @@
             });
         }
 
+        // Функция для получения правильной картинки героя из localStorage
+        function getCharacterImage() {
+            let className = localStorage.getItem('class_name') || 'Warrior';
+            let gender = localStorage.getItem('gender') || 'male';
+            const genderSuffix = gender === 'male' ? '' : 'girl';
+            const classMap = {
+                Warrior: 'war',
+                Mage: 'mag',
+                Tank: 'tank',
+                Archer: 'luk'
+            };
+            return `assets/character/${classMap[className]}${genderSuffix}.png`;
+        }
+
         window.onload = function() {
             renderInventory();
             changePage(1);
+            // Устанавливаем картинку героя
+            const dollImg = document.getElementById('doll-img');
+            if (dollImg) dollImg.src = getCharacterImage();
         };
     </script>
 </body>
