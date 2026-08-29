@@ -20,15 +20,13 @@
             overflow: hidden;
         }
 
-        /* Шапка полностью убрана */
-
-        /* ===== ВРАГИ (Адаптивный блок для 1-5 мобов) ===== */
+        /* ===== ВРАГ (Огромный для PvP, заполняет верх) ===== */
         .enemies-area { 
             display: flex; 
             justify-content: space-around; 
             align-items: flex-end; 
             padding: 10px 5px 5px; 
-            min-height: 150px; 
+            min-height: 220px; /* Увеличили высоту блока */
             flex-shrink: 0;
         }
 
@@ -36,26 +34,26 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            max-width: 90px; 
+            max-width: 220px; /* Блок теперь шире */
             flex: 1; 
         }
 
         .enemy-img { 
             width: 100%; 
-            max-width: 90px; 
+            max-width: 190px; /* Сам герой стал в 2 раза больше */
             height: auto; 
-            max-height: 120px; 
+            max-height: 190px; 
             object-fit: contain; 
             transform: scaleX(-1); 
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); 
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); 
         }
 
         .enemy-hp-bar { 
-            width: 80%; 
-            height: 6px; /* Тонкая полоска по ногам */
+            width: 100%; /* Полоска занимает ширину блока */
+            height: 8px; 
             background: rgba(0,0,0,0.8); 
-            border-radius: 3px; 
-            margin-top: 4px; 
+            border-radius: 4px; 
+            margin-top: 6px; 
             overflow: hidden; 
             border: 1px solid rgba(255,255,255,0.2); 
         }
@@ -63,7 +61,7 @@
         .enemy-hp-fill { 
             height: 100%; 
             background: #ef4444; 
-            border-radius: 3px; 
+            border-radius: 4px; 
             transition: width 0.3s; 
         }
 
@@ -71,19 +69,19 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            margin-top: 2px; 
+            margin-top: 4px; 
             width: 100%; 
             text-shadow: 1px 1px 2px #000; 
         }
 
         .enemy-name { 
-            font-size: 11px; 
+            font-size: 14px; 
             font-weight: 900; 
             color: #facc15; 
         }
 
         .enemy-level { 
-            font-size: 10px; 
+            font-size: 12px; 
             color: #fff; 
         }
 
@@ -146,7 +144,7 @@
             gap: 10px; 
         }
 
-        /* Скиллы в чёрных рамках (первыми) */
+        /* Скиллы */
         .skill-row { 
             display: grid; 
             grid-template-columns: repeat(5, 1fr); 
@@ -190,7 +188,7 @@
         .mana-4 { background: #facc15; }
         .mana-5 { background: #a855f7; }
 
-        /* Герой снизу (после скиллов) */
+        /* Герой снизу */
         .player-section { 
             display: flex; 
             align-items: center; 
@@ -254,6 +252,13 @@
         }
 
         #exit-btn.show { display: block; }
+
+        /* ДЛЯ БУДУЩИХ PvE БОЕВ С МНОЖЕСТВОМ МОНСТРОВ: */
+        /* Добавьте класс "many-enemies" к .enemies-area через JS, и враги станут меньше */
+        .enemies-area.many-enemies { min-height: 120px; }
+        .enemies-area.many-enemies .enemy-img { max-width: 70px; max-height: 70px; }
+        .enemies-area.many-enemies .enemy-wrapper { max-width: 80px; }
+        .enemies-area.many-enemies .enemy-name { font-size: 10px; }
     </style>
 </head>
 <body>
@@ -261,8 +266,8 @@
         <!-- Кнопка выхода (скрыта) -->
         <button id="exit-btn" onclick="window.location.href='lobby.html'">Выйти</button>
 
-        <!-- Враг (пока один, но контейнер готов для нескольких) -->
-        <div class="enemies-area">
+        <!-- Враг (для PvP: огромный. Для PvE: добавить класс many-enemies) -->
+        <div class="enemies-area" id="enemies-area">
             <div class="enemy-wrapper">
                 <img id="enemy-img" class="enemy-img" src="assets/character/mag.png" alt="Враг">
                 <div class="enemy-hp-bar"><div id="enemy-hp" class="enemy-hp-fill" style="width: 100%;"></div></div>
@@ -280,7 +285,7 @@
 
         <!-- Нижний блок -->
         <div class="bottom-panel">
-            <!-- Скиллы первыми (в чёрных рамках) -->
+            <!-- Скиллы первыми -->
             <div class="skill-row">
                 <button class="skill-btn" id="skill1" onclick="useSkill(1)">
                     <span class="skill-icon">🔴</span><span class="skill-name">Удар</span><span class="skill-cost">30</span>
@@ -331,6 +336,10 @@
         let currentTurn = 'player';
         let enemyBlocked = false;
 
+        // ЛОГИКА ДЛЯ БУДУЩИХ PvE БОЕВ:
+        // Если в бою больше 2 врагов, добавляем класс many-enemies к блоку
+        // Например: document.getElementById('enemies-area').classList.add('many-enemies');
+        
         function initBoard() {
             const boardEl = document.getElementById('board');
             boardEl.innerHTML = '';
