@@ -86,7 +86,7 @@
 
         <div class="points-badges">
             <div class="points-badge">⚡ Очки статов: <span id="stat-points">0</span></div>
-            <div class="points-badge skill">✨ Очки навыков: <span id="skill-points">1</span></div>
+            <div class="points-badge skill">✨ Очки навыков: <span id="skill-points">0</span></div>
         </div>
 
         <div class="scroll-content">
@@ -132,7 +132,7 @@
                     <div class="skill-info">
                         <div class="skill-icon">🔴</div>
                         <div>
-                            <div class="skill-name">Удар <span class="info-icon" onclick="openInfo('skill1')">?</span></div>
+                            <div class="skill-name">Скилл 1 <span class="info-icon" onclick="openInfo('skill1')">?</span></div>
                             <div class="skill-level">Уровень: <span id="skill-lvl-1">1</span></div>
                         </div>
                     </div>
@@ -142,7 +142,7 @@
                     <div class="skill-info">
                         <div class="skill-icon">🔵</div>
                         <div>
-                            <div class="skill-name">Заморозка <span class="info-icon" onclick="openInfo('skill2')">?</span></div>
+                            <div class="skill-name">Скилл 2 <span class="info-icon" onclick="openInfo('skill2')">?</span></div>
                             <div class="skill-level">Уровень: <span id="skill-lvl-2">1</span></div>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                     <div class="skill-info">
                         <div class="skill-icon">🟢</div>
                         <div>
-                            <div class="skill-name">Лечение <span class="info-icon" onclick="openInfo('skill3')">?</span></div>
+                            <div class="skill-name">Скилл 3 <span class="info-icon" onclick="openInfo('skill3')">?</span></div>
                             <div class="skill-level">Уровень: <span id="skill-lvl-3">1</span></div>
                         </div>
                     </div>
@@ -162,7 +162,7 @@
                     <div class="skill-info">
                         <div class="skill-icon">🟡</div>
                         <div>
-                            <div class="skill-name">Ускорение <span class="info-icon" onclick="openInfo('skill4')">?</span></div>
+                            <div class="skill-name">Скилл 4 <span class="info-icon" onclick="openInfo('skill4')">?</span></div>
                             <div class="skill-level">Уровень: <span id="skill-lvl-4">1</span></div>
                         </div>
                     </div>
@@ -196,32 +196,32 @@
     </div>
 
     <script>
+        // ВРЕМЕННЫЕ ОПИСАНИЯ (заменим позже на полные названия)
         const INFO_TEXT = {
             'str': 'Сила увеличивает ваш физический урон. 1 очко = +2 к урону.',
             'agl': 'Ловкость увеличивает вашу защиту. 1 очко = +0.5 к защите.',
             'vit': 'Выносливость увеличивает максимальное здоровье. 1 очко = +10 к ХП.',
             'int': 'Интеллект увеличивает магический урон. 1 очко = +2 к урону.',
             'intuition': 'Интуиция увеличивает шанс критического удара. 1 очко = +0.1% к криту.',
-            'skill1': 'Базовый навык. Наносит урон противнику при сборе красных кристаллов.',
-            'skill2': 'Навык контроля. Замораживает противника при сборе синих кристаллов.',
-            'skill3': 'Навык восстановления. Лечит героя при сборе зеленых кристаллов.',
-            'skill4': 'Бафф. Ускоряет героя при сборе желтых кристаллов.',
-            'skill5': 'Ультимейт. Мощная атака при сборе фиолетовых кристаллов.'
+            'skill1': 'Красный скилл. Урон и горение.',
+            'skill2': 'Синий скилл. Контроль и станы.',
+            'skill3': 'Зеленый скилл. Лечение и защита.',
+            'skill4': 'Желтый скилл. Баффы и ускорение.',
+            'skill5': 'Фиолетовый скилл. Ульта!'
         };
 
-        // Данные, загруженные с сервера (коммиченные)
+        // Коммиченные данные (сохранены в базе)
         let committedStats = [8, 4, 6, 2, 5];
         let committedPoints = 0;
         let committedSkills = [1, 1, 1, 1, 1];
-        let committedSkillPoints = 1;
+        let committedSkillPoints = 0;
 
-        // Черновик для изменения
+        // Черновик
         let draftStats = [...committedStats];
         let draftPoints = 0;
         let draftSkills = [...committedSkills];
-        let draftSkillPoints = 1;
+        let draftSkillPoints = 0;
 
-        // ЧИТАЕМ ТОЛЬКО С СЕРВЕРА, БЕЗ localStorage
         function loadHeroFromServer() {
             let tgId = null;
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.user) {
@@ -254,11 +254,17 @@
                     committedPoints = points;
                     draftPoints = points;
 
-                    // Скиллы пока не с сервера
-                    committedSkills = [1, 1, 1, 1, 1];
-                    committedSkillPoints = 1;
-                    draftSkills = [...committedSkills];
-                    draftSkillPoints = 1;
+                    // Загрузка скиллов
+                    const sk = data.user.skills;
+                    if (sk) {
+                        committedSkills = [sk.skill_1, sk.skill_2, sk.skill_3, sk.skill_4, sk.skill_5];
+                        draftSkills = [...committedSkills];
+                        
+                        let skPoints = sk.unspent_skill_points;
+                        if (skPoints === undefined || skPoints === null) skPoints = 0;
+                        committedSkillPoints = skPoints;
+                        draftSkillPoints = skPoints;
+                    }
 
                     updateUI();
                 }
@@ -303,13 +309,18 @@
             for (let i = 1; i <= 5; i++) {
                 document.getElementById(`skill-lvl-${i}`).innerText = draftSkills[i-1];
                 const btn = document.querySelectorAll('.skill-row')[i-1].querySelector('.skill-plus');
-                if (draftSkillPoints > 0) btn.classList.add('active');
+                if (draftSkillPoints > 0 && draftSkills[i-1] < 10) btn.classList.add('active');
                 else btn.classList.remove('active');
             }
 
             calculateDerivedStats(draftStats);
 
-            const hasChanges = JSON.stringify(draftStats) !== JSON.stringify(committedStats) || draftPoints !== committedPoints;
+            const hasChanges = 
+                JSON.stringify(draftStats) !== JSON.stringify(committedStats) || 
+                draftPoints !== committedPoints ||
+                JSON.stringify(draftSkills) !== JSON.stringify(committedSkills) ||
+                draftSkillPoints !== committedSkillPoints;
+
             document.getElementById('save-bar').classList.toggle('active', hasChanges);
         }
 
@@ -321,7 +332,7 @@
         }
 
         function addSkill(index) {
-            if (draftSkillPoints <= 0) return;
+            if (draftSkillPoints <= 0 || draftSkills[index-1] >= 10) return;
             draftSkills[index-1]++;
             draftSkillPoints--;
             updateUI();
@@ -351,7 +362,15 @@
                     int: draftStats[3],
                     intuition: draftStats[4]
                 },
-                stat_points: draftPoints
+                stat_points: draftPoints,
+                skill_levels: {
+                    skill_1: draftSkills[0],
+                    skill_2: draftSkills[1],
+                    skill_3: draftSkills[2],
+                    skill_4: draftSkills[3],
+                    skill_5: draftSkills[4]
+                },
+                skill_points: draftSkillPoints
             };
 
             fetch(`${SERVER_URL}/api/update-stats`, {
@@ -366,7 +385,7 @@
                     committedPoints = draftPoints;
                     committedSkills = [...draftSkills];
                     committedSkillPoints = draftSkillPoints;
-                    
+
                     const saveBtn = document.querySelector('.save-btn');
                     saveBtn.innerText = "Сохранено!";
                     setTimeout(() => { saveBtn.innerText = "Сохранить"; }, 1500);
@@ -377,7 +396,7 @@
             })
             .catch(err => {
                 console.error("Ошибка сети:", err);
-                alert("Не удалось сохранить статы. Проверьте подключение.");
+                alert("Не удалось сохранить. Проверьте подключение.");
             });
         }
 
