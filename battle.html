@@ -10,51 +10,64 @@
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #0b1120; font-family: 'Segoe UI', sans-serif; color: #fff; }
 
-        /* ТВОЙ НОВЫЙ ФОН АРЕНЫ */
+        /* ОСНОВНОЙ КОНТЕЙНЕР (Темный фон для UI) */
         .battle-container { 
             position: fixed; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); 
             width: 100%; max-width: 480px; 
-            background-image: url('assets/bg_arena.png');
-            background-size: cover;
-            background-position: center bottom;
+            background: #0f172a; 
             display: flex; flex-direction: column; 
             overflow: hidden;
         }
 
-        .header { display: flex; align-items: center; justify-content: space-between; padding: 5px 10px; height: 35px; }
-        .exit-btn { font-size: 22px; color: #fff; cursor: pointer; background: none; border: none; text-shadow: 0 0 5px #000; }
-        .title { flex-grow: 1; text-align: center; font-size: 16px; font-weight: 900; color: #fff; text-shadow: 0 0 5px #000; }
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 5px 10px; height: 35px; background: rgba(2, 6, 23, 0.8); }
+        .exit-btn { font-size: 22px; color: #fff; cursor: pointer; background: none; border: none; }
+        .title { flex-grow: 1; text-align: center; font-size: 16px; font-weight: 900; color: #fff; }
 
-        /* Враг сверху (стоит на фоне неба) */
-        .enemy-area { display: flex; flex-direction: column; align-items: center; padding: 5px 15px; height: 100px; justify-content: center; }
-        .enemy-img { width: 70px; height: 70px; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); }
-        .enemy-hp-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.6); border-radius: 6px; margin-top: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); }
+        /* ===== 1. ЗОНА ВРАГА (Темная панель, чтобы куклу было видно) ===== */
+        .enemy-area { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            padding: 10px; height: 120px; 
+            background: rgba(2, 6, 23, 0.9); 
+            border-bottom: 2px solid #334155;
+        }
+        .enemy-img { width: 80px; height: 80px; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); }
+        .enemy-hp-bar { width: 100%; height: 8px; background: #1e293b; border-radius: 6px; margin-top: 5px; overflow: hidden; border: 1px solid #334155; }
         .enemy-hp-fill { height: 100%; background: #ef4444; border-radius: 6px; transition: width 0.3s; }
-        .enemy-info { display: flex; justify-content: space-between; width: 100%; margin-top: 2px; text-shadow: 1px 1px 2px #000; }
-        .enemy-name { font-size: 12px; font-weight: 900; color: #facc15; }
-        .enemy-level { font-size: 11px; color: #fff; }
+        .enemy-info { display: flex; justify-content: space-between; width: 100%; margin-top: 4px; }
+        .enemy-name { font-size: 13px; font-weight: 900; color: #facc15; }
+        .enemy-level { font-size: 12px; color: #94a3b8; }
 
-        /* Поле с полупрозрачной подложкой, чтобы камни были яркими */
-        .board-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 0 10px; }
+        /* ===== 2. ЗОНА АРЕНЫ (Фон и поле) ===== */
+        .board-section { 
+            flex: 1; 
+            display: flex; justify-content: center; align-items: center; 
+            background-image: url('assets/bg_arena.png'); /* Твой красивый фон */
+            background-size: cover; background-position: center;
+            position: relative;
+        }
+        
+        /* Темная подложка для поля, чтобы камни светились ярко */
+        .board-section::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); }
+
         .board { 
+            position: relative; z-index: 2;
             display: grid; 
             grid-template-columns: repeat(7, 1fr); 
             grid-template-rows: repeat(5, 1fr); 
             gap: 2px; 
-            width: 100%; 
-            max-width: 460px; 
-            max-height: 520px;
-            background: rgba(10, 15, 30, 0.45); /* Темное матовое стекло */
-            padding: 4px; 
+            width: 95%; 
+            max-width: 450px;
+            background: rgba(2, 6, 23, 0.7); 
+            padding: 6px; 
             border-radius: 12px; 
-            border: 1px solid rgba(255,255,255,0.15);
-            backdrop-filter: blur(2px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
         }
         
-        .cell { background: transparent; border: none; border-radius: 0; display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: visible; }
-        .cell.selected { filter: brightness(1.5); outline: 2px solid #fff; border-radius: 4px; }
+        .cell { background: rgba(0, 0, 0, 0.4); border-radius: 4px; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .cell.selected { outline: 2px solid #fff; border-radius: 4px; filter: brightness(1.5); }
         
-        .cell img { width: 105%; height: 105%; object-fit: contain; }
+        .cell img { width: 95%; height: 95%; object-fit: contain; }
         
         .cell.c-red img { filter: drop-shadow(0 0 6px rgba(255, 0, 0, 0.8)); }
         .cell.c-blue img { filter: drop-shadow(0 0 6px rgba(0, 150, 255, 0.8)); }
@@ -62,17 +75,18 @@
         .cell.c-yellow img { filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.8)); }
         .cell.c-purple img { filter: drop-shadow(0 0 6px rgba(190, 0, 255, 0.8)); }
 
-        /* Взрыв */
-        .particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: explode 0.5s ease-out forwards; z-index: 10; }
-        @keyframes explode { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); } }
-        .explosion-flash { position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; pointer-events: none; transform: translate(-50%, -50%); animation: flash 0.3s ease-out forwards; z-index: 9; }
-        @keyframes flash { 0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.5); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(2); } }
+        /* ===== 3. ЗОНА ИГРОКА И СКИЛЛОВ (Темная панель) ===== */
+        .bottom-panel { 
+            display: flex; flex-direction: column; gap: 8px; 
+            padding: 10px; 
+            background: rgba(2, 6, 23, 0.95); 
+            border-top: 2px solid #334155;
+        }
 
         /* Скиллы */
-        .bottom-panel { padding: 5px 10px 10px; display: flex; flex-direction: column; gap: 5px; }
         .skill-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
         .skill-btn {
-            height: 70px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer;
+            height: 65px; border-radius: 8px; border: 1px solid #334155; cursor: pointer;
             display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 3px;
             background: rgba(30, 41, 59, 0.9); transition: 0.2s; position: relative; opacity: 0.4; pointer-events: none;
         }
@@ -89,13 +103,20 @@
         .mana-4 { background: #facc15; }
         .mana-5 { background: #a855f7; }
 
-        .player-area { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px; height: 50px; }
-        .player-img { width: 45px; height: 45px; object-fit: contain; }
-        .player-hp-bar { flex: 1; max-width: 250px; height: 10px; background: rgba(0,0,0,0.6); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); }
+        /* Игрок внизу */
+        .player-area { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px; height: 60px; }
+        .player-img { width: 50px; height: 50px; object-fit: contain; }
+        .player-hp-bar { flex: 1; max-width: 250px; height: 10px; background: #1e293b; border-radius: 6px; overflow: hidden; border: 1px solid #334155; }
         .player-hp-fill { height: 100%; background: #22c55e; border-radius: 6px; transition: width 0.3s; }
-        .player-info { width: 100px; display: flex; justify-content: space-between; text-shadow: 1px 1px 2px #000; }
-        .player-name { font-size: 10px; color: #fff; font-weight: 900; }
-        .player-level { font-size: 10px; color: #fff; }
+        .player-info { width: 100px; display: flex; justify-content: space-between; }
+        .player-name { font-size: 11px; color: #fff; font-weight: 900; }
+        .player-level { font-size: 11px; color: #94a3b8; }
+
+        /* Взрыв */
+        .particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: explode 0.5s ease-out forwards; z-index: 10; }
+        @keyframes explode { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); } }
+        .explosion-flash { position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; pointer-events: none; transform: translate(-50%, -50%); animation: flash 0.3s ease-out forwards; z-index: 9; }
+        @keyframes flash { 0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.5); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(2); } }
     </style>
 </head>
 <body>
@@ -105,6 +126,7 @@
             <span class="title">Арена</span>
         </div>
 
+        <!-- ВРАГ: Темная панель -->
         <div class="enemy-area">
             <img id="enemy-img" class="enemy-img" src="assets/character/mag.png" alt="Враг">
             <div class="enemy-hp-bar"><div id="enemy-hp" class="enemy-hp-fill" style="width: 100%;"></div></div>
@@ -114,10 +136,12 @@
             </div>
         </div>
 
-        <div class="board-container">
+        <!-- ПОЛЕ БОЯ (Фон арены) -->
+        <div class="board-section">
             <div id="board" class="board"></div>
         </div>
 
+        <!-- ИГРОК И СКИЛЛЫ: Темная панель -->
         <div class="bottom-panel">
             <div class="skill-row">
                 <button class="skill-btn" id="skill1" onclick="useSkill(1)">
