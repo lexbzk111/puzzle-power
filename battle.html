@@ -22,7 +22,6 @@
         .exit-btn { font-size: 22px; color: #fff; cursor: pointer; background: none; border: none; }
         .title { flex-grow: 1; text-align: center; font-size: 16px; font-weight: 900; color: #fff; }
 
-        /* Враг сверху (Компактно) */
         .enemy-area { display: flex; flex-direction: column; align-items: center; padding: 5px 15px; height: 100px; justify-content: center; }
         .enemy-img { width: 70px; height: 70px; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); }
         .enemy-hp-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.7); border-radius: 6px; margin-top: 4px; overflow: hidden; border: 1px solid #334155; }
@@ -31,25 +30,36 @@
         .enemy-name { font-size: 12px; font-weight: 900; color: #facc15; }
         .enemy-level { font-size: 11px; color: #94a3b8; }
 
-        /* ===== ОГРОМНОЕ ПОЛЕ 7x5 ===== */
+        /* ===== ПЛОТНОЕ ПОЛЕ 7x5 (КАК В EMPIRE & PUZZLES) ===== */
         .board-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 0 10px; }
         .board { 
             display: grid; 
             grid-template-columns: repeat(7, 1fr); 
             grid-template-rows: repeat(5, 1fr); 
-            gap: 5px; 
+            gap: 2px; /* Очень маленький зазор */
             width: 100%; 
-            max-width: 450px; 
-            height: 100%; /* Растягиваем на всю высоту */
-            max-height: 500px;
-            background: rgba(0, 0, 0, 0.35);
-            padding: 10px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 460px; 
+            max-height: 520px;
+            background: rgba(15, 23, 42, 0.9); /* Плотный фон доски */
+            padding: 4px; 
+            border-radius: 8px; 
         }
-        .cell { position: relative; background: rgba(0,0,0,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center; cursor: pointer; }
-        .cell.selected { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
-        .cell img { width: 95%; height: 95%; object-fit: contain; }
+        
+        .cell { 
+            background: transparent; /* Убираем квадратики */
+            border: none; 
+            border-radius: 0;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            cursor: pointer; 
+            overflow: visible;
+        }
+        .cell.selected { filter: brightness(1.5); outline: 2px solid #fff; border-radius: 4px; }
+        
+        /* Камни занимают всю ячейку, слегка выступая за края из-за прозрачности */
+        .cell img { width: 105%; height: 105%; object-fit: contain; }
+        
         .cell.c-red img { filter: drop-shadow(0 0 6px rgba(255, 0, 0, 0.8)); }
         .cell.c-blue img { filter: drop-shadow(0 0 6px rgba(0, 150, 255, 0.8)); }
         .cell.c-green img { filter: drop-shadow(0 0 6px rgba(0, 255, 150, 0.8)); }
@@ -62,7 +72,7 @@
         .explosion-flash { position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; pointer-events: none; transform: translate(-50%, -50%); animation: flash 0.3s ease-out forwards; z-index: 9; }
         @keyframes flash { 0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.5); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(2); } }
 
-        /* ===== СКИЛЛЫ С ПОЛОСКАМИ МАНЫ (Как в E&P) ===== */
+        /* Скиллы */
         .bottom-panel { padding: 5px 10px 10px; display: flex; flex-direction: column; gap: 5px; }
         .skill-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
         .skill-btn {
@@ -71,22 +81,18 @@
             background: rgba(30, 41, 59, 0.9); transition: 0.2s; position: relative; opacity: 0.4; pointer-events: none;
         }
         .skill-btn.active { opacity: 1; pointer-events: auto; border-color: #00d2ff; box-shadow: 0 0 10px rgba(0,210,255,0.3); }
-        
         .skill-icon { font-size: 22px; }
         .skill-name { font-size: 8px; color: #94a3b8; margin-bottom: 2px; }
         .skill-cost { position: absolute; top: 3px; right: 4px; font-size: 8px; color: #00d2ff; font-weight: bold; }
 
-        /* Индивидуальные полоски маны под скиллами */
         .skill-mana-bar { width: 90%; height: 5px; background: rgba(0,0,0,0.8); border-radius: 3px; overflow: hidden; }
         .skill-mana-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 0.2s; }
-        
-        .mana-1 { background: #ef4444; } /* Красный */
-        .mana-2 { background: #3b82f6; } /* Синий */
-        .mana-3 { background: #22c55e; } /* Зеленый */
-        .mana-4 { background: #facc15; } /* Желтый */
-        .mana-5 { background: #a855f7; } /* Фиолетовый */
+        .mana-1 { background: #ef4444; }
+        .mana-2 { background: #3b82f6; }
+        .mana-3 { background: #22c55e; }
+        .mana-4 { background: #facc15; }
+        .mana-5 { background: #a855f7; }
 
-        /* Герой внизу */
         .player-area { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px; height: 50px; }
         .player-img { width: 45px; height: 45px; object-fit: contain; }
         .player-hp-bar { flex: 1; max-width: 250px; height: 10px; background: rgba(0,0,0,0.7); border-radius: 6px; overflow: hidden; border: 1px solid #334155; }
@@ -152,21 +158,20 @@
     </div>
 
     <script>
-        const player = { name: localStorage.getItem('player_name') || 'Герой', level: 1, hp: 1000, maxHp: 1000, mana: 0, maxMana: 100, img: "assets/character/war.png" };
+        const player = { name: localStorage.getItem('player_name') || 'Герой', level: 1, hp: 1000, maxHp: 1000, img: "assets/character/war.png" };
         const enemy = { name: "Гоблин-Маг", level: 1, hp: 800, maxHp: 800, img: "assets/character/mag.png" };
 
         const colors = ['red', 'blue', 'green', 'yellow', 'purple'];
         const colorIcons = { red: 'assets/jewels/red.png', blue: 'assets/jewels/blue.png', green: 'assets/jewels/green.png', yellow: 'assets/jewels/yellow.png', purple: 'assets/jewels/purple.png' };
+
+        const costs = [30, 40, 50, 60, 100];
+        let skillMana = [0, 0, 0, 0, 0];
 
         let board = []; // 5 рядов x 7 колонок
         let selectedCell = null;
         let currentTurn = 'player';
         let enemyBlocked = false;
 
-        // Стоимость скиллов
-        const costs = [30, 40, 50, 60, 100];
-
-        // Инициализация (7 колонок, 5 рядов)
         function initBoard() {
             const boardEl = document.getElementById('board');
             boardEl.innerHTML = '';
@@ -204,12 +209,12 @@
             targetCell.appendChild(flash);
             setTimeout(() => flash.remove(), 400);
 
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < 8; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 particle.style.background = `rgba(${rgb}, 0.9)`;
-                const angle = (i / 6) * (2 * Math.PI);
-                const distance = 10 + Math.random() * 15;
+                const angle = (i / 8) * (2 * Math.PI);
+                const distance = 12 + Math.random() * 18;
                 particle.style.left = `calc(50% + ${Math.cos(angle) * distance}px)`;
                 particle.style.top = `calc(50% + ${Math.sin(angle) * distance}px)`;
                 targetCell.appendChild(particle);
@@ -275,18 +280,25 @@
 
         function resolveMatches(matches) {
             const unique = [...new Map(matches.map(m => [m.join(','), m])).values()];
-            let manaGained = unique.length * 5;
-
+            
             unique.forEach(([r, c]) => {
                 createExplosion(r, c, board[r][c]);
+                
+                const color = board[r][c];
+                if (color === 'red') skillMana[0] = Math.min(skillMana[0] + 5, costs[0]);
+                if (color === 'blue') skillMana[1] = Math.min(skillMana[1] + 5, costs[1]);
+                if (color === 'green') skillMana[2] = Math.min(skillMana[2] + 5, costs[2]);
+                if (color === 'yellow') skillMana[3] = Math.min(skillMana[3] + 5, costs[3]);
+                if (color === 'purple') skillMana[4] = Math.min(skillMana[4] + 5, costs[4]);
+
                 board[r][c] = null;
             });
 
-            dropCrystals();
-            renderBoard();
-            addMana(manaGained);
-
             setTimeout(() => {
+                dropCrystals();
+                renderBoard();
+                updateManaUI();
+
                 const newMatches = findMatches();
                 if (newMatches.length > 0) resolveMatches(newMatches);
                 else endTurn();
@@ -327,33 +339,25 @@
             }
         }
 
-        // Обновление маны (Индивидуальные полоски под скиллами)
-        function addMana(amount) {
-            player.mana = Math.min(player.maxMana, player.mana + amount);
-            updateManaUI();
-        }
-
         function updateManaUI() {
             for (let i = 1; i <= 5; i++) {
                 const btn = document.getElementById(`skill${i}`);
                 const manaBar = document.getElementById(`mana-${i}`);
                 
-                // Заполняем полоску: сколько маны есть относительно стоимости скилла
-                let fillPercent = (player.mana / costs[i-1]) * 100;
+                let fillPercent = (skillMana[i-1] / costs[i-1]) * 100;
                 if (fillPercent > 100) fillPercent = 100;
                 manaBar.style.width = fillPercent + '%';
 
-                // Активируем кнопку, если маны хватает
-                if (player.mana >= costs[i-1]) btn.classList.add('active');
+                if (skillMana[i-1] >= costs[i-1]) btn.classList.add('active');
                 else btn.classList.remove('active');
             }
         }
 
         function useSkill(skillIndex) {
             if (currentTurn !== 'player') return;
-            if (player.mana < costs[skillIndex - 1]) return;
+            if (skillMana[skillIndex - 1] < costs[skillIndex - 1]) return;
 
-            player.mana -= costs[skillIndex - 1];
+            skillMana[skillIndex - 1] -= costs[skillIndex - 1];
             updateManaUI();
 
             const baseDamage = [150, 100, 0, 0, 300][skillIndex - 1];
