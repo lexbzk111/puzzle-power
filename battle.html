@@ -10,33 +10,39 @@
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #0b1120; font-family: 'Segoe UI', sans-serif; color: #fff; }
 
-        .battle-container { position: fixed; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: linear-gradient(180deg, #0f172a 0%, #020617 100%); display: flex; flex-direction: column; }
+        .battle-container { 
+            position: fixed; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); 
+            width: 100%; max-width: 480px; 
+            background-image: url('assets/bg_arena.png'); /* Если зальешь свою арену */
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; 
+        }
 
         /* Шапка */
         .header { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; }
-        .exit-btn { font-size: 22px; color: #94a3b8; cursor: pointer; background: none; border: none; }
-        .title { flex-grow: 1; text-align: center; font-size: 16px; font-weight: 900; color: #fff; }
+        .exit-btn { font-size: 22px; color: #fff; cursor: pointer; background: none; border: none; text-shadow: 0 0 5px #000; }
+        .title { flex-grow: 1; text-align: center; font-size: 16px; font-weight: 900; color: #fff; text-shadow: 0 0 5px #000; }
 
         /* Экран героев */
-        .heroes-area { display: flex; justify-content: space-between; padding: 0 15px; height: 150px; position: relative; }
+        .heroes-area { display: flex; justify-content: space-between; padding: 0 15px; height: 140px; position: relative; }
         
         .hero-side { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 40%; }
         .hero-side.enemy { width: 40%; }
         
-        .hero-img { width: 80px; height: 120px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); }
-        .hero-hp-bar { width: 90%; height: 10px; background: #1e293b; border-radius: 6px; margin-top: 5px; overflow: hidden; border: 1px solid #334155; }
+        .hero-img { width: 80px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); }
+        .hero-hp-bar { width: 90%; height: 8px; background: rgba(0,0,0,0.7); border-radius: 6px; margin-top: 5px; overflow: hidden; border: 1px solid #334155; }
         .hero-hp-fill { height: 100%; background: #ef4444; border-radius: 6px; transition: width 0.3s; }
         
-        .hero-name { font-size: 11px; font-weight: 900; margin-top: 5px; color: #facc15; }
+        .hero-name { font-size: 11px; font-weight: 900; margin-top: 5px; color: #facc15; text-shadow: 1px 1px 2px #000; }
         .hero-level { font-size: 10px; color: #94a3b8; }
 
         /* Враг */
-        .hero-side.enemy { transform: scaleX(-1); } /* Отражаем врага зеркально */
+        .hero-side.enemy { transform: scaleX(-1); }
         .hero-side.enemy .hero-img { transform: scaleX(-1); }
 
         /* Скиллы и мана */
         .skills-panel { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .mana-bar { width: 100%; height: 10px; background: #1e293b; border-radius: 6px; overflow: hidden; border: 1px solid #334155; position: relative; }
+        .mana-bar { width: 100%; height: 10px; background: rgba(0,0,0,0.7); border-radius: 6px; overflow: hidden; border: 1px solid #334155; position: relative; }
         .mana-fill { height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); border-radius: 6px; transition: width 0.2s; }
         .mana-text { position: absolute; top: -2px; left: 0; width: 100%; text-align: center; font-size: 9px; font-weight: 900; color: #fff; text-shadow: 1px 1px 2px #000; }
 
@@ -44,7 +50,7 @@
         .skill-btn {
             height: 52px; border-radius: 10px; border: 1px solid #334155; cursor: pointer;
             display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 2px;
-            background: #1e293b; transition: 0.2s; position: relative; opacity: 0.3; pointer-events: none;
+            background: rgba(30, 41, 59, 0.85); transition: 0.2s; position: relative; opacity: 0.3; pointer-events: none;
         }
         .skill-btn.active { opacity: 1; pointer-events: auto; border-color: #00d2ff; box-shadow: 0 0 10px rgba(0,210,255,0.3); }
         .skill-btn:hover { transform: translateY(-2px); }
@@ -52,24 +58,38 @@
         .skill-name { font-size: 7px; color: #94a3b8; }
         .skill-cost { position: absolute; top: 2px; right: 4px; font-size: 8px; color: #00d2ff; font-weight: bold; }
 
-        /* Поле 7x7 */
+        /* ПОЛЕ 5x7 (Без эмодзи, с картинками) */
         .board-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 0 10px 10px; }
-        .board { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; width: 100%; max-width: 350px; aspect-ratio: 1; }
+        .board { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); /* 5 колонок */
+            grid-template-rows: repeat(7, 1fr);    /* 7 рядов */
+            gap: 4px; 
+            width: 100%; 
+            max-width: 320px; 
+            max-height: 380px;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
         .cell {
-            background: rgba(0, 0, 0, 0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 26px;
+            background: rgba(0,0,0,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
             transition: transform 0.1s;
         }
         .cell.selected { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
+        
+        /* Красивое свечение камней */
+        .cell img { width: 90%; height: 90%; object-fit: contain; }
+        .cell.c-red img { filter: drop-shadow(0 0 6px rgba(255, 0, 0, 0.8)); }
+        .cell.c-blue img { filter: drop-shadow(0 0 6px rgba(0, 150, 255, 0.8)); }
+        .cell.c-green img { filter: drop-shadow(0 0 6px rgba(0, 255, 150, 0.8)); }
+        .cell.c-yellow img { filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.8)); }
+        .cell.c-purple img { filter: drop-shadow(0 0 6px rgba(190, 0, 255, 0.8)); }
+
         .cell.swapping { animation: bounce 0.2s; }
         @keyframes bounce { 0% { transform: scale(0.9); } 100% { transform: scale(1); } }
-
-        /* Кристаллы */
-        .c-red { color: #ef4444; text-shadow: 0 0 10px #ef4444; }
-        .c-blue { color: #3b82f6; text-shadow: 0 0 10px #3b82f6; }
-        .c-green { color: #22c55e; text-shadow: 0 0 10px #22c55e; }
-        .c-yellow { color: #facc15; text-shadow: 0 0 10px #facc15; }
-        .c-purple { color: #a855f7; text-shadow: 0 0 10px #a855f7; }
     </style>
 </head>
 <body>
@@ -96,7 +116,7 @@
             </div>
         </div>
 
-        <!-- Поле боя -->
+        <!-- Поле боя 5x7 -->
         <div class="board-container">
             <div id="board" class="board"></div>
         </div>
@@ -149,29 +169,32 @@
             img: "assets/character/mag.png",
         };
 
-        // 3. ПРАВИЛА БОЯ
+        // 3. КАМНИ (Новые картинки!)
         const colors = ['red', 'blue', 'green', 'yellow', 'purple'];
         const colorIcons = {
-            red: '🔴', blue: '🔵', green: '🟢', yellow: '🟡', purple: '🟣'
+            red: 'assets/jewels/red.png',
+            blue: 'assets/jewels/blue.png',
+            green: 'assets/jewels/green.png',
+            yellow: 'assets/jewels/yellow.png',
+            purple: 'assets/jewels/purple.png'
         };
 
-        let board = []; // 7x7
+        let board = []; // 5x7
         let selectedCell = null;
         let currentTurn = 'player'; // player или enemy
-        let enemyBlocked = false; // Заморозка
+        let enemyBlocked = false;
 
-        // 4. ИНИЦИАЛИЗАЦИЯ
+        // 4. ИНИЦИАЛИЗАЦИЯ (5 колонок, 7 рядов)
         function initBoard() {
             const boardEl = document.getElementById('board');
             boardEl.innerHTML = '';
             board = [];
             for (let r = 0; r < 7; r++) {
                 const row = [];
-                for (let c = 0; c < 7; c++) {
+                for (let c = 0; c < 5; c++) {
                     const color = colors[Math.floor(Math.random() * colors.length)];
                     const cell = document.createElement('div');
                     cell.className = `cell c-${color}`;
-                    cell.innerText = colorIcons[color];
                     cell.dataset.r = r;
                     cell.dataset.c = c;
                     cell.onclick = () => handleCellClick(r, c);
@@ -180,6 +203,7 @@
                 }
                 board.push(row);
             }
+            renderBoard();
         }
 
         // 5. ЛОГИКА ВЫБОРА И СВАПА
@@ -190,14 +214,11 @@
                 selectedCell = { r, c };
                 document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`).classList.add('selected');
             } else {
-                // Проверяем соседство
                 const dr = Math.abs(r - selectedCell.r);
                 const dc = Math.abs(c - selectedCell.c);
                 if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
-                    // Свап
                     swapCells(selectedCell.r, selectedCell.c, r, c);
                 } else {
-                    // Сброс выбора
                     document.querySelectorAll('.cell.selected').forEach(el => el.classList.remove('selected'));
                     selectedCell = null;
                     handleCellClick(r, c);
@@ -211,12 +232,10 @@
             board[r2][c2] = temp;
             renderBoard();
 
-            // Проверяем, есть ли матчи
             const matches = findMatches();
             if (matches.length > 0) {
                 resolveMatches(matches);
             } else {
-                // Возвращаем обратно
                 const temp2 = board[r1][c1];
                 board[r1][c1] = board[r2][c2];
                 board[r2][c2] = temp2;
@@ -226,20 +245,20 @@
             document.querySelectorAll('.cell.selected').forEach(el => el.classList.remove('selected'));
         }
 
-        // 6. ПОИСК И УДАЛЕНИЕ МАТЧЕЙ
+        // 6. ПОИСК И УДАЛЕНИЕ МАТЧЕЙ (Обновлено под 5 колонок и 7 рядов)
         function findMatches() {
             const matches = [];
-            // Горизонтальные
+            // Горизонтальные (макс 3 в ряд, так как 5 колонок)
             for (let r = 0; r < 7; r++) {
-                for (let c = 0; c < 5; c++) {
+                for (let c = 0; c < 3; c++) {
                     if (board[r][c] === board[r][c+1] && board[r][c] === board[r][c+2]) {
                         matches.push([r, c], [r, c+1], [r, c+2]);
                     }
                 }
             }
-            // Вертикальные
+            // Вертикальные (макс 3 в ряд, так как 7 рядов)
             for (let r = 0; r < 5; r++) {
-                for (let c = 0; c < 7; c++) {
+                for (let c = 0; c < 5; c++) {
                     if (board[r][c] === board[r+1][c] && board[r][c] === board[r+2][c]) {
                         matches.push([r, c], [r+1, c], [r+2, c]);
                     }
@@ -249,23 +268,18 @@
         }
 
         function resolveMatches(matches) {
-            // Убираем дубликаты
             const unique = [...new Map(matches.map(m => [m.join(','), m])).values()];
-            let manaGained = unique.length * 5; // Даем ману за каждый камень
+            let manaGained = unique.length * 5;
 
-            // Удаляем камни
             unique.forEach(([r, c]) => {
                 board[r][c] = null;
             });
 
-            // Падаем вниз
             dropCrystals();
             renderBoard();
 
-            // Начисляем ману
             addMana(manaGained);
 
-            // Проверяем каскады
             setTimeout(() => {
                 const newMatches = findMatches();
                 if (newMatches.length > 0) {
@@ -277,7 +291,7 @@
         }
 
         function dropCrystals() {
-            for (let c = 0; c < 7; c++) {
+            for (let c = 0; c < 5; c++) {
                 for (let r = 6; r >= 0; r--) {
                     if (board[r][c] === null) {
                         for (let r2 = r - 1; r2 >= 0; r2--) {
@@ -289,7 +303,6 @@
                         }
                     }
                 }
-                // Заполняем верх новыми
                 for (let r = 0; r < 7; r++) {
                     if (board[r][c] === null) {
                         board[r][c] = colors[Math.floor(Math.random() * colors.length)];
@@ -298,16 +311,21 @@
             }
         }
 
-        // 7. ОТРИСОВКА ПОЛЯ
+        // 7. ОТРИСОВКА ПОЛЯ (Картинки вместо эмодзи)
         function renderBoard() {
-            const boardEl = document.getElementById('board');
-            const cells = boardEl.children;
             for (let r = 0; r < 7; r++) {
-                for (let c = 0; c < 7; c++) {
-                    const idx = r * 7 + c;
+                for (let c = 0; c < 5; c++) {
+                    const idx = r * 5 + c;
                     const color = board[r][c];
-                    cells[idx].className = `cell c-${color}`;
-                    cells[idx].innerText = colorIcons[color];
+                    const cell = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+                    
+                    cell.innerHTML = '';
+                    cell.className = `cell c-${color}`;
+                    
+                    const img = document.createElement('img');
+                    img.src = colorIcons[color];
+                    img.draggable = false;
+                    cell.appendChild(img);
                 }
             }
         }
@@ -322,7 +340,6 @@
             document.getElementById('mana-fill').style.width = (player.mana / player.maxMana * 100) + '%';
             document.getElementById('mana-text').innerText = `${player.mana} / ${player.maxMana}`;
             
-            // Активируем кнопки
             const costs = [30, 40, 50, 60, 100];
             for (let i = 1; i <= 5; i++) {
                 const btn = document.getElementById(`skill${i}`);
@@ -339,16 +356,14 @@
             player.mana -= costs[skillIndex - 1];
             updateManaUI();
 
-            // Простая логика урона (потом заменим на формулы из статов)
-            const baseDamage = [150, 100, 0, 0, 300][skillIndex - 1]; // Урон скиллов
-            const crit = Math.random() < 0.2 ? 2 : 1; // 20% шанс крита
+            const baseDamage = [150, 100, 0, 0, 300][skillIndex - 1];
+            const crit = Math.random() < 0.2 ? 2 : 1;
             const damage = baseDamage * crit;
 
             if (damage > 0) {
                 enemy.hp = Math.max(0, enemy.hp - damage);
                 document.getElementById('enemy-hp').style.width = (enemy.hp / enemy.maxHp * 100) + '%';
                 
-                // Анимация удара (тряска)
                 const enemyDiv = document.querySelector('.hero-side.enemy');
                 enemyDiv.style.transform = 'translateX(-10px)';
                 setTimeout(() => enemyDiv.style.transform = '', 200);
@@ -361,17 +376,15 @@
             }
 
             if (skillIndex === 2) {
-                // Заморозка
                 enemyBlocked = true;
                 document.getElementById('enemy-name').innerText = '❄️ Заморожен';
             }
 
-            // Передаем ход врагу
             currentTurn = 'enemy';
             setTimeout(enemyTurn, 800);
         }
 
-        // 9. ХОД ВРАГА (Бот просто бьет)
+        // 9. ХОД ВРАГА
         function enemyTurn() {
             if (enemyBlocked) {
                 enemyBlocked = false;
@@ -380,7 +393,7 @@
                 return;
             }
 
-            const damage = 80 + Math.random() * 40; // Случайный урон бота
+            const damage = 80 + Math.random() * 40;
             player.hp = Math.max(0, player.hp - damage);
             document.getElementById('hero-hp').style.width = (player.hp / player.maxHp * 100) + '%';
             
@@ -405,7 +418,6 @@
             document.getElementById('enemy-level').innerText = 'Ур. 1';
             document.getElementById('hero-level').innerText = 'Ур. 1';
             
-            // Подгружаем картинку героя из localStorage
             const className = localStorage.getItem('class_name') || 'Warrior';
             const gender = localStorage.getItem('gender') || 'male';
             const classMap = { Warrior: 'war', Mage: 'mag', Tank: 'tank', Archer: 'luk' };
