@@ -20,33 +20,82 @@
             overflow: hidden;
         }
 
-        .header { display: flex; align-items: center; justify-content: space-between; padding: 5px 10px; height: 35px; background: transparent; }
-        .exit-btn { font-size: 22px; color: #fff; cursor: pointer; background: none; border: none; text-shadow: 0 0 5px #000; }
-        .title { flex-grow: 1; text-align: center; font-size: 16px; font-weight: 900; color: #fff; text-shadow: 0 0 5px #000; }
+        /* Шапка полностью убрана */
 
-        /* ===== ВРАГ (Огромный, на фоне неба, с компактной полоской) ===== */
-        .enemy-area { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            padding: 10px 15px; height: 160px; 
-            background: transparent; 
+        /* ===== ВРАГИ (Адаптивный блок для 1-5 мобов) ===== */
+        .enemies-area { 
+            display: flex; 
+            justify-content: space-around; 
+            align-items: flex-end; 
+            padding: 10px 5px 5px; 
+            min-height: 150px; 
+            flex-shrink: 0;
         }
-        .enemy-img { width: 140px; height: 140px; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); }
-        
-        /* Компактная полоска ХП врага (по размеру героя) */
-        .enemy-info-bar { width: 130px; margin-top: 5px; display: flex; flex-direction: column; gap: 3px; }
-        .enemy-hp-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.7); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); }
-        .enemy-hp-fill { height: 100%; background: #ef4444; border-radius: 4px; transition: width 0.3s; }
-        .enemy-text { display: flex; justify-content: space-between; font-size: 10px; text-shadow: 1px 1px 2px #000; }
-        .enemy-name { font-weight: 900; color: #facc15; }
-        .enemy-level { color: #fff; }
 
-        /* ===== ПОЛЕ 7x5 (Прижато к низу) ===== */
+        .enemy-wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            max-width: 90px; 
+            flex: 1; 
+        }
+
+        .enemy-img { 
+            width: 100%; 
+            max-width: 90px; 
+            height: auto; 
+            max-height: 120px; 
+            object-fit: contain; 
+            transform: scaleX(-1); 
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); 
+        }
+
+        .enemy-hp-bar { 
+            width: 80%; 
+            height: 6px; /* Тонкая полоска по ногам */
+            background: rgba(0,0,0,0.8); 
+            border-radius: 3px; 
+            margin-top: 4px; 
+            overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.2); 
+        }
+
+        .enemy-hp-fill { 
+            height: 100%; 
+            background: #ef4444; 
+            border-radius: 3px; 
+            transition: width 0.3s; 
+        }
+
+        .enemy-info { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            margin-top: 2px; 
+            width: 100%; 
+            text-shadow: 1px 1px 2px #000; 
+        }
+
+        .enemy-name { 
+            font-size: 11px; 
+            font-weight: 900; 
+            color: #facc15; 
+        }
+
+        .enemy-level { 
+            font-size: 10px; 
+            color: #fff; 
+        }
+
+        /* ===== ПОЛЕ 7x5 ===== */
         .board-section { 
             flex: 1; 
-            display: flex; justify-content: center; align-items: flex-end; 
-            padding: 0 10px;
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-end; 
+            padding: 0 10px; 
         }
-        
+
         .board { 
             display: grid; 
             grid-template-columns: repeat(7, 1fr); 
@@ -54,87 +103,170 @@
             gap: 2px; 
             width: 100%; 
             max-width: 460px; 
-            background: rgba(2, 6, 23, 0.4); 
+            background: rgba(2, 6, 23, 0.5); 
             padding: 6px; 
             border-radius: 12px; 
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255,255,255,0.2); 
+            box-shadow: 0 0 15px rgba(0,0,0,0.4); 
         }
-        
-        .cell { background: transparent; border-radius: 4px; display: flex; justify-content: center; align-items: center; cursor: pointer; }
-        .cell.selected { outline: 2px solid #fff; border-radius: 4px; filter: brightness(1.5); }
-        
-        .cell img { width: 100%; height: 100%; object-fit: contain; }
-        
+
+        .cell { 
+            background: transparent; 
+            border-radius: 4px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            cursor: pointer; 
+        }
+
+        .cell.selected { 
+            outline: 2px solid #fff; 
+            border-radius: 4px; 
+            filter: brightness(1.5); 
+        }
+
+        .cell img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+        }
+
         .cell.c-red img { filter: drop-shadow(0 0 6px rgba(255, 0, 0, 0.8)); }
         .cell.c-blue img { filter: drop-shadow(0 0 6px rgba(0, 150, 255, 0.8)); }
         .cell.c-green img { filter: drop-shadow(0 0 6px rgba(0, 255, 150, 0.8)); }
         .cell.c-yellow img { filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.8)); }
         .cell.c-purple img { filter: drop-shadow(0 0 6px rgba(190, 0, 255, 0.8)); }
 
-        /* ===== НИЖНИЙ БЛОК: СКИЛЛЫ → ГЕРОЙ ===== */
+        /* ===== НИЖНИЙ БЛОК ===== */
         .bottom-panel { 
             padding: 10px 15px 15px; 
             background: transparent; 
             display: flex; 
             flex-direction: column; 
-            gap: 10px;
+            gap: 10px; 
         }
 
-        /* Скиллы с чёрной рамкой */
-        .skill-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+        /* Скиллы в чёрных рамках (первыми) */
+        .skill-row { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 6px; 
+        }
+
         .skill-btn {
-            height: 70px; border-radius: 8px; cursor: pointer;
-            display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 3px;
-            background: rgba(0, 0, 0, 0.9); /* Чёрный фон */
-            border: 2px solid #334155; /* Чёрная рамка */
-            transition: 0.2s; position: relative; opacity: 0.4; pointer-events: none;
+            height: 75px; 
+            border-radius: 10px; 
+            border: 2px solid #000; 
+            cursor: pointer;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            flex-direction: column; 
+            gap: 3px;
+            background: #0f172a; 
+            transition: 0.2s; 
+            position: relative; 
+            opacity: 0.4; 
+            pointer-events: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.6);
         }
-        .skill-btn.active { opacity: 1; pointer-events: auto; border-color: #00d2ff; box-shadow: 0 0 10px rgba(0,210,255,0.3); }
-        .skill-icon { font-size: 24px; }
-        .skill-name { font-size: 9px; color: #fff; margin-bottom: 2px; }
-        .skill-cost { position: absolute; top: 3px; right: 4px; font-size: 8px; color: #00d2ff; font-weight: bold; }
 
-        .skill-mana-bar { width: 90%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
-        .skill-mana-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 0.2s; }
+        .skill-btn.active { 
+            opacity: 1; 
+            pointer-events: auto; 
+            border-color: #00d2ff; 
+            box-shadow: 0 0 15px rgba(0,210,255,0.5); 
+        }
+
+        .skill-icon { font-size: 26px; }
+        .skill-name { font-size: 9px; color: #fff; }
+        .skill-cost { position: absolute; top: 4px; right: 6px; font-size: 9px; color: #00d2ff; font-weight: bold; }
+
+        .skill-mana-bar { width: 85%; height: 4px; background: #222; border-radius: 2px; overflow: hidden; margin-top: 2px; }
+        .skill-mana-fill { height: 100%; border-radius: 2px; width: 0%; transition: width 0.2s; }
         .mana-1 { background: #ef4444; }
         .mana-2 { background: #3b82f6; }
         .mana-3 { background: #22c55e; }
         .mana-4 { background: #facc15; }
         .mana-5 { background: #a855f7; }
 
-        /* Герой снизу (компактный) */
-        .player-section { display: flex; align-items: center; justify-content: center; gap: 12px; }
-        .player-img { width: 70px; height: 70px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(0,0,0,0.8)); }
-        
-        .player-info-block { display: flex; flex-direction: column; gap: 4px; width: 130px; }
-        .player-hp-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.7); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); }
-        .player-hp-fill { height: 100%; background: #22c55e; border-radius: 4px; transition: width 0.3s; }
-        
-        .player-text { display: flex; justify-content: space-between; font-size: 10px; text-shadow: 1px 1px 2px #000; }
-        .player-name { font-weight: 900; color: #fff; }
-        .player-level { color: #fff; }
+        /* Герой снизу (после скиллов) */
+        .player-section { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
 
-        /* Взрыв */
+        .player-img { 
+            width: 85px; 
+            height: 85px; 
+            object-fit: contain; 
+            filter: drop-shadow(0 0 8px rgba(0,0,0,0.8)); 
+        }
+
+        .player-hp-bar { 
+            flex: 1; 
+            height: 10px; 
+            background: rgba(0,0,0,0.7); 
+            border-radius: 5px; 
+            overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.3); 
+        }
+
+        .player-hp-fill { 
+            height: 100%; 
+            background: #22c55e; 
+            border-radius: 5px; 
+            transition: width 0.3s; 
+        }
+
+        .player-text { 
+            display: flex; 
+            flex-direction: column; 
+            width: 70px; 
+            text-shadow: 1px 1px 2px #000; 
+        }
+
+        .player-name { font-size: 12px; font-weight: 900; color: #fff; }
+        .player-level { font-size: 10px; color: #fff; }
+
+        /* ===== ВЗРЫВ ===== */
         .particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: explode 0.5s ease-out forwards; z-index: 10; }
         @keyframes explode { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); } }
         .explosion-flash { position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; pointer-events: none; transform: translate(-50%, -50%); animation: flash 0.3s ease-out forwards; z-index: 9; }
         @keyframes flash { 0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.5); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(2); } }
+
+        /* Кнопка выхода (появляется только после завершения) */
+        #exit-btn { 
+            display: none; 
+            position: absolute; 
+            top: 10px; 
+            left: 10px; 
+            z-index: 100; 
+            background: rgba(0,0,0,0.7); 
+            border: 2px solid #fff; 
+            color: #fff; 
+            border-radius: 8px; 
+            padding: 8px 15px; 
+            font-size: 14px; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
+
+        #exit-btn.show { display: block; }
     </style>
 </head>
 <body>
     <div class="battle-container">
-        <div class="header">
-            <button class="exit-btn" onclick="window.location.href='lobby.html'">◀</button>
-            <span class="title">Арена</span>
-        </div>
+        <!-- Кнопка выхода (скрыта) -->
+        <button id="exit-btn" onclick="window.location.href='lobby.html'">Выйти</button>
 
-        <!-- Враг (Огромный) -->
-        <div class="enemy-area">
-            <img id="enemy-img" class="enemy-img" src="assets/character/mag.png" alt="Враг">
-            <div class="enemy-info-bar">
+        <!-- Враг (пока один, но контейнер готов для нескольких) -->
+        <div class="enemies-area">
+            <div class="enemy-wrapper">
+                <img id="enemy-img" class="enemy-img" src="assets/character/mag.png" alt="Враг">
                 <div class="enemy-hp-bar"><div id="enemy-hp" class="enemy-hp-fill" style="width: 100%;"></div></div>
-                <div class="enemy-text">
+                <div class="enemy-info">
                     <span class="enemy-name" id="enemy-name">Бот</span>
                     <span class="enemy-level" id="enemy-level">Ур. 1</span>
                 </div>
@@ -146,8 +278,9 @@
             <div id="board" class="board"></div>
         </div>
 
-        <!-- Нижний блок: Скиллы → Герой -->
+        <!-- Нижний блок -->
         <div class="bottom-panel">
+            <!-- Скиллы первыми (в чёрных рамках) -->
             <div class="skill-row">
                 <button class="skill-btn" id="skill1" onclick="useSkill(1)">
                     <span class="skill-icon">🔴</span><span class="skill-name">Удар</span><span class="skill-cost">30</span>
@@ -170,21 +303,21 @@
                     <div class="skill-mana-bar"><div id="mana-5" class="skill-mana-fill mana-5"></div></div>
                 </button>
             </div>
-            
+
+            <!-- Герой (снизу) -->
             <div class="player-section">
                 <img id="hero-img" class="player-img" src="assets/character/war.png" alt="Герой">
-                <div class="player-info-block">
-                    <div class="player-hp-bar"><div id="hero-hp" class="player-hp-fill" style="width: 100%;"></div></div>
-                    <div class="player-text">
-                        <span class="player-name" id="hero-name">Герой</span>
-                        <span class="player-level" id="hero-level">Ур. 1</span>
-                    </div>
+                <div class="player-hp-bar"><div id="hero-hp" class="player-hp-fill" style="width: 100%;"></div></div>
+                <div class="player-text">
+                    <span class="player-name" id="hero-name">Герой</span>
+                    <span class="player-level" id="hero-level">Ур. 1</span>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Данные боя
         const player = { name: localStorage.getItem('player_name') || 'Герой', level: 1, hp: 1000, maxHp: 1000, img: "assets/character/war.png" };
         const enemy = { name: "Гоблин-Маг", level: 1, hp: 800, maxHp: 800, img: "assets/character/mag.png" };
 
@@ -193,8 +326,7 @@
 
         const costs = [30, 40, 50, 60, 100];
         let skillMana = [0, 0, 0, 0, 0];
-
-        let board = []; // 5 рядов x 7 колонок
+        let board = [];
         let selectedCell = null;
         let currentTurn = 'player';
         let enemyBlocked = false;
@@ -307,17 +439,14 @@
 
         function resolveMatches(matches) {
             const unique = [...new Map(matches.map(m => [m.join(','), m])).values()];
-            
             unique.forEach(([r, c]) => {
                 createExplosion(r, c, board[r][c]);
-                
                 const color = board[r][c];
                 if (color === 'red') skillMana[0] = Math.min(skillMana[0] + 5, costs[0]);
                 if (color === 'blue') skillMana[1] = Math.min(skillMana[1] + 5, costs[1]);
                 if (color === 'green') skillMana[2] = Math.min(skillMana[2] + 5, costs[2]);
                 if (color === 'yellow') skillMana[3] = Math.min(skillMana[3] + 5, costs[3]);
                 if (color === 'purple') skillMana[4] = Math.min(skillMana[4] + 5, costs[4]);
-
                 board[r][c] = null;
             });
 
@@ -325,7 +454,6 @@
                 dropCrystals();
                 renderBoard();
                 updateManaUI();
-
                 const newMatches = findMatches();
                 if (newMatches.length > 0) resolveMatches(newMatches);
                 else endTurn();
@@ -370,11 +498,9 @@
             for (let i = 1; i <= 5; i++) {
                 const btn = document.getElementById(`skill${i}`);
                 const manaBar = document.getElementById(`mana-${i}`);
-                
                 let fillPercent = (skillMana[i-1] / costs[i-1]) * 100;
                 if (fillPercent > 100) fillPercent = 100;
                 manaBar.style.width = fillPercent + '%';
-
                 if (skillMana[i-1] >= costs[i-1]) btn.classList.add('active');
                 else btn.classList.remove('active');
             }
@@ -383,7 +509,6 @@
         function useSkill(skillIndex) {
             if (currentTurn !== 'player') return;
             if (skillMana[skillIndex - 1] < costs[skillIndex - 1]) return;
-
             skillMana[skillIndex - 1] -= costs[skillIndex - 1];
             updateManaUI();
 
@@ -395,13 +520,14 @@
                 enemy.hp = Math.max(0, enemy.hp - damage);
                 document.getElementById('enemy-hp').style.width = (enemy.hp / enemy.maxHp * 100) + '%';
                 
-                const enemyDiv = document.querySelector('.enemy-area');
+                const enemyDiv = document.querySelector('.enemy-wrapper');
                 enemyDiv.style.transform = 'translateX(-10px)';
                 setTimeout(() => enemyDiv.style.transform = '', 200);
 
                 if (enemy.hp <= 0) {
+                    // Победа - показать кнопку выхода
+                    document.getElementById('exit-btn').classList.add('show');
                     setTimeout(() => alert('Победа!'), 300);
-                    setTimeout(() => window.location.href = 'lobby.html', 600);
                     return;
                 }
             }
@@ -432,8 +558,9 @@
             setTimeout(() => playerDiv.style.transform = '', 200);
 
             if (player.hp <= 0) {
+                // Поражение - показать кнопку выхода
+                document.getElementById('exit-btn').classList.add('show');
                 setTimeout(() => alert('Поражение...'), 300);
-                setTimeout(() => window.location.href = 'lobby.html', 600);
                 return;
             }
 
