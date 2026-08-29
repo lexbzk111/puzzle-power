@@ -20,13 +20,13 @@
             overflow: hidden;
         }
 
-        /* ===== ВРАГ (Огромный для PvP, заполняет верх) ===== */
+        /* ===== ВРАГ (Огромный) ===== */
         .enemies-area { 
             display: flex; 
             justify-content: space-around; 
             align-items: flex-end; 
             padding: 10px 5px 5px; 
-            min-height: 220px; /* Увеличили высоту блока */
+            min-height: 220px; 
             flex-shrink: 0;
         }
 
@@ -34,13 +34,13 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            max-width: 220px; /* Блок теперь шире */
+            max-width: 220px; 
             flex: 1; 
         }
 
         .enemy-img { 
             width: 100%; 
-            max-width: 190px; /* Сам герой стал в 2 раза больше */
+            max-width: 190px; 
             height: auto; 
             max-height: 190px; 
             object-fit: contain; 
@@ -48,12 +48,13 @@
             filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); 
         }
 
+        /* МАЛЕНЬКАЯ ПОЛОСКА ХП ВРАГА (как ты просил - по ногам) */
         .enemy-hp-bar { 
-            width: 100%; /* Полоска занимает ширину блока */
-            height: 8px; 
+            width: 70%; 
+            height: 6px; 
             background: rgba(0,0,0,0.8); 
-            border-radius: 4px; 
-            margin-top: 6px; 
+            border-radius: 3px; 
+            margin: 4px auto 0; 
             overflow: hidden; 
             border: 1px solid rgba(255,255,255,0.2); 
         }
@@ -61,7 +62,7 @@
         .enemy-hp-fill { 
             height: 100%; 
             background: #ef4444; 
-            border-radius: 4px; 
+            border-radius: 3px; 
             transition: width 0.3s; 
         }
 
@@ -69,7 +70,7 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            margin-top: 4px; 
+            margin-top: 3px; 
             width: 100%; 
             text-shadow: 1px 1px 2px #000; 
         }
@@ -135,6 +136,28 @@
         .cell.c-yellow img { filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.8)); }
         .cell.c-purple img { filter: drop-shadow(0 0 6px rgba(190, 0, 255, 0.8)); }
 
+        /* ===== УЛУЧШЕННЫЙ ВЗРЫВ (Сочные частицы с вращением) ===== */
+        .particle { 
+            position: absolute; width: 10px; height: 10px; border-radius: 50%; 
+            pointer-events: none; transform: translate(-50%, -50%); 
+            animation: explode 0.6s ease-out forwards; z-index: 10; 
+        }
+        @keyframes explode { 
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); } 
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(180deg); } 
+        }
+        
+        .explosion-flash { 
+            position: absolute; width: 25px; height: 25px; border-radius: 50%; 
+            background: rgba(255, 255, 255, 0.9); 
+            pointer-events: none; transform: translate(-50%, -50%); 
+            animation: flash 0.35s ease-out forwards; z-index: 9; 
+        }
+        @keyframes flash { 
+            0% { opacity: 0.9; transform: translate(-50%, -50%) scale(0.5); } 
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(2.5); } 
+        }
+
         /* ===== НИЖНИЙ БЛОК ===== */
         .bottom-panel { 
             padding: 10px 15px 15px; 
@@ -144,7 +167,6 @@
             gap: 10px; 
         }
 
-        /* Скиллы */
         .skill-row { 
             display: grid; 
             grid-template-columns: repeat(5, 1fr); 
@@ -188,7 +210,6 @@
         .mana-4 { background: #facc15; }
         .mana-5 { background: #a855f7; }
 
-        /* Герой снизу */
         .player-section { 
             display: flex; 
             align-items: center; 
@@ -228,13 +249,6 @@
         .player-name { font-size: 12px; font-weight: 900; color: #fff; }
         .player-level { font-size: 10px; color: #fff; }
 
-        /* ===== ВЗРЫВ ===== */
-        .particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: explode 0.5s ease-out forwards; z-index: 10; }
-        @keyframes explode { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); } }
-        .explosion-flash { position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; pointer-events: none; transform: translate(-50%, -50%); animation: flash 0.3s ease-out forwards; z-index: 9; }
-        @keyframes flash { 0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.5); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(2); } }
-
-        /* Кнопка выхода (появляется только после завершения) */
         #exit-btn { 
             display: none; 
             position: absolute; 
@@ -252,22 +266,13 @@
         }
 
         #exit-btn.show { display: block; }
-
-        /* ДЛЯ БУДУЩИХ PvE БОЕВ С МНОЖЕСТВОМ МОНСТРОВ: */
-        /* Добавьте класс "many-enemies" к .enemies-area через JS, и враги станут меньше */
-        .enemies-area.many-enemies { min-height: 120px; }
-        .enemies-area.many-enemies .enemy-img { max-width: 70px; max-height: 70px; }
-        .enemies-area.many-enemies .enemy-wrapper { max-width: 80px; }
-        .enemies-area.many-enemies .enemy-name { font-size: 10px; }
     </style>
 </head>
 <body>
     <div class="battle-container">
-        <!-- Кнопка выхода (скрыта) -->
         <button id="exit-btn" onclick="window.location.href='lobby.html'">Выйти</button>
 
-        <!-- Враг (для PvP: огромный. Для PvE: добавить класс many-enemies) -->
-        <div class="enemies-area" id="enemies-area">
+        <div class="enemies-area">
             <div class="enemy-wrapper">
                 <img id="enemy-img" class="enemy-img" src="assets/character/mag.png" alt="Враг">
                 <div class="enemy-hp-bar"><div id="enemy-hp" class="enemy-hp-fill" style="width: 100%;"></div></div>
@@ -278,14 +283,11 @@
             </div>
         </div>
 
-        <!-- Поле боя -->
         <div class="board-section">
             <div id="board" class="board"></div>
         </div>
 
-        <!-- Нижний блок -->
         <div class="bottom-panel">
-            <!-- Скиллы первыми -->
             <div class="skill-row">
                 <button class="skill-btn" id="skill1" onclick="useSkill(1)">
                     <span class="skill-icon">🔴</span><span class="skill-name">Удар</span><span class="skill-cost">30</span>
@@ -309,7 +311,6 @@
                 </button>
             </div>
 
-            <!-- Герой (снизу) -->
             <div class="player-section">
                 <img id="hero-img" class="player-img" src="assets/character/war.png" alt="Герой">
                 <div class="player-hp-bar"><div id="hero-hp" class="player-hp-fill" style="width: 100%;"></div></div>
@@ -322,7 +323,6 @@
     </div>
 
     <script>
-        // Данные боя
         const player = { name: localStorage.getItem('player_name') || 'Герой', level: 1, hp: 1000, maxHp: 1000, img: "assets/character/war.png" };
         const enemy = { name: "Гоблин-Маг", level: 1, hp: 800, maxHp: 800, img: "assets/character/mag.png" };
 
@@ -336,10 +336,6 @@
         let currentTurn = 'player';
         let enemyBlocked = false;
 
-        // ЛОГИКА ДЛЯ БУДУЩИХ PvE БОЕВ:
-        // Если в бою больше 2 врагов, добавляем класс many-enemies к блоку
-        // Например: document.getElementById('enemies-area').classList.add('many-enemies');
-        
         function initBoard() {
             const boardEl = document.getElementById('board');
             boardEl.innerHTML = '';
@@ -377,16 +373,17 @@
             targetCell.appendChild(flash);
             setTimeout(() => flash.remove(), 400);
 
-            for (let i = 0; i < 8; i++) {
+            // Увеличили количество частиц до 12 для более сочного взрыва
+            for (let i = 0; i < 12; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 particle.style.background = `rgba(${rgb}, 0.9)`;
-                const angle = (i / 8) * (2 * Math.PI);
-                const distance = 12 + Math.random() * 18;
+                const angle = (i / 12) * (2 * Math.PI);
+                const distance = 10 + Math.random() * 22;
                 particle.style.left = `calc(50% + ${Math.cos(angle) * distance}px)`;
                 particle.style.top = `calc(50% + ${Math.sin(angle) * distance}px)`;
                 targetCell.appendChild(particle);
-                setTimeout(() => particle.remove(), 500);
+                setTimeout(() => particle.remove(), 600);
             }
         }
 
@@ -534,7 +531,6 @@
                 setTimeout(() => enemyDiv.style.transform = '', 200);
 
                 if (enemy.hp <= 0) {
-                    // Победа - показать кнопку выхода
                     document.getElementById('exit-btn').classList.add('show');
                     setTimeout(() => alert('Победа!'), 300);
                     return;
@@ -567,7 +563,6 @@
             setTimeout(() => playerDiv.style.transform = '', 200);
 
             if (player.hp <= 0) {
-                // Поражение - показать кнопку выхода
                 document.getElementById('exit-btn').classList.add('show');
                 setTimeout(() => alert('Поражение...'), 300);
                 return;
