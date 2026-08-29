@@ -18,42 +18,38 @@
             overflow: hidden;
         }
 
-        .header { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; height: 40px; }
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 5px 10px; height: 35px; }
         .exit-btn { font-size: 22px; color: #fff; cursor: pointer; background: none; border: none; }
         .title { flex-grow: 1; text-align: center; font-size: 16px; font-weight: 900; color: #fff; }
 
-        /* Враг сверху */
-        .enemy-area { display: flex; flex-direction: column; align-items: center; padding: 5px 15px; height: 130px; justify-content: center; }
-        .enemy-img { width: 90px; height: 90px; object-fit: contain; transform: scaleX(-1); }
-        .enemy-hp-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.7); border-radius: 6px; margin-top: 5px; overflow: hidden; border: 1px solid #334155; }
+        /* Враг сверху (Компактно) */
+        .enemy-area { display: flex; flex-direction: column; align-items: center; padding: 5px 15px; height: 100px; justify-content: center; }
+        .enemy-img { width: 70px; height: 70px; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); }
+        .enemy-hp-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.7); border-radius: 6px; margin-top: 4px; overflow: hidden; border: 1px solid #334155; }
         .enemy-hp-fill { height: 100%; background: #ef4444; border-radius: 6px; transition: width 0.3s; }
-        .enemy-info { display: flex; justify-content: space-between; width: 100%; margin-top: 4px; }
+        .enemy-info { display: flex; justify-content: space-between; width: 100%; margin-top: 2px; }
         .enemy-name { font-size: 12px; font-weight: 900; color: #facc15; }
-        .enemy-level { font-size: 12px; color: #94a3b8; }
+        .enemy-level { font-size: 11px; color: #94a3b8; }
 
-        /* 7 ВБОК, 5 ВНИЗ */
+        /* ===== ОГРОМНОЕ ПОЛЕ 7x5 ===== */
         .board-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 0 10px; }
         .board { 
             display: grid; 
-            grid-template-columns: repeat(7, 1fr); /* 7 колонок */
-            grid-template-rows: repeat(5, 1fr);    /* 5 рядов */
-            gap: 4px; 
+            grid-template-columns: repeat(7, 1fr); 
+            grid-template-rows: repeat(5, 1fr); 
+            gap: 5px; 
             width: 100%; 
-            max-width: 400px; 
-            max-height: 300px;
+            max-width: 450px; 
+            height: 100%; /* Растягиваем на всю высоту */
+            max-height: 500px;
             background: rgba(0, 0, 0, 0.35);
-            padding: 8px;
+            padding: 10px;
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.1);
         }
-        .cell {
-            position: relative;
-            background: rgba(0,0,0,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: center; align-items: center; cursor: pointer;
-        }
+        .cell { position: relative; background: rgba(0,0,0,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center; cursor: pointer; }
         .cell.selected { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
-        .cell img { width: 90%; height: 90%; object-fit: contain; }
-        
+        .cell img { width: 95%; height: 95%; object-fit: contain; }
         .cell.c-red img { filter: drop-shadow(0 0 6px rgba(255, 0, 0, 0.8)); }
         .cell.c-blue img { filter: drop-shadow(0 0 6px rgba(0, 150, 255, 0.8)); }
         .cell.c-green img { filter: drop-shadow(0 0 6px rgba(0, 255, 150, 0.8)); }
@@ -66,21 +62,33 @@
         .explosion-flash { position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; pointer-events: none; transform: translate(-50%, -50%); animation: flash 0.3s ease-out forwards; z-index: 9; }
         @keyframes flash { 0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.5); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(2); } }
 
-        /* Низ: Скиллы и Игрок */
-        .bottom-panel { padding: 8px 15px 10px; display: flex; flex-direction: column; gap: 8px; height: 160px; justify-content: flex-end; }
-        .mana-bar { width: 100%; height: 10px; background: rgba(0,0,0,0.7); border-radius: 6px; overflow: hidden; border: 1px solid #334155; position: relative; }
-        .mana-fill { height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); border-radius: 6px; transition: width 0.2s; }
-        .mana-text { position: absolute; top: -2px; left: 0; width: 100%; text-align: center; font-size: 9px; font-weight: 900; color: #fff; text-shadow: 1px 1px 2px #000; }
-
+        /* ===== СКИЛЛЫ С ПОЛОСКАМИ МАНЫ (Как в E&P) ===== */
+        .bottom-panel { padding: 5px 10px 10px; display: flex; flex-direction: column; gap: 5px; }
         .skill-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-        .skill-btn { height: 50px; border-radius: 10px; border: 1px solid #334155; cursor: pointer; display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 2px; background: rgba(30, 41, 59, 0.85); transition: 0.2s; position: relative; opacity: 0.3; pointer-events: none; }
+        .skill-btn {
+            height: 70px; border-radius: 8px; border: 1px solid #334155; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 3px;
+            background: rgba(30, 41, 59, 0.9); transition: 0.2s; position: relative; opacity: 0.4; pointer-events: none;
+        }
         .skill-btn.active { opacity: 1; pointer-events: auto; border-color: #00d2ff; box-shadow: 0 0 10px rgba(0,210,255,0.3); }
-        .skill-icon { font-size: 20px; }
-        .skill-name { font-size: 7px; color: #94a3b8; }
-        .skill-cost { position: absolute; top: 2px; right: 4px; font-size: 8px; color: #00d2ff; font-weight: bold; }
+        
+        .skill-icon { font-size: 22px; }
+        .skill-name { font-size: 8px; color: #94a3b8; margin-bottom: 2px; }
+        .skill-cost { position: absolute; top: 3px; right: 4px; font-size: 8px; color: #00d2ff; font-weight: bold; }
 
+        /* Индивидуальные полоски маны под скиллами */
+        .skill-mana-bar { width: 90%; height: 5px; background: rgba(0,0,0,0.8); border-radius: 3px; overflow: hidden; }
+        .skill-mana-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 0.2s; }
+        
+        .mana-1 { background: #ef4444; } /* Красный */
+        .mana-2 { background: #3b82f6; } /* Синий */
+        .mana-3 { background: #22c55e; } /* Зеленый */
+        .mana-4 { background: #facc15; } /* Желтый */
+        .mana-5 { background: #a855f7; } /* Фиолетовый */
+
+        /* Герой внизу */
         .player-area { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px; height: 50px; }
-        .player-img { width: 50px; height: 50px; object-fit: contain; }
+        .player-img { width: 45px; height: 45px; object-fit: contain; }
         .player-hp-bar { flex: 1; max-width: 250px; height: 10px; background: rgba(0,0,0,0.7); border-radius: 6px; overflow: hidden; border: 1px solid #334155; }
         .player-hp-fill { height: 100%; background: #22c55e; border-radius: 6px; transition: width 0.3s; }
         .player-info { width: 100px; display: flex; justify-content: space-between; }
@@ -109,25 +117,26 @@
         </div>
 
         <div class="bottom-panel">
-            <div class="mana-bar">
-                <div id="mana-fill" class="mana-fill" style="width: 0%;"></div>
-                <div id="mana-text" class="mana-text">0 / 100</div>
-            </div>
             <div class="skill-row">
                 <button class="skill-btn" id="skill1" onclick="useSkill(1)">
                     <span class="skill-icon">🔴</span><span class="skill-name">Удар</span><span class="skill-cost">30</span>
+                    <div class="skill-mana-bar"><div id="mana-1" class="skill-mana-fill mana-1"></div></div>
                 </button>
                 <button class="skill-btn" id="skill2" onclick="useSkill(2)">
                     <span class="skill-icon">🔵</span><span class="skill-name">Лед</span><span class="skill-cost">40</span>
+                    <div class="skill-mana-bar"><div id="mana-2" class="skill-mana-fill mana-2"></div></div>
                 </button>
                 <button class="skill-btn" id="skill3" onclick="useSkill(3)">
                     <span class="skill-icon">🟢</span><span class="skill-name">Щит</span><span class="skill-cost">50</span>
+                    <div class="skill-mana-bar"><div id="mana-3" class="skill-mana-fill mana-3"></div></div>
                 </button>
                 <button class="skill-btn" id="skill4" onclick="useSkill(4)">
                     <span class="skill-icon">🟡</span><span class="skill-name">Ярость</span><span class="skill-cost">60</span>
+                    <div class="skill-mana-bar"><div id="mana-4" class="skill-mana-fill mana-4"></div></div>
                 </button>
                 <button class="skill-btn" id="skill5" onclick="useSkill(5)">
                     <span class="skill-icon">🟣</span><span class="skill-name">Ульта</span><span class="skill-cost">100</span>
+                    <div class="skill-mana-bar"><div id="mana-5" class="skill-mana-fill mana-5"></div></div>
                 </button>
             </div>
             
@@ -153,6 +162,9 @@
         let selectedCell = null;
         let currentTurn = 'player';
         let enemyBlocked = false;
+
+        // Стоимость скиллов
+        const costs = [30, 40, 50, 60, 100];
 
         // Инициализация (7 колонок, 5 рядов)
         function initBoard() {
@@ -242,10 +254,8 @@
             document.querySelectorAll('.cell.selected').forEach(el => el.classList.remove('selected'));
         }
 
-        // 7 колонок, 5 рядов
         function findMatches() {
             const matches = [];
-            // Горизонтальные
             for (let r = 0; r < 5; r++) {
                 for (let c = 0; c < 5; c++) {
                     if (board[r][c] === board[r][c+1] && board[r][c] === board[r][c+2]) {
@@ -253,7 +263,6 @@
                     }
                 }
             }
-            // Вертикальные
             for (let r = 0; r < 3; r++) {
                 for (let c = 0; c < 7; c++) {
                     if (board[r][c] === board[r+1][c] && board[r][c] === board[r+2][c]) {
@@ -275,16 +284,12 @@
 
             dropCrystals();
             renderBoard();
-
             addMana(manaGained);
 
             setTimeout(() => {
                 const newMatches = findMatches();
-                if (newMatches.length > 0) {
-                    resolveMatches(newMatches);
-                } else {
-                    endTurn();
-                }
+                if (newMatches.length > 0) resolveMatches(newMatches);
+                else endTurn();
             }, 300);
         }
 
@@ -302,9 +307,7 @@
                     }
                 }
                 for (let r = 0; r < 5; r++) {
-                    if (board[r][c] === null) {
-                        board[r][c] = colors[Math.floor(Math.random() * colors.length)];
-                    }
+                    if (board[r][c] === null) board[r][c] = colors[Math.floor(Math.random() * colors.length)];
                 }
             }
         }
@@ -312,13 +315,10 @@
         function renderBoard() {
             for (let r = 0; r < 5; r++) {
                 for (let c = 0; c < 7; c++) {
-                    const idx = r * 7 + c;
                     const color = board[r][c];
                     const cell = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
-                    
                     cell.innerHTML = '';
                     cell.className = `cell c-${color}`;
-                    
                     const img = document.createElement('img');
                     img.src = colorIcons[color];
                     img.draggable = false;
@@ -327,18 +327,23 @@
             }
         }
 
+        // Обновление маны (Индивидуальные полоски под скиллами)
         function addMana(amount) {
             player.mana = Math.min(player.maxMana, player.mana + amount);
             updateManaUI();
         }
 
         function updateManaUI() {
-            document.getElementById('mana-fill').style.width = (player.mana / player.maxMana * 100) + '%';
-            document.getElementById('mana-text').innerText = `${player.mana} / ${player.maxMana}`;
-            
-            const costs = [30, 40, 50, 60, 100];
             for (let i = 1; i <= 5; i++) {
                 const btn = document.getElementById(`skill${i}`);
+                const manaBar = document.getElementById(`mana-${i}`);
+                
+                // Заполняем полоску: сколько маны есть относительно стоимости скилла
+                let fillPercent = (player.mana / costs[i-1]) * 100;
+                if (fillPercent > 100) fillPercent = 100;
+                manaBar.style.width = fillPercent + '%';
+
+                // Активируем кнопку, если маны хватает
                 if (player.mana >= costs[i-1]) btn.classList.add('active');
                 else btn.classList.remove('active');
             }
@@ -346,7 +351,6 @@
 
         function useSkill(skillIndex) {
             if (currentTurn !== 'player') return;
-            const costs = [30, 40, 50, 60, 100];
             if (player.mana < costs[skillIndex - 1]) return;
 
             player.mana -= costs[skillIndex - 1];
@@ -418,6 +422,8 @@
             const suffix = gender === 'male' ? '' : 'girl';
             player.img = `assets/character/${classMap[className]}${suffix}.png`;
             document.getElementById('hero-img').src = player.img;
+            
+            updateManaUI();
         };
     </script>
 </body>
